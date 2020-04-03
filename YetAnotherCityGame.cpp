@@ -15,6 +15,7 @@
 #pragma comment(lib,"opengl32.lib")
 
 #include "ContextManager.h"
+#include "Option.h"
 
 SDL_Window * _MainWindow = nullptr;
 SDL_GLContext _glContext;
@@ -25,6 +26,12 @@ bool _runApplication = true;
 
 int main(int argc, char* args[])
 {
+	//read option from hard drive 
+	if (!COption::getInstance().Read_Option())
+	{
+		//if something goes wrong during option loading, display error message
+	}
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		std::cout << SDL_GetError() << std::endl;
@@ -33,7 +40,10 @@ int main(int argc, char* args[])
 		return -1;
 	}
 
-	_MainWindow = SDL_CreateWindow("YetAnotherCityGame", 0, 0, 1280, 760, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+	_MainWindow = SDL_CreateWindow("YetAnotherCityGame", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		COption::getInstance().Get_Horizontal_Resolution(),
+		COption::getInstance().Get_Vertical_Resolution(),
+		SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
 	//opengl set-up
 
