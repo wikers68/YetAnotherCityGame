@@ -1,3 +1,9 @@
 .vs/
 x64/
 Debug/
+*.pdb
+*.log
+*.ilk
+*.tlog
+*.ipch
+*.db
