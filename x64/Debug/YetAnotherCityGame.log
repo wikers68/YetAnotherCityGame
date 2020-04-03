@@ -1,4 +1,5 @@
-﻿  YetAnotherCityGame.cpp
+﻿  stdafx.cpp
+  YetAnotherCityGame.cpp
   ContextManager.cpp
   Context.cpp
   Generating Code...
