@@ -1,0 +1,4 @@
+.vs
+*.tlog
+/x64
+/debug
