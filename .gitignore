@@ -1,4 +1,3 @@
-.vs
-*.tlog
-/x64
-/debug
+.vs/
+x64/
+Debug/

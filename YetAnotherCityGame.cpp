@@ -3,10 +3,16 @@
 
 #include "stdafx.h"
 #include <iostream>
-#include "SDL.h"
 
+#include "SDL.h"
 #pragma comment(lib,"SDL2.lib")
 #pragma comment(lib,"SDL2main.lib")
+
+#include "GL/glew.h"
+#pragma comment(lib,"glew32.lib")
+
+#include <gl/GL.h>
+#pragma comment(lib,"opengl32.lib")
 
 #include "ContextManager.h"
 
@@ -47,10 +53,15 @@ int main(int argc, char* args[])
 
 	while (_runApplication)
 	{
+		glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		if (CContextManager::Instance().GetCurrentActiveContext())
 		{
 			CContextManager::Instance().GetCurrentActiveContext()->RunContext();
 		}
+
+		SDL_GL_SwapWindow(_MainWindow);
 	}
 
 	SDL_GL_DeleteContext(_glContext);
