@@ -10,9 +10,9 @@ public:
 	CContext();
 	~CContext();
 
-	bool CreateContext();
+	virtual bool CreateContext();
 	bool ActivateContext();
-	bool RunContext();
+	virtual bool RunContext(float delta_t = 0.0f);
 	bool DestroyContext();
 };
 

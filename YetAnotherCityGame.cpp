@@ -15,6 +15,7 @@
 #pragma comment(lib,"opengl32.lib")
 
 #include "ContextManager.h"
+#include "Context\MainMenu.h"
 #include "Option.h"
 
 SDL_Window * _MainWindow = nullptr;
@@ -22,7 +23,7 @@ SDL_GLContext _glContext;
 SDL_Event _SdlEvent;
 
 bool _runApplication = true;
-
+CMainMenu *_MainMenuContext = nullptr;
 
 int main(int argc, char* args[])
 {
@@ -47,8 +48,8 @@ int main(int argc, char* args[])
 
 	//opengl set-up
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
@@ -59,7 +60,23 @@ int main(int argc, char* args[])
 		std::cout << SDL_GetError() << std::endl;
 		SDL_DestroyWindow(_MainWindow);
 		SDL_Quit();
+		return -2;
 	}
+
+	/*
+	* Load OpenGL 4.2 extension for Windows
+	*/
+	GLenum initialisationGlew = glewInit();
+	if (initialisationGlew != GLEW_OK)
+	{
+		std::cout << glewGetErrorString(initialisationGlew) << std::endl;
+		return -3;
+	}
+
+	//create the main menu
+	_MainMenuContext = new CMainMenu();
+	_MainMenuContext->CreateContext();
+	CContextManager::Instance().SetCurrentActiveContext(_MainMenuContext);
 
 	while (_runApplication)
 	{

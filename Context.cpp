@@ -24,7 +24,7 @@ bool CContext::ActivateContext()
 }
 
 
-bool CContext::RunContext()
+bool CContext::RunContext(float delta_t)
 {
 	return false;
 }
