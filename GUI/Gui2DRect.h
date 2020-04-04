@@ -8,6 +8,8 @@
 #include <GL/glew.h>
 #include <iostream>
 
+#include "../Option.h"
+
 class CGui2DRect : public CGuiBaseRect
 {
 public:
@@ -21,6 +23,6 @@ public:
 	GLuint _bufferVertex;
 	GLuint _vertexArray;
 
-	void Draw(void);
+	void Draw(void) override;
 };
 

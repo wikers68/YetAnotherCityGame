@@ -13,7 +13,7 @@ CMainMenu::~CMainMenu()
 
 bool CMainMenu::CreateContext()
 {
-	_MenuBackGround = new CGui2DRect(400, 200, 0, 0,nullptr);
+	_MenuBackGround = new CGui2DRect(1200, 700, 0, 0,nullptr);
 	return false;
 }
 

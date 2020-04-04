@@ -24,5 +24,7 @@ public:
 
 	//link to other GuiElement linked to the current CGuiBaseRect 
 	std::list<CGuiBaseRect*> *_Child;
+
+	virtual void Draw(void) {};
 };
 

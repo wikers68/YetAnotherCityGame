@@ -4,6 +4,8 @@
 
 CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition, CGuiBaseRect *argParent) :CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition, argParent)
 {
+	CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition, argParent);
+
 	glGenVertexArrays(1, &_vertexArray);
 	glBindVertexArray(_vertexArray);
 
@@ -31,11 +33,21 @@ CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, i
 	{
 		"#version 420 core\n"
 		"layout( location = 0) in vec2 vertexPosition;"
+		"uniform ivec4 PositionSize;"
+		"uniform ivec4 ScreenSize;"
 		"out vec2 colorRG;"
 		"void main()"
 		"{"
+			//dimension in viewport space of the rectangle
+		"float widthRelToScreen = float(PositionSize.z) / float(ScreenSize.x);"
+		"float heightRelToScreen = float(PositionSize.w) / float(ScreenSize.y);"
+
+			//upper left corner position in screen space
+		"float Xposition = -1 + 2*vertexPosition.x * widthRelToScreen + float(PositionSize.x) / float(ScreenSize.x);"
+		"float Yposition =  1 - 2*vertexPosition.y * heightRelToScreen - float(PositionSize.y) / float(ScreenSize.y);"
+
 			"colorRG = vec2(vertexPosition.x,vertexPosition.y);"
-			"gl_Position = vec4( vertexPosition,1,1);"
+			"gl_Position = vec4( Xposition,Yposition,1,1);"
 		"};"
 	};
 
@@ -105,5 +117,31 @@ void CGui2DRect::Draw(void)
 {
 	glUseProgram(_Shader);
 	glBindVertexArray(_vertexArray);
+
+	glUniform4i( glGetUniformLocation(_Shader, "PositionSize"),
+		(GLint)CGuiBaseRect::_HorizontalPosition,
+		(GLint)CGuiBaseRect::_VerticalPosition,
+		(GLint)CGuiBaseRect::_Width,
+		(GLint)CGui2DRect::_Height);
+
+	glUniform4i(glGetUniformLocation(_Shader, "ScreenSize"),
+		COption::getInstance().Get_Horizontal_Resolution(),
+		COption::getInstance().Get_Vertical_Resolution(),
+		0,
+		0);
+	
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	//TODO: bug with Child which isn't set to NULL... but it should be via constructor ! 
+	if (_Child != nullptr)
+	{
+		//TODO::render child
+
+		std::list<CGuiBaseRect*>::iterator *it;
+
+		for(it = &_Child->begin(); it != &_Child->end(); it++)
+		{
+			//(*it)->Draw();
+		}
+	}
 }
