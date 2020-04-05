@@ -2,9 +2,9 @@
 #include "Gui2DRect.h"
 
 
-CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition, CGuiBaseRect *argParent) :CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition, argParent)
+CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition) :CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
 {
-	CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition, argParent);
+	//CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition, argParent);
 
 	glGenVertexArrays(1, &_vertexArray);
 	glBindVertexArray(_vertexArray);
@@ -43,8 +43,8 @@ CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, i
 		"float heightRelToScreen = float(PositionSize.w) / float(ScreenSize.y);"
 
 			//upper left corner position in screen space
-		"float Xposition = -1 + 2*vertexPosition.x * widthRelToScreen + float(PositionSize.x) / float(ScreenSize.x);"
-		"float Yposition =  1 - 2*vertexPosition.y * heightRelToScreen - float(PositionSize.y) / float(ScreenSize.y);"
+		"float Xposition = -1 + 2*(vertexPosition.x * widthRelToScreen + float(PositionSize.x) / float(ScreenSize.x));"
+		"float Yposition =  1 - 2*(vertexPosition.y * heightRelToScreen + float(PositionSize.y) / float(ScreenSize.y));"
 
 			"colorRG = vec2(vertexPosition.x,vertexPosition.y);"
 			"gl_Position = vec4( Xposition,Yposition,1,1);"
@@ -119,8 +119,8 @@ void CGui2DRect::Draw(void)
 	glBindVertexArray(_vertexArray);
 
 	glUniform4i( glGetUniformLocation(_Shader, "PositionSize"),
-		(GLint)CGuiBaseRect::_HorizontalPosition,
-		(GLint)CGuiBaseRect::_VerticalPosition,
+		(GLint)CGuiBaseRect::_AbsoluteHorizontalPosition,
+		(GLint)CGuiBaseRect::_AbsoluteVerticalPosition,
 		(GLint)CGuiBaseRect::_Width,
 		(GLint)CGui2DRect::_Height);
 
@@ -132,16 +132,13 @@ void CGui2DRect::Draw(void)
 	
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
-	//TODO: bug with Child which isn't set to NULL... but it should be via constructor ! 
-	if (_Child != nullptr)
+	if (_Child)
 	{
-		//TODO::render child
+		std::list<CGuiBaseRect*>::iterator it = _Child->begin();
 
-		std::list<CGuiBaseRect*>::iterator *it;
-
-		for(it = &_Child->begin(); it != &_Child->end(); it++)
+		for(it = _Child->begin(); it != _Child->end(); it++)
 		{
-			//(*it)->Draw();
+			(*it)->Draw();
 		}
 	}
 }
