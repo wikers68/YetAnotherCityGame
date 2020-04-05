@@ -34,3 +34,13 @@ bool CContext::DestroyContext()
 {
 	return false;
 }
+
+void CContext::ManageEvent(void)
+{
+	SDL_Event evt;
+	while (SDL_PollEvent(&evt))
+	{
+		EventProcessing(evt);
+	}
+
+}

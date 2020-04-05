@@ -14,5 +14,10 @@ public:
 
 	bool CreateContext() override;
 	bool RunContext(float delta_t = 0.0f) override;
+
+
+	// Inherited via CContext
+	virtual void EventProcessing(SDL_Event evt) override;
+
 };
 

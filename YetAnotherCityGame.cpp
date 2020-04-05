@@ -73,8 +73,6 @@ int main(int argc, char* args[])
 		return -3;
 	}
 
-	//glViewport(-1.0, -1.0, COption::getInstance().Get_Horizontal_Resolution(), COption::getInstance().Get_Vertical_Resolution());
-
 	//create the main menu
 	_MainMenuContext = new CMainMenu();
 	_MainMenuContext->CreateContext();
@@ -87,6 +85,7 @@ int main(int argc, char* args[])
 
 		if (CContextManager::Instance().GetCurrentActiveContext())
 		{
+			CContextManager::Instance().GetCurrentActiveContext()->ManageEvent();
 			CContextManager::Instance().GetCurrentActiveContext()->RunContext();
 		}
 

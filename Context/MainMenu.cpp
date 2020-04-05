@@ -26,7 +26,13 @@ bool CMainMenu::CreateContext()
 
 bool CMainMenu::RunContext(float delta_t)
 {
+	ManageEvent();
+
 	_MenuBackGround->Draw();
 	//_ButtonGame->Draw(); //move in parent draw function
 	return false;
+}
+
+void CMainMenu::EventProcessing(SDL_Event evt)
+{
 }
