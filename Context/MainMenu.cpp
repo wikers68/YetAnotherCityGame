@@ -15,6 +15,7 @@ bool CMainMenu::CreateContext()
 {
 	_MenuBackGround = new CGui2DRect(1240, 700, 0, 0);
 	_ButtonGame = new CGui2DRect(250, 100, 100, 400);
+	_ButtonGame->SetBackGroundColor(0.0f, 0.0f, 1.0f);
 	_ButtonInsideButtonGame = new CGui2DRect(50, 50, 100, 25);
 	
 	_MenuBackGround->AddChild(_ButtonGame);

@@ -23,5 +23,15 @@ public:
 	GLuint _vertexArray;
 
 	void Draw(void) override;
+
+	void SetBackGroundColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha = 1.0f);
+
+private:
+	
+	// background color
+	 GLfloat _Red;
+	 GLfloat _Green;
+	 GLfloat _Blue;
+	 GLfloat _Alpha;
 };
 

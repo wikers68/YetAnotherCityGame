@@ -31,22 +31,23 @@ CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, i
 	
 	const char *VertexShaderString =
 	{
-		"#version 420 core\n"
+		"#version 410 core\n"
 		"layout( location = 0) in vec2 vertexPosition;"
 		"uniform ivec4 PositionSize;"
 		"uniform ivec4 ScreenSize;"
-		"out vec2 colorRG;"
+		"uniform vec4 BackGroundColor;"
+		"out vec4 ColorRG;"
 		"void main()"
 		"{"
-			//dimension in viewport space of the rectangle
-		"float widthRelToScreen = float(PositionSize.z) / float(ScreenSize.x);"
-		"float heightRelToScreen = float(PositionSize.w) / float(ScreenSize.y);"
+		//dimension in viewport space of the rectangle
+	"float widthRelToScreen = float(PositionSize.z) / float(ScreenSize.x);"
+	"float heightRelToScreen = float(PositionSize.w) / float(ScreenSize.y);"
 
-			//upper left corner position in screen space
-		"float Xposition = -1 + 2*(vertexPosition.x * widthRelToScreen + float(PositionSize.x) / float(ScreenSize.x));"
-		"float Yposition =  1 - 2*(vertexPosition.y * heightRelToScreen + float(PositionSize.y) / float(ScreenSize.y));"
+		//upper left corner position in screen space
+	"float Xposition = -1 + 2*(vertexPosition.x * widthRelToScreen + float(PositionSize.x) / float(ScreenSize.x));"
+	"float Yposition =  1 - 2*(vertexPosition.y * heightRelToScreen + float(PositionSize.y) / float(ScreenSize.y));"
 
-			"colorRG = vec2(vertexPosition.x,vertexPosition.y);"
+			"ColorRG = vec4(BackGroundColor.x,BackGroundColor.y,BackGroundColor.z,1.0f);"
 			"gl_Position = vec4( Xposition,Yposition,1,1);"
 		"};"
 	};
@@ -54,21 +55,32 @@ CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, i
 	const char *FragmentShaderString =
 	{
 		"#version 420 core\n"
-		"in vec2 colorRG;"
+		"in vec4 ColorRG;"
 		"out vec4 color;"
 		"void main()"
 		"{"
-			"color = vec4( colorRG.xy,1,1);"
+		"color = vec4(ColorRG.x,ColorRG.y,ColorRG.z,1.0f);"
 		"};"
 	};
 
 	_Shader = new CShader();
 	_Shader->Compile(VertexShaderString, FragmentShaderString);
+
+	//set default color
+	SetBackGroundColor(0.5f, 0.5f, 0.5f);
 }
 
 
 CGui2DRect::~CGui2DRect()
 {
+}
+
+void CGui2DRect::SetBackGroundColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+	this->_Red = red;
+	this->_Green = green;
+	this->_Blue = blue;
+	this->_Alpha = alpha;
 }
 
 void CGui2DRect::Draw(void)
@@ -87,6 +99,12 @@ void CGui2DRect::Draw(void)
 		COption::getInstance().Get_Vertical_Resolution(),
 		0,
 		0);
+
+	glUniform4f(glGetUniformLocation(_Shader->getShaderProgram(), "BackGroundColor"),
+		_Red,
+		_Green,
+		_Blue,
+		_Alpha);
 	
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
