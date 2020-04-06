@@ -16,7 +16,6 @@ public:
 	CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition);
 	~CGui2DRect();
 
-	GLuint _Shader;
 	GLuint _vertexShader;
 	GLuint _pixelShader;
 

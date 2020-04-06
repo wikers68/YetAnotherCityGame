@@ -5,6 +5,7 @@
 */
 
 #include <list>
+#include "../Shaders/Shader.h"
 
 class CGuiBaseRect
 {
@@ -22,6 +23,8 @@ public:
 
 	int _AbsoluteHorizontalPosition;	//absolute position in screen space
 	int _AbsoluteVerticalPosition;		//absolute position in screen space
+
+	CShader *_Shader;	//shader used to draw the BaseRect
 
 	//if something is change (size, parent location...), set to false.
 	//bool _ToBeUpdated;
