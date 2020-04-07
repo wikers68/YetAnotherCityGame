@@ -145,6 +145,7 @@
     <ClInclude Include="GUI\Gui2DRect.h" />
     <ClInclude Include="GUI\GuiBaseRect.h" />
     <ClInclude Include="Context\MainMenu.h" />
+    <ClInclude Include="Event\Mousse_Event.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="Shaders\Shader.h" />
     <ClInclude Include="stdafx.h" />

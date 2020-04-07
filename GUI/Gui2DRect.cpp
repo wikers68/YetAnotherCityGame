@@ -4,8 +4,6 @@
 
 CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition) :CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
 {
-	_isVisible = true;
-
 	glGenVertexArrays(1, &_vertexArray);
 	glBindVertexArray(_vertexArray);
 
@@ -69,9 +67,9 @@ CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, i
 	//set default color
 	SetBackGroundColor(0.5f, 0.5f, 0.5f);
 
-	OnClick_CallBackFunction = IsOver_CallBackFunction = IsLeaving_CallBackFunction =  nullptr;
-
 	PointerWasOverLastFrame = false;
+
+	Evenment = new CMousse_Event<CGui2DRect*>();
 }
 
 
@@ -87,38 +85,8 @@ void CGui2DRect::SetBackGroundColor(GLfloat red, GLfloat green, GLfloat blue, GL
 	this->_Alpha = alpha;
 }
 
-void CGui2DRect::Hide(void)
+void CGui2DRect::DrawLocal(float delta_t)
 {
-	this->_isVisible = false;
-}
-
-void CGui2DRect::Show(void)
-{
-	this->_isVisible = true;
-}
-
-bool CGui2DRect::IsVisible(void)
-{
-	return _isVisible;
-}
-
-void CGui2DRect::DrawChild(void)
-{
-	if (_Child)
-	{
-		std::list<CGuiBaseRect*>::iterator it = _Child->begin();
-
-		for (it = _Child->begin(); it != _Child->end(); it++)
-		{
-			(*it)->Draw();
-		}
-	}
-}
-
-void CGui2DRect::Draw(void)
-{
-	if (_isVisible)
-	{
 		glUseProgram(_Shader->getShaderProgram());
 		glBindVertexArray(_vertexArray);
 
@@ -142,84 +110,33 @@ void CGui2DRect::Draw(void)
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		DrawChild();
-	}
-}
-
-void CGui2DRect::Generate_Mousse_Action(SDL_Event evt)
-{
-	switch (evt.type)
-	{
-	default: break;
-	case SDL_MOUSEMOTION:
-		CheckMouseIsOver(evt);
-		CheckMouseIsLeaving(evt);
-		break;
-	case SDL_MOUSEBUTTONDOWN:
-		CheckMouseClick(evt);
-		break;
-	}
 }
 
 void CGui2DRect::CheckMouseClick(SDL_Event evt)
 {
-	if (PointerIsInside_Rect(evt.button.x, evt.button.y) && OnClick_CallBackFunction)
+	if (PointerIsInside_Rect(evt.button.x, evt.button.y) && Evenment->OnClick_CallBackFunction)
 	{
-		OnClick_CallBackFunction(this);
+		Evenment->OnClick_CallBackFunction(this);
 	}
 }
 
 void CGui2DRect::CheckMouseIsOver(SDL_Event evt)
 {
-	if (PointerIsInside_Rect(evt.motion.x, evt.motion.y) && IsOver_CallBackFunction)
+	if (PointerIsInside_Rect(evt.motion.x, evt.motion.y) && Evenment->IsOver_CallBackFunction)
 	{
 		this->PointerWasOverLastFrame = true;
-		IsOver_CallBackFunction(this);
+		  Evenment->IsOver_CallBackFunction(this);
 	}
 }
 
 void CGui2DRect::CheckMouseIsLeaving(SDL_Event evt)
 {
-	if (IsLeaving_CallBackFunction)
+	if (Evenment->IsLeaving_CallBackFunction)
 	{
 		if (PointerWasOverLastFrame && !PointerIsInside_Rect(evt.motion.x, evt.motion.y))
 		{
 			PointerWasOverLastFrame = false;
-			IsLeaving_CallBackFunction(this);
+			Evenment->IsLeaving_CallBackFunction(this);
 		}
 	}
-}
-
-bool CGui2DRect::PointerIsInside_Rect(int x, int y)
-{
-	if (x > this->_AbsoluteHorizontalPosition && x <= (_AbsoluteHorizontalPosition + _Width))
-	{
-		if (y > this->_AbsoluteVerticalPosition && y <= (_AbsoluteVerticalPosition + _Height))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void CGui2DRect::Set_OnClick_Callback(std::function<void(CGui2DRect*)> func)
-{
-	OnClick_CallBackFunction = func;
-}
-
-void CGui2DRect::Set_IsOver_Callback(std::function<void(CGui2DRect*)> func)
-{
-	IsOver_CallBackFunction = func;
-}
-
-void CGui2DRect::Set_IsLeaving_Callback(std::function<void(CGui2DRect*)> func)
-{
-	IsLeaving_CallBackFunction = func;
 }

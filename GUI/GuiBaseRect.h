@@ -5,6 +5,8 @@
 */
 
 #include <list>
+#include <functional>
+#include <SDL.h>
 #include "../Shaders/Shader.h"
 
 class CGuiBaseRect
@@ -24,6 +26,8 @@ public:
 	int _AbsoluteHorizontalPosition;	//absolute position in screen space
 	int _AbsoluteVerticalPosition;		//absolute position in screen space
 
+	bool _isVisible;
+
 	CShader *_Shader;	//shader used to draw the BaseRect
 
 	//if something is change (size, parent location...), set to false.
@@ -39,7 +43,33 @@ public:
 
 	void AddChild(CGuiBaseRect *argChild);
 
-	virtual void Draw(void) {};
+	void Draw(float delta_t = 0.0f);
+
+	//add specific draw instruction of inherited class inside
+	virtual void DrawLocal(float delta_t = 0.0f) = 0;
+
+	void DrawChild(void);
+
+	void Hide(void);
+
+	void Show(void);
+
+	bool IsVisible(void);
+
+	/*
+	*	True if the pointer was over the element during last frame.
+	*	If pointer is not over frame during test, event "OnLeave" is generated
+	*/
+	bool PointerWasOverLastFrame;
+
+	bool PointerIsInside_Rect(int x, int y);
+
+	void CGuiBaseRect::Generate_Mousse_Action(SDL_Event evt);
+
+	//list of event function
+	virtual void CheckMouseClick(SDL_Event evt) = 0;
+	virtual void CheckMouseIsOver(SDL_Event evt) = 0;
+	virtual void CheckMouseIsLeaving(SDL_Event evt) = 0;
 
 private:
 
