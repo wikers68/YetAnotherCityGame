@@ -20,6 +20,7 @@ CContext * CContextManager::GetCurrentActiveContext()
 
 CContextManager::CContextManager()
 {
+	RunApplication = true;
 }
 
 

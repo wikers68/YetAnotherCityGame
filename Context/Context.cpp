@@ -56,12 +56,12 @@ void CContext::ManageEvent(void)
 
 		for (it = _GuiElements->begin(); it != _GuiElements->end(); it++)
 		{
-			//only CGUI2DRect can handle  event
-			if (static_cast<CGui2DRect*>(*it))
+			//only CGUiBase Rect can handle  event
+			if (static_cast<CGuiBaseRect*>(*it))
 			{
-				if (static_cast<CGui2DRect*>(*it)->IsVisible())
+				if (static_cast<CGuiBaseRect*>(*it)->IsVisible())
 				{
-					static_cast<CGui2DRect*>(*it)->Generate_Mousse_Action(evt);
+					static_cast<CGuiBaseRect*>(*it)->Generate_Mousse_Action(evt);
 				}
 			}
 

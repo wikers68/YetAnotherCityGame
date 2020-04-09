@@ -6,8 +6,9 @@
 
 #include <SDL.h> //for event handling
 #include <list>
-#include "GUI\GuiBaseRect.h"
-#include "GUI\Gui2DRect.h"
+
+#include "../GUI/GuiBaseRect.h"
+#include "../GUI/Gui2DRect.h"
 
 class CContext
 {

@@ -14,15 +14,21 @@
 #include <gl/GL.h>
 #pragma comment(lib,"opengl32.lib")
 
-#include "ContextManager.h"
-#include "Context\MainMenu.h"
+//use only once before including stb_image.h in other file
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+#pragma comment(lib,"freetype.lib")
+
+#include "./Context/ContextManager.h"
+#include "./Context/MainMenu.h"
 #include "Option.h"
+#include "./GUI/Font/FontManager.h"
 
 SDL_Window * _MainWindow = nullptr;
 SDL_GLContext _glContext;
 SDL_Event _SdlEvent;
 
-bool _runApplication = true;
 CMainMenu *_MainMenuContext = nullptr;
 
 int main(int argc, char* args[])
@@ -73,12 +79,20 @@ int main(int argc, char* args[])
 		return -3;
 	}
 
+	/*
+	*	FontManager initialisation
+	*/
+	if (!CFontManager::getInstance().Init_FontManager())
+	{
+		return -4;
+	}
+
 	//create the main menu
 	_MainMenuContext = new CMainMenu();
 	_MainMenuContext->CreateContext();
 	CContextManager::Instance().SetCurrentActiveContext(_MainMenuContext);
 
-	while (_runApplication)
+	while (CContextManager::Instance().getRunApplication())
 	{
 		glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
