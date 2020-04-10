@@ -4,6 +4,7 @@
 #include "../GUI/Gui2DRect.h"
 #include "../GUI/GuiTextureRect.h"
 #include "../graphics/texture/Texture.h"
+#include "../GUI/Font/DisplayText.h"
 
 class CMainMenu : 	public CContext
 {
@@ -17,6 +18,9 @@ public:
 
 	CGuiTextureRect *_ButtonTexture;
 	CGui2DRect *_buttonExitGame;
+
+	CDisplayText *hello;
+	CDisplayText *quit;
 
 	bool CreateContext() override;
 	void RunContextLogic(float delta_t = 0.0f) override;

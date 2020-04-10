@@ -5,7 +5,11 @@ CFontManager CFontManager::_singletonInstance = CFontManager();
 
 CFontManager::CFontManager()
 {
+	CharacterSet = new std::map<int, SCharacter>();
 
+	//resolution of the texture that will pack glyph raster
+	TextureResolution = 1024;
+	Raster = -1;
 }
 
 
@@ -18,7 +22,6 @@ bool CFontManager::Init_FontManager(void)
 	/*
 	*	First we create an "OpenGL texture" in which we will raster each Glyph
 	*/
-	GLuint Raster;
 	glGenTextures(1, &Raster);
 	glBindTexture(GL_TEXTURE_2D, Raster);
 
@@ -27,10 +30,6 @@ bool CFontManager::Init_FontManager(void)
 	*	https://www.freetype.org/freetype2/docs/reference/ft2-basic_types.html#ft_pixel_mode_gray
 	*/
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	//resolution of the texture that will pack glyph raster
-	int TextureResolution = 1024;
-
 
 	/*
 	*	define one texture only with one color
@@ -100,7 +99,6 @@ bool CFontManager::Init_FontManager(void)
 
 	//screen resolution Change by real value?
 	int dpi = 76;
-	int pixelHeight = 72;
 
 	codeErreur = FT_Set_Char_Size(face, 0, pixelHeight * 64, dpi, dpi);
 
@@ -148,6 +146,7 @@ bool CFontManager::Init_FontManager(void)
 		}
 
 		SCharacter ch;
+		ch.codeCaractere = character;
 		ch.Horizontal_Start = Pixel_Horizontal_offset;
 		ch.Vertical_Start = LineNumber*pixelHeight;
 		ch.Vertical_End = ch.Vertical_Start + bitmapRes_Height;
@@ -171,6 +170,8 @@ bool CFontManager::Init_FontManager(void)
 					ch.Vertical_End - ch.Vertical_Start,
 					GL_RED, GL_UNSIGNED_BYTE,
 					face->glyph->bitmap.buffer);
+
+				AddCharacterToSet(ch);
 			}
 		}
 
@@ -182,4 +183,31 @@ bool CFontManager::Init_FontManager(void)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 	return true;
+}
+
+void CFontManager::AddCharacterToSet(SCharacter arg)
+{
+	CharacterSet->insert(std::pair<int, SCharacter>(arg.codeCaractere, arg));
+}
+
+SCharacter CFontManager::getCharacter_Code(int code)
+{
+	
+	std::map<int, SCharacter>::iterator results = CharacterSet->find(code);
+
+	if (results != CharacterSet->end())
+	{
+		/*
+		*	The character exist on our base
+		*/
+		return results->second;
+	}
+	else
+	{
+		/*
+		*	The character doens't exist on our base.
+		*	We return a new character all set to 0.
+		*/
+		return SCharacter();
+	}
 }

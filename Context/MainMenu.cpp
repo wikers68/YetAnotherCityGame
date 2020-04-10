@@ -48,6 +48,14 @@ bool CMainMenu::CreateContext()
 	_MenuBackGround->AddChild(_buttonExitGame);
 	RegisterGui_ForEvent_Handling(_buttonExitGame);
 
+	hello = new CDisplayText(0,0,200,0);
+	hello->SetText(L"Ca marche! => €");
+	_MenuBackGround->AddChild(hello);
+
+	quit = new CDisplayText(0,0,0,0);
+	quit->SetText(L"EeXxIt");
+	_buttonExitGame->AddChild(quit);
+
 	return false;
 }
 

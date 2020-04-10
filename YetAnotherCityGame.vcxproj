@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="Context\Context.h" />
     <ClInclude Include="Context\ContextManager.h" />
+    <ClInclude Include="GUI\Font\DisplayText.h" />
     <ClInclude Include="GUI\Font\FontManager.h" />
     <ClInclude Include="GUI\Gui2DRect.h" />
     <ClInclude Include="GUI\GuiBaseRect.h" />
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="Context\Context.cpp" />
     <ClCompile Include="Context\ContextManager.cpp" />
+    <ClCompile Include="GUI\Font\DisplayText.cpp" />
     <ClCompile Include="GUI\Font\FontManager.cpp" />
     <ClCompile Include="GUI\Gui2DRect.cpp" />
     <ClCompile Include="GUI\GuiBaseRect.cpp" />
