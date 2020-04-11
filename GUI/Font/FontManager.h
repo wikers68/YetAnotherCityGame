@@ -41,6 +41,11 @@ public:
 	*/
 	const int pixelHeight = 72;
 
+	/*
+	*	We define a number to have a dead spac between two characters
+	*/
+	const int PixelGap = 6;
+
 private:
 	CFontManager();
 	~CFontManager();

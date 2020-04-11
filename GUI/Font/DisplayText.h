@@ -32,6 +32,10 @@ public:
 	virtual void CheckMouseIsOver(SDL_Event evt) override {};
 	virtual void CheckMouseIsLeaving(SDL_Event evt) override {};
 
+	float R;
+	float G;
+	float B;
+
 private:
 
 	int HeightPixel; 
@@ -40,5 +44,11 @@ private:
 
 	//number of character in the string
 	int numberOfCharacter;
+
+	/* 
+	*	Size of string in pixel.
+	*	Calculated during SetText()
+	*/
+	int StringSize;
 };
 

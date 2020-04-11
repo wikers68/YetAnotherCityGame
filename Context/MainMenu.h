@@ -6,21 +6,36 @@
 #include "../graphics/texture/Texture.h"
 #include "../GUI/Font/DisplayText.h"
 
+#define BUTTON_WIDTH 200
+#define BUTTON_HEIGHT 100
+#define BUTTON_COLOR 0.13, 0.33, 0.50,1.0
+#define BUTTON_COLOR_ISOVER 0.11f, 0.27f, 0.41f
+
 class CMainMenu : 	public CContext
 {
 public:
 	CMainMenu();
 	~CMainMenu();
 
-	CGui2DRect *_MenuBackGround;
-	CGui2DRect *_ButtonGame;
-	CGui2DRect *_ButtonInsideButtonGame;
-
+	CGuiTextureRect *_MenuBackGround;
 	CGuiTextureRect *_ButtonTexture;
-	CGui2DRect *_buttonExitGame;
 
-	CDisplayText *hello;
+	CGui2DRect *_ButtonStartNewGame;
+	CDisplayText *PlayText;
+
+	CGui2DRect *_ButtonOpenGame;
+	CDisplayText *OpenGameText;
+
+	CGui2DRect *_Editor;
+	CDisplayText *EditorText;
+
+	CGui2DRect *_Option;
+	CDisplayText *OptionText;
+
+	CGui2DRect *_buttonExitGame;
 	CDisplayText *quit;
+
+	CDisplayText *Version;
 
 	bool CreateContext() override;
 	void RunContextLogic(float delta_t = 0.0f) override;

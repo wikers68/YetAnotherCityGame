@@ -148,11 +148,12 @@ bool CFontManager::Init_FontManager(void)
 		SCharacter ch;
 		ch.codeCaractere = character;
 		ch.Horizontal_Start = Pixel_Horizontal_offset;
-		ch.Vertical_Start = LineNumber*pixelHeight;
+		ch.Vertical_Start = LineNumber*(pixelHeight/*+PixelGap*/);
 		ch.Vertical_End = ch.Vertical_Start + bitmapRes_Height;
 		Pixel_Horizontal_offset += bitmapRes_With;
 
 		ch.Horzontal_End = Pixel_Horizontal_offset;
+		//Pixel_Horizontal_offset += PixelGap;
 
 		/*
 		*	draw the glyph bitmap in the Texture raster

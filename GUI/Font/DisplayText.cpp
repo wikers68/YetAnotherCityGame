@@ -31,17 +31,26 @@ CDisplayText::CDisplayText(int argWidth, int argHeight, int argHorizontalPositio
 		"#version 420 core\n"
 		"in vec2 p_uv;"
 		"uniform sampler2D glyph_packed;"
+		"uniform vec3 TextColor;"
 		"out vec4 color;"
 		"void main()"
 		"{"
-		"color = texture(glyph_packed,p_uv);"
+
+		"if(texture(glyph_packed,p_uv).r <= 0.5f)"
+		"{"
+		"discard;"
+		"}"
+		"color = vec4(TextColor,1.0f); "
 		"};"
 	};
 
 	_Shader = new CShader();
 	_Shader->Compile(VertexShaderString, FragmentShaderString);
 
-	HeightPixel = 120;
+	HeightPixel = 50;
+
+	//default color is White
+	R = G = B = 1.0f;
 }
 
 
@@ -162,12 +171,14 @@ void CDisplayText::SetText(std::wstring text)
 			glEnableVertexAttribArray(1);
 		}
 
+		StringSize = offset_Horizontal;
 		free(vt);
 	}
 }
 
 void CDisplayText::SetHeight(int Height_Pixel)
 {
+	this->HeightPixel = Height_Pixel;
 }
 
 void CDisplayText::DrawLocal(float delta_t)
@@ -186,6 +197,11 @@ void CDisplayText::DrawLocal(float delta_t)
 		COption::getInstance().Get_Vertical_Resolution(),
 		0,
 		0);
+
+	glUniform3f(glGetUniformLocation(_Shader->getShaderProgram(), "TextColor"),
+		R,
+		G,
+		B);
 
 	/*
 	*	We bind the texture with all glyphs 
