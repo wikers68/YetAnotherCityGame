@@ -9,6 +9,11 @@
 #include <SDL.h>
 #include "../Shaders/Shader.h"
 
+#define HORIZONTAL_CENTER -1
+#define HORIZONTAL_LEFT -2
+#define HORIZONTAL_RIGHT -3
+
+
 class CGuiBaseRect
 {
 public:

@@ -90,7 +90,7 @@ int main(int argc, char* args[])
 	//create the main menu
 	_MainMenuContext = new CMainMenu();
 	_MainMenuContext->CreateContext();
-	CContextManager::Instance().SetCurrentActiveContext(_MainMenuContext);
+	_MainMenuContext->ActivateContext();
 
 	while (CContextManager::Instance().getRunApplication())
 	{

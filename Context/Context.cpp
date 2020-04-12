@@ -10,6 +10,8 @@ CContext::CContext()
 
 CContext::~CContext()
 {
+	_GuiElements->clear();
+	delete _GuiElements;
 }
 
 
@@ -21,12 +23,18 @@ bool CContext::CreateContext()
 
 bool CContext::ActivateContext()
 {
-	return false;
+	CContextManager::Instance().SetCurrentActiveContext(this);
+	return true;
 }
 
 
 bool CContext::RunContext(float delta_t)
 {
+	/*
+	*	We delete the previous context after that the new one is running.
+	*/
+	CContextManager::Instance().DeletePreviousContext();
+
 	ManageEvent();
 	RunContextLogic(delta_t);
 

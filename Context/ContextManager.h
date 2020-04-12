@@ -2,6 +2,11 @@
 
 #include "Context.h"
 
+/*
+*	Added to solve cyclic header file dependency 
+*/
+class CContext;
+
 class CContextManager
 {
 public:
@@ -9,9 +14,12 @@ public:
 
 	void SetCurrentActiveContext(CContext *_currentActiveContext);
 	CContext *GetCurrentActiveContext();
+	CContext *previousContext;
 
 	bool getRunApplication(void) { return RunApplication; }
 	void stopApplication(void) { RunApplication = false; }
+
+	void DeletePreviousContext(void);
 
 private:
 	static CContextManager _singletonInstance;
@@ -27,4 +35,3 @@ private:
 	//used to run or to exit applicaton; 
 	bool RunApplication;
 };
-

@@ -5,8 +5,9 @@
 #include "../GUI/GuiTextureRect.h"
 #include "../graphics/texture/Texture.h"
 #include "../GUI/Font/DisplayText.h"
+#include "./Game/GameContext.h"
 
-#define BUTTON_WIDTH 200
+#define BUTTON_WIDTH 300
 #define BUTTON_HEIGHT 100
 #define BUTTON_COLOR 0.13, 0.33, 0.50,1.0
 #define BUTTON_COLOR_ISOVER 0.11f, 0.27f, 0.41f
@@ -51,5 +52,7 @@ public:
 
 	void TextureIsOver(CGuiTextureRect *caller);
 	void TextureIsLeaving(CGuiTextureRect *caller);
+
+	void ButtonStartNewGameOnClick(CGui2DRect *caller);
 };
 

@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef CONTEXT_H
+#define CONTEXT_H
+
 /*
 *	Base class to manage game context such as main menu, in game logic, terrain editor, asset...
 */
@@ -9,6 +12,7 @@
 
 #include "../GUI/GuiBaseRect.h"
 #include "../GUI/Gui2DRect.h"
+#include "ContextManager.h"
 
 class CContext
 {
@@ -32,3 +36,4 @@ public:
 	void RegisterGui_ForEvent_Handling(CGuiBaseRect *arg);
 };
 
+#endif

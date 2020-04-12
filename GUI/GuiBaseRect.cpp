@@ -30,6 +30,8 @@ CGuiBaseRect::CGuiBaseRect(int argWidth, int argHeight, int argHorizontalPositio
 
 CGuiBaseRect::~CGuiBaseRect()
 {
+	if (_Child) _Child->clear();
+	delete _Child;
 }
 
 void CGuiBaseRect::Hide(void)
@@ -65,8 +67,33 @@ void CGuiBaseRect::Update(void)
 {
 	if (_Parent != nullptr)
 	{
-		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + _HorizontalPosition;
-		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
+		if (_HorizontalPosition >= 0)
+		{
+			_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + _HorizontalPosition;
+			_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
+		}
+		else
+		{
+			switch (_HorizontalPosition)
+			{
+			default:
+				_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition;
+				_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;;
+				break;
+			case HORIZONTAL_CENTER:
+				_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + int( (float)((_Parent->_Width - this->_Width)) / 2.0f);
+				_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
+				break;
+			case HORIZONTAL_LEFT:
+				_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition;
+				_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;;
+				break;
+			case HORIZONTAL_RIGHT:
+				_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + (_Parent->_Width - this->_Width);
+				_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
+				break;
+			}
+		}
 	}
 	else
 	{

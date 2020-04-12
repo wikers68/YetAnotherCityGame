@@ -63,6 +63,15 @@
     <ClInclude Include="GUI\Font\DisplayText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="3DGameObject\C3DObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="3DGameObject\StaticObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Context\Game\GameContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -102,6 +111,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Font\DisplayText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3DGameObject\C3DObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3DGameObject\StaticObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\Game\GameContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -75,6 +75,8 @@ CGui2DRect::CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, i
 
 CGui2DRect::~CGui2DRect()
 {
+	if (_Child) _Child->clear();
+	delete _Child;
 }
 
 void CGui2DRect::SetBackGroundColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
