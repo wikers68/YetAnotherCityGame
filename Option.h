@@ -5,6 +5,9 @@
 *	Use singleton patern to be accessible every where
 */
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 class COption
 {
 public:
@@ -19,6 +22,8 @@ public:
 	void Set_Vertical_Resolution(int arg);
 	int Get_Vertical_Resolution(void);
 
+	glm::mat4 getMatriceProjection(void);
+
 private:
 	static COption _Instance;
 
@@ -30,5 +35,8 @@ private:
 
 	int _Horizontal_Resolution;
 	int _Vertical_Resolution;
+
+	bool ProjectionMatriceIsUpToDate;
+	glm::mat4 matriceProjection;
 };
 

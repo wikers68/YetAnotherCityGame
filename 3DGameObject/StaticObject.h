@@ -19,6 +19,8 @@ public:
 	void Draw(float delta_t = 0.0f) override;
 
 	// Inherited via C3DObject
-	virtual void Initialize(void * data) override;
+	virtual void Initialize(void * data, int numberOfElement) override;
+
+	int numberOfvertex;
 };
 

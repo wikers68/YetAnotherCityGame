@@ -15,6 +15,8 @@ bool COption::Read_Option()
 	Set_Horizontal_Resolution(1280);
 	Set_Vertical_Resolution(760);
 
+	ProjectionMatriceIsUpToDate = false;
+
 	return false;
 }
 
@@ -38,8 +40,29 @@ int COption::Get_Vertical_Resolution(void)
 	return _Vertical_Resolution;
 }
 
+glm::mat4 COption::getMatriceProjection(void)
+{
+	if (ProjectionMatriceIsUpToDate)
+	{
+		return matriceProjection;
+	}
+	else
+	{
+		matriceProjection = glm::perspectiveFovRH(glm::radians(45.0f),
+			(float)Get_Horizontal_Resolution(),
+			(float)Get_Vertical_Resolution(),
+			0.1f,
+			100.0f);
+
+		ProjectionMatriceIsUpToDate = true;
+
+		return matriceProjection;
+	}
+}
+
 COption::COption()
 {
+	ProjectionMatriceIsUpToDate = false;
 }
 
 

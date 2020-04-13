@@ -24,12 +24,17 @@
 #include "./Context/MainMenu.h"
 #include "Option.h"
 #include "./GUI/Font/FontManager.h"
+#include "./Shaders/ShaderManager.h"
 
 SDL_Window * _MainWindow = nullptr;
 SDL_GLContext _glContext;
 SDL_Event _SdlEvent;
 
 CMainMenu *_MainMenuContext = nullptr;
+
+unsigned int startFrameTime = 0;
+unsigned int endFrameTime = 0;
+float delta_t = 0.0;
 
 int main(int argc, char* args[])
 {
@@ -87,23 +92,38 @@ int main(int argc, char* args[])
 		return -4;
 	}
 
+	/*
+	*	Load and compile shaders
+	*/
+	if (!CShaderManager::getInstance().InitializeShader())
+	{
+		return -5;
+	}
+
 	//create the main menu
 	_MainMenuContext = new CMainMenu();
 	_MainMenuContext->CreateContext();
 	_MainMenuContext->ActivateContext();
 
+	//glViewport(-1.0, -1.0, COption::getInstance().Get_Horizontal_Resolution(), COption::getInstance().Get_Vertical_Resolution());
+
 	while (CContextManager::Instance().getRunApplication())
 	{
+		startFrameTime = SDL_GetTicks();
+
 		glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (CContextManager::Instance().GetCurrentActiveContext())
 		{
 			CContextManager::Instance().GetCurrentActiveContext()->ManageEvent();
-			CContextManager::Instance().GetCurrentActiveContext()->RunContext();
+			CContextManager::Instance().GetCurrentActiveContext()->RunContext(delta_t);
 		}
 
 		SDL_GL_SwapWindow(_MainWindow);
+
+		endFrameTime = SDL_GetTicks();
+		delta_t = (float)(endFrameTime - startFrameTime) / 1000.0;
 	}
 
 	SDL_GL_DeleteContext(_glContext);
