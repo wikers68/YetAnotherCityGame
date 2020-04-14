@@ -156,6 +156,7 @@ void CGameContext::RunContextLogic(float delta_t)
 	debugObject->Draw();
 }
 
-void CGameContext::EventProcessing(SDL_Event evt)
+void CGameContext::EventProcessing(SDL_Event evt, float delta_t)
 {
+	if (camera) camera->Proceed_Event(evt, delta_t);
 }

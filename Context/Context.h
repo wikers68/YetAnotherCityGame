@@ -29,9 +29,9 @@ public:
 	bool DestroyContext();
 
 	//dispatch event inside the context
-	void ManageEvent(void);
+	void ManageEvent(float delta_t = 0.0f);
 
-	virtual void EventProcessing(SDL_Event evt) = 0;
+	virtual void EventProcessing(SDL_Event evt, float delta_t = 0.0f) = 0;
 
 	void RegisterGui_ForEvent_Handling(CGuiBaseRect *arg);
 };

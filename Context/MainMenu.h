@@ -42,7 +42,7 @@ public:
 	void RunContextLogic(float delta_t = 0.0f) override;
 
 	// Inherited via CContext
-	virtual void EventProcessing(SDL_Event evt) override;
+	virtual void EventProcessing(SDL_Event evt, float delta_t = 0.0) override;
 
 	//callback function...
 	void ButtonGameOnClick(CGui2DRect *caller);

@@ -12,7 +12,7 @@ public:
 
 	// Inherited via CContext
 	virtual void RunContextLogic(float delta_t = 0.0f) override;
-	virtual void EventProcessing(SDL_Event evt) override;
+	virtual void EventProcessing(SDL_Event evt, float delta_t = 0.0) override;
 
 	CStaticObject *debugObject;
 

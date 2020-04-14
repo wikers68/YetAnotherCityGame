@@ -110,7 +110,7 @@ void CMainMenu::RunContextLogic(float delta_t)
 
 }
 
-void CMainMenu::EventProcessing(SDL_Event evt)
+void CMainMenu::EventProcessing(SDL_Event evt, float delta_t)
 {
 }
 

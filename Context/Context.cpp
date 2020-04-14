@@ -52,7 +52,7 @@ void CContext::RegisterGui_ForEvent_Handling(CGuiBaseRect * arg)
 	this->_GuiElements->push_back(arg);
 }
 
-void CContext::ManageEvent(void)
+void CContext::ManageEvent(float delta_t)
 {
 	SDL_Event evt;
 	while (SDL_PollEvent(&evt))
@@ -76,7 +76,7 @@ void CContext::ManageEvent(void)
 		}
 
 		//function defined in parent class. Used to manage local event <-> Specific to active context
-		EventProcessing(evt);
+		EventProcessing(evt,delta_t);
 	}
 
 }

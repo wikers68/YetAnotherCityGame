@@ -24,6 +24,9 @@ public:
 
 	glm::mat4 getMatriceProjection(void);
 
+	float getCamera_TranslationSpeed(void);
+	float getCamera_RotationSpeed(void);
+
 private:
 	static COption _Instance;
 

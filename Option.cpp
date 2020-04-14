@@ -60,6 +60,16 @@ glm::mat4 COption::getMatriceProjection(void)
 	}
 }
 
+float COption::getCamera_TranslationSpeed(void)
+{
+	return 1.0f;
+}
+
+float COption::getCamera_RotationSpeed(void)
+{
+	return 5.0f;
+}
+
 COption::COption()
 {
 	ProjectionMatriceIsUpToDate = false;

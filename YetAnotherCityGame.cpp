@@ -116,7 +116,7 @@ int main(int argc, char* args[])
 
 		if (CContextManager::Instance().GetCurrentActiveContext())
 		{
-			CContextManager::Instance().GetCurrentActiveContext()->ManageEvent();
+			CContextManager::Instance().GetCurrentActiveContext()->ManageEvent(delta_t);
 			CContextManager::Instance().GetCurrentActiveContext()->RunContext(delta_t);
 		}
 
