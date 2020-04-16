@@ -17,7 +17,7 @@
 class CGuiTextureRect : public CGuiBaseRect
 {
 public:
-	CGuiTextureRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition);
+	CGuiTextureRect(std::string  argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition);
 	~CGuiTextureRect();
 
 	GLuint _vertexShader;

@@ -145,6 +145,7 @@
     <ClInclude Include="Context\Context.h" />
     <ClInclude Include="Context\ContextManager.h" />
     <ClInclude Include="Context\Game\GameContext.h" />
+    <ClInclude Include="Context\ObjectEditor\EditorLandScreen.h" />
     <ClInclude Include="GUI\Font\DisplayText.h" />
     <ClInclude Include="GUI\Font\FontManager.h" />
     <ClInclude Include="GUI\Gui2DRect.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Context\MainMenu.h" />
     <ClInclude Include="Event\Mousse_Event.h" />
     <ClInclude Include="GUI\GuiTextureRect.h" />
+    <ClInclude Include="GUI\Layout\Horizontal_layout.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="Shaders\ShaderManager.h" />
     <ClInclude Include="Shaders\Shader.h" />
@@ -160,6 +162,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="graphics\texture\Texture.h" />
+    <ClInclude Include="GUI\Layout\Vertical_layout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3DGameObject\C3DObject.cpp" />
@@ -167,12 +170,14 @@
     <ClCompile Include="Context\Context.cpp" />
     <ClCompile Include="Context\ContextManager.cpp" />
     <ClCompile Include="Context\Game\GameContext.cpp" />
+    <ClCompile Include="Context\ObjectEditor\EditorLandScreen.cpp" />
     <ClCompile Include="GUI\Font\DisplayText.cpp" />
     <ClCompile Include="GUI\Font\FontManager.cpp" />
     <ClCompile Include="GUI\Gui2DRect.cpp" />
     <ClCompile Include="GUI\GuiBaseRect.cpp" />
     <ClCompile Include="Context\MainMenu.cpp" />
     <ClCompile Include="GUI\GuiTextureRect.cpp" />
+    <ClCompile Include="GUI\Layout\Horizontal_layout.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Shaders\ShaderManager.cpp" />
     <ClCompile Include="Shaders\Shader.cpp" />
@@ -184,6 +189,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="graphics\texture\Texture.cpp" />
+    <ClCompile Include="GUI\Layout\Vertical_layout.cpp" />
     <ClCompile Include="YetAnotherCityGame.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

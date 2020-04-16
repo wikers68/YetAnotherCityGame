@@ -18,7 +18,7 @@ class CDisplayText :
 	public CGuiBaseRect
 {
 public:
-	CDisplayText(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition);
+	CDisplayText(std::string argWidth, std::string argHeight, int argHorizontalPosition, int argVerticalPosition);
 	~CDisplayText();
 
 	void SetText(std::wstring text);

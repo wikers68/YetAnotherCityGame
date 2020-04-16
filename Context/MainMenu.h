@@ -6,9 +6,11 @@
 #include "../graphics/texture/Texture.h"
 #include "../GUI/Font/DisplayText.h"
 #include "./Game/GameContext.h"
+#include "../GUI/Layout/Vertical_layout.h"
+#include "ObjectEditor\EditorLandScreen.h"
 
-#define BUTTON_WIDTH 300
-#define BUTTON_HEIGHT 100
+#define BUTTON_WIDTH "300p"
+#define BUTTON_HEIGHT "100p"
 #define BUTTON_COLOR 0.13, 0.33, 0.50,1.0
 #define BUTTON_COLOR_ISOVER 0.11f, 0.27f, 0.41f
 
@@ -17,6 +19,8 @@ class CMainMenu : 	public CContext
 public:
 	CMainMenu();
 	~CMainMenu();
+
+	CVertical_layout *verticalLayout;
 
 	CGuiTextureRect *_MenuBackGround;
 	CGuiTextureRect *_ButtonTexture;
@@ -46,6 +50,7 @@ public:
 
 	//callback function...
 	void ButtonGameOnClick(CGui2DRect *caller);
+	void ButtonEditorOnClick(CGui2DRect * caller);
 	void IsOverButton(CGui2DRect *caller);
 	void IsLeavingButton(CGui2DRect * caller);
 	void ExitGame(CGui2DRect *caller);

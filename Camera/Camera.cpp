@@ -54,6 +54,17 @@ void CCamera::Proceed_Event(SDL_Event evt, float delta_t)
 		lastMousseXposition = newXposition;
 		lastMousseYposition = newYposition;
 	}
+	
+	switch (evt.type)
+	{
+		default: break;
+		case SDL_MOUSEWHEEL:
+			/*
+			*	Zoom in if y > 0 & zoom out if y < 0
+			*/
+			Position += 5.0f*(float)evt.wheel.y * getViewDirection()*delta_t* COption::getInstance().getCamera_TranslationSpeed();
+			break;
+	}
 
 	/*
 	*	Keyboard Event (in qwerty ?)

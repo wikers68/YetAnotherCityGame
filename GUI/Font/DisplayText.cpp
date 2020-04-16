@@ -2,7 +2,7 @@
 #include "DisplayText.h"
 
 
-CDisplayText::CDisplayText(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition) : CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
+CDisplayText::CDisplayText(std::string argWidth, std::string argHeight, int argHorizontalPosition, int argVerticalPosition) : CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
 {
 	const char *VertexShaderString =
 	{

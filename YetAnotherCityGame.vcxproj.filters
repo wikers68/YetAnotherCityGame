@@ -81,6 +81,15 @@
     <ClInclude Include="Shaders\ShaderSource\C3DObjectShaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Context\ObjectEditor\EditorLandScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Layout\Vertical_layout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Layout\Horizontal_layout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -135,6 +144,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Shaders\ShaderManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\ObjectEditor\EditorLandScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Layout\Vertical_layout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Layout\Horizontal_layout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

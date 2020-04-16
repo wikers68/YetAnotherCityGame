@@ -6,24 +6,31 @@ CGuiBaseRect::CGuiBaseRect()
 {
 	_Width = _Height = 0;
 	_HorizontalPosition = _VerticalPosition = 0;
+
 	_Parent = nullptr;
 	_Child = nullptr;
 	_isVisible = true;
+	commandWidthString = "";
 
 	//OnClick_CallBackFunction = IsOver_CallBackFunction = IsLeaving_CallBackFunction = nullptr;
 }
 
-CGuiBaseRect::CGuiBaseRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition)
+CGuiBaseRect::CGuiBaseRect(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition)
 {
-	_Width = argWidth;
-	_Height = argHeight;
+	commandWidthString = argWidth;
+	_Width = -1;  
+
+	commandHeightString = argHeight;
+	_Height = -1;
+	
 	_HorizontalPosition = argHorizontalPosition;
 	_VerticalPosition = argVerticalPosition;
 	_Parent = nullptr;
 	_Child = nullptr;
 	_isVisible = true;
 
-	//update absolute position in case where a parent is attached
+	SizeHasBeenCalculated = false;
+
 	Update();
 }
 
@@ -59,12 +66,18 @@ void CGuiBaseRect::AddChild(CGuiBaseRect *argChild)
 	_Child->push_back(argChild);
 
 	argChild->_Parent = this;
+	argChild->Reset_HasBeenCalculated();
 
 	argChild->Update();
 }
 
 void CGuiBaseRect::Update(void)
 {
+	if (!SizeHasBeenCalculated)
+	{
+		CalculateSize();
+	}
+
 	if (_Parent != nullptr)
 	{
 		if (_HorizontalPosition >= 0)
@@ -132,8 +145,18 @@ void CGuiBaseRect::Draw(float delta_t)
 {
 	if (_isVisible)
 	{
-		DrawLocal(delta_t);
-		DrawChild();
+		if (SizeHasBeenCalculated)
+		{
+			DrawLocal(delta_t);
+			DrawChild();
+		}
+		else
+		{
+			/*
+			*	Update element size;
+			*/
+			CalculateSize();
+		}
 	}
 }
 
@@ -170,4 +193,116 @@ void CGuiBaseRect::Generate_Mousse_Action(SDL_Event evt)
 		CheckMouseClick(evt);
 		break;
 	}
+}
+
+int CGuiBaseRect::getHeight(void)
+{
+	if (SizeHasBeenCalculated)
+	{
+		return _Height;
+	}
+	else
+	{
+		CalculateSize();
+		
+		getHeight();
+	}
+}
+
+int CGuiBaseRect::getWidth(void)
+{
+	if (SizeHasBeenCalculated)
+	{
+		return _Width;
+	}
+	else
+	{
+		CalculateSize();
+
+		getWidth();
+	}
+}
+
+void CGuiBaseRect::Reset_HasBeenCalculated(void)
+{
+	SizeHasBeenCalculated = false;
+
+	if (_Child)
+	{
+		std::list<CGuiBaseRect*>::iterator it;
+
+		for (it = _Child->begin(); it != _Child->end(); it++)
+		{
+			(*it)->Reset_HasBeenCalculated();
+		}
+	}
+}
+
+void CGuiBaseRect::SetCommandString(std::string command, Translate_Size ts)
+{
+	switch (ts)
+	{
+		default:break;
+		case Translate_Size::WIDTH:
+			commandWidthString = command;
+			break;
+		case Translate_Size::HEIGHT:
+			commandHeightString = command;
+			break;
+	}
+
+	Reset_HasBeenCalculated();
+}
+
+int CGuiBaseRect::TranslateStringToSize(std::string arg, Translate_Size ts)
+{
+	int argLength = arg.length();
+
+	if (argLength > 0)
+	{
+		char lastCharacter = arg[argLength - 1];
+
+		if (lastCharacter == 'p' || lastCharacter == 'P')
+		{
+			std::string pixelSize = arg;
+			pixelSize.resize(argLength - 1);
+
+			return std::atoi(pixelSize.c_str());
+		}
+
+		if (lastCharacter == '%' || lastCharacter == '%')
+		{
+			std::string pourcentSize = arg;
+			pourcentSize.resize(argLength - 1);
+			float pourcentSizeF = 0.01 *  std::atof(pourcentSize.c_str());
+
+			if (_Parent)
+			{
+				if (ts == WIDTH)
+				{
+					float fWidth = (float)_Parent->_Width * pourcentSizeF;
+					return (int)fWidth;
+				}
+				else if(ts == HEIGHT)
+				{
+					float fHeight = (float)_Parent->_Height* pourcentSizeF;
+					return (int)fHeight;
+				}
+				return 0;
+			}
+			
+			return 0;
+		}
+
+	}
+
+	return 0;
+}
+
+void CGuiBaseRect::CalculateSize(void)
+{
+	_Width = TranslateStringToSize(commandWidthString,WIDTH);
+	_Height = TranslateStringToSize(commandHeightString, HEIGHT);
+
+	SizeHasBeenCalculated = true;
 }

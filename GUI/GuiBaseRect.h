@@ -6,6 +6,7 @@
 
 #include <list>
 #include <functional>
+#include <string>
 #include <SDL.h>
 #include "../Shaders/Shader.h"
 
@@ -13,14 +14,23 @@
 #define HORIZONTAL_LEFT -2
 #define HORIZONTAL_RIGHT -3
 
+enum Translate_Size
+{
+	WIDTH,
+	HEIGHT,
+};
+
 
 class CGuiBaseRect
 {
 public:
 	CGuiBaseRect();
-	CGuiBaseRect(int argWidth,int argHeight, int argHorizontalPosition, int argVerticalPosition );
+	CGuiBaseRect(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition );
 
 	~CGuiBaseRect();
+
+	std::string commandWidthString;
+	std::string commandHeightString;
 
 	int _Width;
 	int _Height;
@@ -46,7 +56,7 @@ public:
 	//link to other GuiElement linked to the current CGuiBaseRect 
 	std::list<CGuiBaseRect*> *_Child;
 
-	void AddChild(CGuiBaseRect *argChild);
+	virtual void AddChild(CGuiBaseRect *argChild);
 
 	void Draw(float delta_t = 0.0f);
 
@@ -76,7 +86,28 @@ public:
 	virtual void CheckMouseIsOver(SDL_Event evt) = 0;
 	virtual void CheckMouseIsLeaving(SDL_Event evt) = 0;
 
+	int getHeight(void);
+	int getWidth(void);
+
+	void Reset_HasBeenCalculated(void);
+
+	void SetCommandString(std::string command, Translate_Size ts);
+
 private:
+
+	/*
+	*	use to translate arg in string format to size:
+	*		- string ended by p ==> size is in pixel
+	*		- string ended by % ==> size is in parent size %
+	*/
+	int TranslateStringToSize(std::string arg, Translate_Size ts);
+
+	/*
+	*	True if size argument (in string format) has been translated into int type (pixel size)
+	*/
+	bool SizeHasBeenCalculated;
+
+	void CalculateSize(void);
 
 };
 

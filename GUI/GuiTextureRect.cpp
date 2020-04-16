@@ -2,7 +2,7 @@
 #include "GuiTextureRect.h"
 
 
-CGuiTextureRect::CGuiTextureRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition) :CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
+CGuiTextureRect::CGuiTextureRect(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition) :CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
 {
 	glGenVertexArrays(1, &_vertexArray);
 	glBindVertexArray(_vertexArray);

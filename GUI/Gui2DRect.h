@@ -16,7 +16,7 @@
 class CGui2DRect : public CGuiBaseRect
 {
 public:
-	CGui2DRect(int argWidth, int argHeight, int argHorizontalPosition, int argVerticalPosition);
+	CGui2DRect(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition);
 	~CGui2DRect();
 
 	GLuint _vertexShader;
