@@ -44,7 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <UseOfMfc>Static</UseOfMfc>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -158,6 +158,7 @@
     <ClInclude Include="GUI\GuiTextureRect.h" />
     <ClInclude Include="GUI\GUI_Style.h" />
     <ClInclude Include="GUI\Layout\Horizontal_layout.h" />
+    <ClInclude Include="Context\ObjectEditor\Importer\Importer_Obj.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="Shaders\ShaderManager.h" />
     <ClInclude Include="Shaders\Shader.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="Context\MainMenu.cpp" />
     <ClCompile Include="GUI\GuiTextureRect.cpp" />
     <ClCompile Include="GUI\Layout\Horizontal_layout.cpp" />
+    <ClCompile Include="Context\ObjectEditor\Importer\Importer_Obj.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Shaders\ShaderManager.cpp" />
     <ClCompile Include="Shaders\Shader.cpp" />

@@ -38,6 +38,15 @@ float delta_t = 0.0;
 
 int main(int argc, char* args[])
 {
+	/*
+	*	Initialize AFX module that will be used later, as CFileDialiog...
+	*/
+	if (!AfxWinInit(GetModuleHandle(nullptr),nullptr,GetCommandLine(),0))
+	{
+		std::cout << "can't initialize AFX" << std::endl;
+		return 0;
+	}
+
 	//read option from hard drive 
 	if (!COption::getInstance().Read_Option())
 	{

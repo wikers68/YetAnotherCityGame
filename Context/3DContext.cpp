@@ -117,7 +117,7 @@ C3DContext::C3DContext()
 	vt[31] = vt1;
 	vt[32] = vt2;
 
-	debugObject->Initialize(vt, 36);
+	//debugObject->Initialize(vt, 36);
 
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_FRONT_AND_BACK);
@@ -153,7 +153,7 @@ void C3DContext::RunContextLogic(float delta_t)
 		glm::value_ptr(COption::getInstance().getMatriceProjection())
 	);
 
-	debugObject->Draw();
+	//debugObject->Draw();
 }
 
 void C3DContext::EventProcessing(SDL_Event evt, float delta_t)

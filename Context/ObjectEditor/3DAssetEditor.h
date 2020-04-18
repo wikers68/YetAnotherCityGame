@@ -8,6 +8,11 @@
 #include "../../GUI/Layout/Horizontal_layout.h"
 #include "../../GUI/GUI_Style.h"
 
+/*
+*	Include for importer
+*/
+#include "Importer\Importer_Obj.h"
+
 class C3DAssetEditor : public C3DContext
 {
 public:
@@ -21,6 +26,8 @@ public:
 	CGui2DRect *TopMenuBackGround;
 
 	CGui2DRect *Button_backGround_ImportGeom;
+
+	CStaticObject *importedStaticObject;
 
 	/*
 	*	Open a File Dialog box, let the user to choose the asset to be imported.

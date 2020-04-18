@@ -4,6 +4,8 @@
 
 C3DAssetEditor::C3DAssetEditor()
 {
+	importedStaticObject = nullptr;
+
 	TopMenuBackGround = new CGui2DRect(CGuiBaseRect::ConvertIntToCommandeSring(COption::getInstance().Get_Horizontal_Resolution(),"p"),"50p", 0, 0);
 	
 	CHorizontal_layout *hl = new CHorizontal_layout("100%", "80%", 0, 5, 10);
@@ -26,9 +28,11 @@ C3DAssetEditor::~C3DAssetEditor()
 
 void C3DAssetEditor::RunContextLogic(float delta_t)
 {
+	TopMenuBackGround->Draw();
+
 	C3DContext::RunContextLogic(delta_t);
 
-	TopMenuBackGround->Draw();
+	if (importedStaticObject) importedStaticObject->Draw();
 }
 
 void C3DAssetEditor::EventProcessing(SDL_Event evt, float delta_t)
@@ -38,7 +42,32 @@ void C3DAssetEditor::EventProcessing(SDL_Event evt, float delta_t)
 
 void C3DAssetEditor::ImportAssetEvent(CGui2DRect * caller)
 {
-	CFileDialog *fd;
+
+	LPCTSTR FileFilter = L"Obj (*.obj) | *.obj";
+
+	/*
+	*	Create a MFC dialog box
+	*/
+	CFileDialog fd(TRUE,NULL,NULL, OFN_HIDEREADONLY | OFN_FILEMUSTEXIST,FileFilter);
+
+	/*
+	*	Open and act if a file is selected
+	*/
+	if (fd.DoModal() == IDOK)
+	{
+		CString path = fd.GetPathName();
+
+		CString fileExt = fd.GetFileExt();
+
+		std::wcout << "Opening: " << (std::wstring)path << std::endl;
+
+		if (fileExt.Compare(CString("obj")) == 0)
+		{
+			CImporter_Obj *objImporter = new CImporter_Obj();
+
+			this->importedStaticObject = objImporter->ImportObjFile((std::wstring)path);
+		}
+	}
 }
 
 void C3DAssetEditor::IsOverButton(CGui2DRect * caller)
