@@ -13,6 +13,11 @@ CStaticObject::~CStaticObject()
 
 void CStaticObject::Draw(float delta_t)
 {
+	if (!glIsEnabled(GL_DEPTH_TEST))
+	{
+		glEnable(GL_DEPTH_TEST);
+	}
+
 	glm::mat4 model = glm::mat4(1.0f);
 	
 	glBindVertexArray(_vertexArray);

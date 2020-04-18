@@ -93,6 +93,14 @@ public:
 
 	void SetCommandString(std::string command, Translate_Size ts);
 
+	/*
+	*	Some helper function
+	*/
+	static std::string ConvertIntToCommandeSring(int size, std::string symbol)
+	{
+		return std::to_string(size).append(symbol);
+	}
+
 private:
 
 	/*

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Context.h"
+#include "3DAssetEditor.h"
 #include "../../GUI/Gui2DRect.h"
 #include "../../GUI/GuiTextureRect.h"
 #include "../../GUI/Font/DisplayText.h"
@@ -18,5 +19,7 @@ public:
 	// Inherited via CContext
 	virtual void RunContextLogic(float delta_t = 0.0f) override;
 	virtual void EventProcessing(SDL_Event evt, float delta_t = 0.0f) override;
+
+	void New3DAsset(CGui2DRect* caller);
 };
 

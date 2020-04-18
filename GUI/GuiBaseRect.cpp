@@ -147,6 +147,14 @@ void CGuiBaseRect::Draw(float delta_t)
 	{
 		if (SizeHasBeenCalculated)
 		{
+			/*
+			*	Draw GUI Over others elements
+			*/
+			if (glIsEnabled(GL_DEPTH_TEST))
+			{
+				glDisable(GL_DEPTH_TEST);
+			}
+
 			DrawLocal(delta_t);
 			DrawChild();
 		}

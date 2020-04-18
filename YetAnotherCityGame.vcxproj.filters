@@ -90,6 +90,15 @@
     <ClInclude Include="GUI\Layout\Horizontal_layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Context\3DContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Context\ObjectEditor\3DAssetEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\GUI_Style.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +162,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Layout\Horizontal_layout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\3DContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Context\ObjectEditor\3DAssetEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

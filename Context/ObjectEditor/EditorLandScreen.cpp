@@ -70,6 +70,8 @@ CEditorLandScreen::CEditorLandScreen() : CContext()
 	CGui2DRect *NewTerrain = new CGui2DRect("100%", "100%", 0, 0);
 	TerrainAssetHL->AddChild(NewTerrain);
 	
+	RegisterGui_ForEvent_Handling(NewObject);
+	NewObject->Evenment->Set_OnClick_Callback(std::bind(&CEditorLandScreen::New3DAsset, this, std::placeholders::_1));
 
 }
 
@@ -85,4 +87,9 @@ void CEditorLandScreen::RunContextLogic(float delta_t)
 
 void CEditorLandScreen::EventProcessing(SDL_Event evt, float delta_t )
 {
+}
+
+void CEditorLandScreen::New3DAsset(CGui2DRect * caller)
+{
+	ChangeContext<C3DAssetEditor>(this);
 }

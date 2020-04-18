@@ -44,6 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -142,9 +143,11 @@
   <ItemGroup>
     <ClInclude Include="3DGameObject\C3DObject.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Context\3DContext.h" />
     <ClInclude Include="Context\Context.h" />
     <ClInclude Include="Context\ContextManager.h" />
     <ClInclude Include="Context\Game\GameContext.h" />
+    <ClInclude Include="Context\ObjectEditor\3DAssetEditor.h" />
     <ClInclude Include="Context\ObjectEditor\EditorLandScreen.h" />
     <ClInclude Include="GUI\Font\DisplayText.h" />
     <ClInclude Include="GUI\Font\FontManager.h" />
@@ -153,6 +156,7 @@
     <ClInclude Include="Context\MainMenu.h" />
     <ClInclude Include="Event\Mousse_Event.h" />
     <ClInclude Include="GUI\GuiTextureRect.h" />
+    <ClInclude Include="GUI\GUI_Style.h" />
     <ClInclude Include="GUI\Layout\Horizontal_layout.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="Shaders\ShaderManager.h" />
@@ -167,9 +171,11 @@
   <ItemGroup>
     <ClCompile Include="3DGameObject\C3DObject.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Context\3DContext.cpp" />
     <ClCompile Include="Context\Context.cpp" />
     <ClCompile Include="Context\ContextManager.cpp" />
     <ClCompile Include="Context\Game\GameContext.cpp" />
+    <ClCompile Include="Context\ObjectEditor\3DAssetEditor.cpp" />
     <ClCompile Include="Context\ObjectEditor\EditorLandScreen.cpp" />
     <ClCompile Include="GUI\Font\DisplayText.cpp" />
     <ClCompile Include="GUI\Font\FontManager.cpp" />

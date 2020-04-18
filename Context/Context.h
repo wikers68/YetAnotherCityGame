@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef CONTEXT_H
-#define CONTEXT_H
-
 /*
 *	Base class to manage game context such as main menu, in game logic, terrain editor, asset...
 */
@@ -34,6 +31,19 @@ public:
 	virtual void EventProcessing(SDL_Event evt, float delta_t = 0.0f) = 0;
 
 	void RegisterGui_ForEvent_Handling(CGuiBaseRect *arg);
-};
 
-#endif
+	template<class C>
+	void ChangeContext(CContext *currentContext)
+	{
+		C *nContext = new C();
+
+		if (static_cast<CContext*>(nContext))
+		{
+			nContext->CreateContext();
+			nContext->ActivateContext();
+
+			//~currentContext(); //does it works ? Not sure
+		}
+	}
+
+};

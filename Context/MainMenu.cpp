@@ -37,7 +37,7 @@ bool CMainMenu::CreateContext()
 	*	Initialisation for play
 	*/
 	_ButtonStartNewGame = new CGui2DRect(BUTTON_WIDTH, BUTTON_HEIGHT, HORIZONTAL_CENTER, 0);
-	_ButtonStartNewGame->SetBackGroundColor(BUTTON_COLOR);
+	_ButtonStartNewGame->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_ButtonStartNewGame);
 	_ButtonStartNewGame->Evenment->Set_OnClick_Callback(std::bind(&CMainMenu::ButtonStartNewGameOnClick, this, std::placeholders::_1));
 	_ButtonStartNewGame->Evenment->Set_IsOver_Callback(std::bind(&CMainMenu::IsOverButton, this, std::placeholders::_1));
@@ -52,7 +52,7 @@ bool CMainMenu::CreateContext()
 	*	Initialisation for OpenGame
 	*/
 	_ButtonOpenGame = new CGui2DRect("50%", BUTTON_HEIGHT, HORIZONTAL_CENTER, 0);
-	_ButtonOpenGame->SetBackGroundColor(BUTTON_COLOR);
+	_ButtonOpenGame->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_ButtonOpenGame);
 	_ButtonOpenGame->Evenment->Set_IsOver_Callback(std::bind(&CMainMenu::IsOverButton, this, std::placeholders::_1));
 	_ButtonOpenGame->Evenment->Set_IsLeaving_Callback(std::bind(&CMainMenu::IsLeavingButton, this, std::placeholders::_1));
@@ -66,7 +66,7 @@ bool CMainMenu::CreateContext()
 	*	Initialisation for Editor
 	*/
 	_Editor = new CGui2DRect(BUTTON_WIDTH, BUTTON_HEIGHT, HORIZONTAL_CENTER, 0);
-	_Editor->SetBackGroundColor(BUTTON_COLOR);
+	_Editor->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_Editor);
 	_Editor->Evenment->Set_OnClick_Callback(std::bind(&CMainMenu::ButtonEditorOnClick, this, std::placeholders::_1));
 	_Editor->Evenment->Set_IsOver_Callback(std::bind(&CMainMenu::IsOverButton, this, std::placeholders::_1));
@@ -81,7 +81,7 @@ bool CMainMenu::CreateContext()
 	*	Initialisation for Option
 	*/
 	_Option = new CGui2DRect(BUTTON_WIDTH, BUTTON_HEIGHT, HORIZONTAL_CENTER, 0);
-	_Option->SetBackGroundColor(BUTTON_COLOR);
+	_Option->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_Option);
 	_Option->Evenment->Set_IsOver_Callback(std::bind(&CMainMenu::IsOverButton, this, std::placeholders::_1));
 	_Option->Evenment->Set_IsLeaving_Callback(std::bind(&CMainMenu::IsLeavingButton, this, std::placeholders::_1));
@@ -98,7 +98,7 @@ bool CMainMenu::CreateContext()
 	_buttonExitGame->Evenment->Set_OnClick_Callback(std::bind(&CMainMenu::ExitGame, this, std::placeholders::_1));
 	_buttonExitGame->Evenment->Set_IsOver_Callback(std::bind(&CMainMenu::IsOverButton, this, std::placeholders::_1));
 	_buttonExitGame->Evenment->Set_IsLeaving_Callback(std::bind(&CMainMenu::IsLeavingButton, this, std::placeholders::_1));
-	_buttonExitGame->SetBackGroundColor(BUTTON_COLOR);
+	_buttonExitGame->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_buttonExitGame);
 	RegisterGui_ForEvent_Handling(_buttonExitGame);
 
@@ -134,12 +134,12 @@ void CMainMenu::ButtonGameOnClick(CGui2DRect *caller)
 
 void CMainMenu::IsOverButton(CGui2DRect * caller)
 {
-	caller->SetBackGroundColor(BUTTON_COLOR_ISOVER);
+	caller->SetBackGroundColor(BUTTON_BACKGROUND_IsOVER_COLOR);
 }
 
 void CMainMenu::IsLeavingButton(CGui2DRect * caller)
 {
-	caller->SetBackGroundColor(BUTTON_COLOR);
+	caller->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 }
 
 void CMainMenu::ExitGame(CGui2DRect * caller)
@@ -159,14 +159,10 @@ void CMainMenu::TextureIsLeaving(CGuiTextureRect * caller)
 
 void CMainMenu::ButtonStartNewGameOnClick(CGui2DRect * caller)
 {
-	CGameContext *gc = new CGameContext();
-	gc->CreateContext();
-	gc->ActivateContext();
+	ChangeContext<CGameContext>(this);
 }
 void CMainMenu::ButtonEditorOnClick(CGui2DRect * caller)
 {
-	CEditorLandScreen *editor = new CEditorLandScreen();
-	editor->CreateContext();
-	editor->ActivateContext();
+	ChangeContext<CEditorLandScreen>(this);
 }
 

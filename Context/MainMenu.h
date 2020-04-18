@@ -8,11 +8,10 @@
 #include "./Game/GameContext.h"
 #include "../GUI/Layout/Vertical_layout.h"
 #include "ObjectEditor\EditorLandScreen.h"
+#include "../GUI/GUI_Style.h"
 
 #define BUTTON_WIDTH "300p"
 #define BUTTON_HEIGHT "100p"
-#define BUTTON_COLOR 0.13, 0.33, 0.50,1.0
-#define BUTTON_COLOR_ISOVER 0.11f, 0.27f, 0.41f
 
 class CMainMenu : 	public CContext
 {
