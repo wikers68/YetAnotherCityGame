@@ -102,6 +102,9 @@
     <ClInclude Include="Context\ObjectEditor\Importer\Importer_Obj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -174,6 +177,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Context\ObjectEditor\Importer\Importer_Obj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

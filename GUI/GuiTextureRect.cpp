@@ -84,10 +84,12 @@ CGuiTextureRect::~CGuiTextureRect()
 
 void CGuiTextureRect::DrawLocal(float delta_t)
 {
+	if (_texture)
+	{
 		glUseProgram(_Shader->getShaderProgram());
 		glBindVertexArray(_vertexArray);
 		glBindSampler(0, _Sampler);
-		glBindTexture(GL_TEXTURE_2D,this->_texture->getGlTexture());
+		glBindTexture(GL_TEXTURE_2D, this->_texture->getGlTexture());
 
 		glUniform4i(glGetUniformLocation(_Shader->getShaderProgram(), "PositionSize"),
 			(GLint)CGuiBaseRect::_AbsoluteHorizontalPosition,
@@ -108,6 +110,7 @@ void CGuiTextureRect::DrawLocal(float delta_t)
 			Modulation_A);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
 
 }
 

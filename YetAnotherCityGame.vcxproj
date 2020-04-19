@@ -159,6 +159,7 @@
     <ClInclude Include="GUI\GUI_Style.h" />
     <ClInclude Include="GUI\Layout\Horizontal_layout.h" />
     <ClInclude Include="Context\ObjectEditor\Importer\Importer_Obj.h" />
+    <ClInclude Include="graphics\Material.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="Shaders\ShaderManager.h" />
     <ClInclude Include="Shaders\Shader.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="GUI\GuiTextureRect.cpp" />
     <ClCompile Include="GUI\Layout\Horizontal_layout.cpp" />
     <ClCompile Include="Context\ObjectEditor\Importer\Importer_Obj.cpp" />
+    <ClCompile Include="graphics\Material.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Shaders\ShaderManager.cpp" />
     <ClCompile Include="Shaders\Shader.cpp" />

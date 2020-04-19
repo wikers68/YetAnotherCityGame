@@ -10,6 +10,7 @@
 #include "../Shaders/ShaderManager.h"
 #include "../Shaders/Shader.h"
 #include "../Option.h"
+#include "../graphics/Material.h"
 
 class C3DObject
 {
@@ -27,5 +28,7 @@ public:
 	CShader *_Shader;	//shader used to draw the BaseRect
 
 	GLuint _vertexArray;
+
+	CMaterial *ObjectMaterial;
 };
 

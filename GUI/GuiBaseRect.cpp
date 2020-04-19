@@ -110,10 +110,31 @@ void CGuiBaseRect::Update(void)
 	}
 	else
 	{
+		int ScreenWidth = COption::getInstance().Get_Horizontal_Resolution();
+
+		switch (_HorizontalPosition)
+		{
+		default:
+			_AbsoluteHorizontalPosition = _HorizontalPosition;
+			_AbsoluteVerticalPosition = _VerticalPosition;;
+			break;
+		case HORIZONTAL_CENTER:
+			_AbsoluteHorizontalPosition =  (ScreenWidth - this->_Width) / 2.0;
+			_AbsoluteVerticalPosition =  _VerticalPosition;
+			break;
+		case HORIZONTAL_LEFT:
+			_AbsoluteHorizontalPosition = 0;
+			_AbsoluteVerticalPosition =  _VerticalPosition;;
+			break;
+		case HORIZONTAL_RIGHT:
+			_AbsoluteHorizontalPosition = ScreenWidth - this->_Width;
+			_AbsoluteVerticalPosition = _VerticalPosition;
+			break;
+		}
 		//if no parent is linked to the widget, the position on screen = the relative position
 
-		_AbsoluteHorizontalPosition = _HorizontalPosition;
-		_AbsoluteVerticalPosition = _VerticalPosition;
+		/*_AbsoluteHorizontalPosition = _HorizontalPosition;
+		_AbsoluteVerticalPosition = _VerticalPosition;*/
 	}
 
 

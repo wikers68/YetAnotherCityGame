@@ -19,10 +19,16 @@ void CStaticObject::Draw(float delta_t)
 	}
 
 	glm::mat4 model = glm::mat4(1.0f);
-	
+
 	glBindVertexArray(_vertexArray);
 	glUniformMatrix4fv(glGetUniformLocation(_Shader->getShaderProgram(), "Model"), 1, GL_FALSE, glm::value_ptr(model));
-	
+
+	if (this->ObjectMaterial->baseColorTexture)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, ObjectMaterial->baseColorTexture->getGlTexture());
+	}
+
 	glDrawArrays(GL_TRIANGLES, 0, numberOfvertex);
 }
 

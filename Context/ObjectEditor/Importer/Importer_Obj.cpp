@@ -218,6 +218,9 @@ CStaticObject * CImporter_Obj::GenerateObject(void)
 {
 	int numberOfVertex = this->MeshVertexList->size();
 
+	/*
+	*	Create the mesh array in PC memory
+	*/
 	StaticVertex *v = (StaticVertex*)calloc(numberOfVertex, sizeof(StaticVertex));
 
 	std::list<StaticVertex>::iterator it;

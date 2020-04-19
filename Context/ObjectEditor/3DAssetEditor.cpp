@@ -19,6 +19,22 @@ C3DAssetEditor::C3DAssetEditor()
 	Button_backGround_ImportGeom->Evenment->Set_OnClick_Callback(std::bind(&C3DAssetEditor::ImportAssetEvent, this, std::placeholders::_1));
 	Button_backGround_ImportGeom->Evenment->Set_IsOver_Callback(std::bind(&C3DAssetEditor::IsOverButton, this, std::placeholders::_1));
 	Button_backGround_ImportGeom->Evenment->Set_IsLeaving_Callback(std::bind(&C3DAssetEditor::IsLeavingButton, this, std::placeholders::_1));
+
+	materialBackground = new CGui2DRect("200p", CGuiBaseRect::ConvertIntToCommandeSring(COption::getInstance().Get_Vertical_Resolution() - 50, "p"), HORIZONTAL_RIGHT, 50);
+	CVertical_layout *vlMaterial = new CVertical_layout("80%", "100%", HORIZONTAL_CENTER, 0, 10);
+	materialBackground->AddChild(vlMaterial);
+
+	materialBaseColorButton = new CGui2DRect("80%", "80%", 0, 0);
+	materialBaseColorButton->Evenment->Set_OnClick_Callback(std::bind(&C3DAssetEditor::ImportBaseColorTexture, this, std::placeholders::_1));
+	materialBaseColorButton->Evenment->Set_IsOver_Callback(std::bind(&C3DAssetEditor::IsOverButton, this, std::placeholders::_1));
+	materialBaseColorButton->Evenment->Set_IsLeaving_Callback(std::bind(&C3DAssetEditor::IsLeavingButton, this, std::placeholders::_1));
+	RegisterGui_ForEvent_Handling(materialBaseColorButton);
+
+	materialBaseColorTexture = new CGuiTextureRect("80%", "80%", HORIZONTAL_CENTER, 0);
+	materialBaseColorTexture->SetTexture(nullptr); // display nothing at start up
+	materialBaseColorButton->AddChild(materialBaseColorTexture);
+
+	vlMaterial->AddChild(materialBaseColorButton);
 }
 
 
@@ -29,6 +45,7 @@ C3DAssetEditor::~C3DAssetEditor()
 void C3DAssetEditor::RunContextLogic(float delta_t)
 {
 	TopMenuBackGround->Draw();
+	materialBackground->Draw();
 
 	C3DContext::RunContextLogic(delta_t);
 
@@ -78,4 +95,13 @@ void C3DAssetEditor::IsOverButton(CGui2DRect * caller)
 void C3DAssetEditor::IsLeavingButton(CGui2DRect * caller)
 {
 	caller->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
+}
+
+void C3DAssetEditor::ImportBaseColorTexture(CGui2DRect * caller)
+{
+	if (importedStaticObject)
+	{
+		importedStaticObject->ObjectMaterial->OpenDialogBoxToImportTexture(TextureType::BASE_COLOR);
+		materialBaseColorTexture->SetTexture(importedStaticObject->ObjectMaterial->baseColorTexture);
+	}
 }

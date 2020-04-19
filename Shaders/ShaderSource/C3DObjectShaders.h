@@ -20,9 +20,10 @@ static const char *FragmentShader_StaticObject =
 {
 	"#version 420 core\n"
 	"in vec2 uv;"
+	"uniform sampler2D baseColor;"
 	"out vec4 color;"
 	"void main()"
 	"{"
-	"color = vec4(uv.x,1.0f,uv.y,1.0f);"
+	"color = texture(baseColor,uv);"
 	"};"
 };

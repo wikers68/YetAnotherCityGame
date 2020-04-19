@@ -4,6 +4,7 @@
 
 C3DObject::C3DObject()
 {
+	ObjectMaterial = new CMaterial();
 }
 
 

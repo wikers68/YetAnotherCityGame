@@ -5,8 +5,10 @@
 #include "../3DContext.h"
 #include "../../3DGameObject/StaticObject.h"
 #include "../../Camera/Camera.h"
+#include "../../GUI/Layout/Vertical_layout.h"
 #include "../../GUI/Layout/Horizontal_layout.h"
 #include "../../GUI/GUI_Style.h"
+#include "../../GUI/GuiTextureRect.h"
 
 /*
 *	Include for importer
@@ -24,8 +26,10 @@ public:
 	virtual void EventProcessing(SDL_Event evt, float delta_t = 0.0) override;
 
 	CGui2DRect *TopMenuBackGround;
-
 	CGui2DRect *Button_backGround_ImportGeom;
+	CGui2DRect *materialBackground;
+	CGui2DRect *materialBaseColorButton;
+	CGuiTextureRect *materialBaseColorTexture;
 
 	CStaticObject *importedStaticObject;
 
@@ -37,6 +41,8 @@ public:
 
 	void IsOverButton(CGui2DRect *caller);
 	void IsLeavingButton(CGui2DRect * caller);
+
+	void ImportBaseColorTexture(CGui2DRect *caller);
 
 };
 

@@ -9,6 +9,7 @@
 #include <string>
 #include <SDL.h>
 #include "../Shaders/Shader.h"
+#include "../Option.h"
 
 #define HORIZONTAL_CENTER -1
 #define HORIZONTAL_LEFT -2

@@ -71,15 +71,60 @@ void CCamera::Proceed_Event(SDL_Event evt, float delta_t)
 	*/
 	const Uint8 *state = SDL_GetKeyboardState(nullptr);
 
+	/*
+	*	Translate camera forward
+	*/
 	if (state[SDL_SCANCODE_W])
 	{
 		Position += getViewDirection()*delta_t* COption::getInstance().getCamera_TranslationSpeed();
 		//std::cout << Position.x << std::endl;
 	}
 
+	/*
+	*	Translate camera backward
+	*/
 	if (state[SDL_SCANCODE_S])
 	{
 		Position -= getViewDirection()*delta_t*COption::getInstance().getCamera_TranslationSpeed();
+	}
+
+	/*
+	*	Translate camera right
+	*/
+	if (state[SDL_SCANCODE_D])
+	{
+		glm::vec3 viewDirection = getViewDirection();
+		glm::vec3 rightVector = glm::vec3(viewDirection.y, -viewDirection.x, 0.0f);
+
+		Position += rightVector*delta_t*COption::getInstance().getCamera_TranslationSpeed();
+	}
+
+	/*
+	*	Translate camera left
+	*/
+	if (state[SDL_SCANCODE_A])
+	{
+		glm::vec3 viewDirection = getViewDirection();
+		glm::vec3 leftVector = glm::vec3(-viewDirection.y, viewDirection.x, 0.0f);
+
+		Position += leftVector*delta_t*COption::getInstance().getCamera_TranslationSpeed();
+	}
+
+	/*
+	*	Translate camera Upward
+	*/
+	if (state[SDL_SCANCODE_E])
+	{
+		glm::vec3 upVector = glm::vec3(0.0, 0.0, 1.0f);
+
+		Position += upVector*delta_t*COption::getInstance().getCamera_TranslationSpeed();
+	}
+
+	if (state[SDL_SCANCODE_X])
+	{
+		glm::vec3 downVector = glm::vec3(0.0, 0.0, -1.0f);
+
+		Position += downVector*delta_t*COption::getInstance().getCamera_TranslationSpeed();
 	}
 
 }
