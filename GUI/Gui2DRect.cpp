@@ -54,9 +54,11 @@ CGui2DRect::CGui2DRect(std::string argWidth, std::string  argHeight, int argHori
 	{
 		"#version 420 core\n"
 		"in vec4 ColorRG;"
-		"out vec4 color;"
+		"layout (location = 0) out vec4 color;"
+		"layout (location = 1) out int MaterialID;"
 		"void main()"
 		"{"
+		"MaterialID=255;"
 		"color = vec4(ColorRG.x,ColorRG.y,ColorRG.z,1.0f);"
 		"};"
 	};

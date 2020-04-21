@@ -32,7 +32,8 @@ CDisplayText::CDisplayText(std::string argWidth, std::string argHeight, int argH
 		"in vec2 p_uv;"
 		"uniform sampler2D glyph_packed;"
 		"uniform vec3 TextColor;"
-		"out vec4 color;"
+		"layout (location = 0) out vec4 color;"
+		"layout (location = 1) out int MaterialID;"
 		"void main()"
 		"{"
 
@@ -40,6 +41,7 @@ CDisplayText::CDisplayText(std::string argWidth, std::string argHeight, int argH
 		"{"
 		"discard;"
 		"}"
+		"MaterialID = 125;" //TODO: change by same id than other 2d GUI elements
 		"color = vec4(TextColor,1.0f); "
 		"};"
 	};

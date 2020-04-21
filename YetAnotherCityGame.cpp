@@ -25,6 +25,7 @@
 #include "Option.h"
 #include "./GUI/Font/FontManager.h"
 #include "./Shaders/ShaderManager.h"
+#include "./Render/FinalRenderPass.h"
 
 SDL_Window * _MainWindow = nullptr;
 SDL_GLContext _glContext;
@@ -69,7 +70,7 @@ int main(int argc, char* args[])
 	//opengl set-up
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
@@ -116,18 +117,134 @@ int main(int argc, char* args[])
 
 	//glViewport(-1.0, -1.0, COption::getInstance().Get_Horizontal_Resolution(), COption::getInstance().Get_Vertical_Resolution());
 
+	//http://www.songho.ca/opengl/gl_fbo.html
+	
+	/*
+	*	Error tracking
+	*/
+	GLenum status = glGetError();
+
+	
+	/*
+	*	We create the framebuffer to hold all texture that will be used in PB rendering
+	*/
+	GLuint PBR_FrameBuffer, ColorBufferTexture, MaterialID;
+	glGenFramebuffers(1, &PBR_FrameBuffer);
+
+	/*
+	*	Color texture
+	*/
+	glGenTextures(1, &ColorBufferTexture);
+	glBindTexture(GL_TEXTURE_2D, ColorBufferTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
+		COption::getInstance().Get_Horizontal_Resolution(),
+		COption::getInstance().Get_Vertical_Resolution(),
+		0, GL_RGBA,  GL_UNSIGNED_BYTE, (void*)0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	/*
+	*	One texture with material ID.
+	*	Will be used on final rendering pass to select the shading model
+	*	Id = nombre entier entre 0 et 255
+	*/
+	glGenTextures(1, &MaterialID);
+	glBindTexture(GL_TEXTURE_2D, MaterialID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32I,
+		COption::getInstance().Get_Horizontal_Resolution(),
+		COption::getInstance().Get_Vertical_Resolution(),
+		0, GL_RED_INTEGER, GL_INT, (void*)0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	status = glGetError();
+
+	
+	/*GLuint DepthBufferTExture;
+	glGenTextures(1, &DepthBufferTExture);
+	glBindTexture(GL_TEXTURE_2D, DepthBufferTExture);
+	glTexImage2D(GL_TEXTURE_2D, 1, GL_R32F,
+		COption::getInstance().Get_Horizontal_Resolution(),
+		COption::getInstance().Get_Vertical_Resolution(),
+		0, GL_R32F, GL_UNSIGNED_BYTE, nullptr);*/
+	
+	status = glGetError();
+
+	GLuint PBR_RenderDepth;
+	glGenRenderbuffers(1, &PBR_RenderDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, PBR_RenderDepth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 
+		COption::getInstance().Get_Horizontal_Resolution(),
+		COption::getInstance().Get_Vertical_Resolution());
+	
+	status = glGetError();
+	
+	/*
+	*	Bind texture and render to th PBR framebuffer
+	*/
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, PBR_FrameBuffer);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D, ColorBufferTexture, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, MaterialID, 0);
+	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, PBR_RenderDepth);
+	//glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, DepthBufferTExture, 0);
+	glEnable(GL_DEPTH_TEST);
+
+	GLenum b[] = { GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(2, b);
+
+	status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		std::cout << "not ok..." << std::endl;
+	}
+
+	status = glGetError();
+
+	/*
+	*	Set Up the final render pass
+	*/
+	CFinalRenderPass *FinalRenderPass = new CFinalRenderPass();
+	FinalRenderPass->Init(ColorBufferTexture, MaterialID);
+
 	while (CContextManager::Instance().getRunApplication())
 	{
 		startFrameTime = SDL_GetTicks();
 
-		glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		/*
+		*	Set buffer used to draw PBR data
+		*/
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, PBR_FrameBuffer);
+
+		/*
+		*	Clear the current DEPTH buffer
+		*/
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		/*
+		*	Clear the ColorBufferTexture which is at index 0 of glDrawBuffers
+		*/
+		GLfloat clearColor[] = { 0.0f, 0.0f, 0.4f, 1.0f };
+		glClearBufferfv(GL_COLOR, 0, clearColor);
+
+		/*
+		*	Clear the MaterialID which is at index 1 of glDrawBuffers
+		*/
+		GLint clear[] = { 0,0,0,0 };
+		glClearBufferiv(GL_COLOR, 1, clear);
 
 		if (CContextManager::Instance().GetCurrentActiveContext())
 		{
 			CContextManager::Instance().GetCurrentActiveContext()->ManageEvent(delta_t);
 			CContextManager::Instance().GetCurrentActiveContext()->RunContext(delta_t);
 		}
+
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, PBR_FrameBuffer);
+		
+		FinalRenderPass->Draw();
 
 		SDL_GL_SwapWindow(_MainWindow);
 

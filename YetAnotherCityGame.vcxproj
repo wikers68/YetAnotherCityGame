@@ -149,6 +149,7 @@
     <ClInclude Include="Context\Game\GameContext.h" />
     <ClInclude Include="Context\ObjectEditor\3DAssetEditor.h" />
     <ClInclude Include="Context\ObjectEditor\EditorLandScreen.h" />
+    <ClInclude Include="Render\FinalRenderPass.h" />
     <ClInclude Include="GUI\Font\DisplayText.h" />
     <ClInclude Include="GUI\Font\FontManager.h" />
     <ClInclude Include="GUI\Gui2DRect.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="Context\Game\GameContext.cpp" />
     <ClCompile Include="Context\ObjectEditor\3DAssetEditor.cpp" />
     <ClCompile Include="Context\ObjectEditor\EditorLandScreen.cpp" />
+    <ClCompile Include="Render\FinalRenderPass.cpp" />
     <ClCompile Include="GUI\Font\DisplayText.cpp" />
     <ClCompile Include="GUI\Font\FontManager.cpp" />
     <ClCompile Include="GUI\Gui2DRect.cpp" />

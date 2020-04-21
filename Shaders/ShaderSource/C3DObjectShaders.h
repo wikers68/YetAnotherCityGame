@@ -21,9 +21,11 @@ static const char *FragmentShader_StaticObject =
 	"#version 420 core\n"
 	"in vec2 uv;"
 	"uniform sampler2D baseColor;"
-	"out vec4 color;"
+	"layout (location = 0) out vec4 color;"
+	"layout (location = 1) out int MaterialID;"
 	"void main()"
 	"{"
+	"MaterialID = 60;"
 	"color = texture(baseColor,uv);"
 	"};"
 };

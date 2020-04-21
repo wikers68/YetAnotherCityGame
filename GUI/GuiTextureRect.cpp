@@ -54,10 +54,12 @@ CGuiTextureRect::CGuiTextureRect(std::string argWidth, std::string  argHeight, i
 		"#version 420 core\n"
 		"in vec2 uv;"
 		"uniform vec4 Modulation;"
-		"out vec4 color;"
+		"layout (location = 0) out vec4 color;"
+		"layout (location = 1) out int MaterialID;"
 		"uniform sampler2D _Texture;"
 		"void main()"
 		"{"
+		"MaterialID = 255;"
 		"color = texture(_Texture,uv)*Modulation;"
 		"};"
 	};
@@ -88,7 +90,9 @@ void CGuiTextureRect::DrawLocal(float delta_t)
 	{
 		glUseProgram(_Shader->getShaderProgram());
 		glBindVertexArray(_vertexArray);
-		glBindSampler(0, _Sampler);
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(glGetUniformLocation(_Shader->getShaderProgram(), "_Texture"), 0);
+		//glBindSampler(0, _Sampler);
 		glBindTexture(GL_TEXTURE_2D, this->_texture->getGlTexture());
 
 		glUniform4i(glGetUniformLocation(_Shader->getShaderProgram(), "PositionSize"),
