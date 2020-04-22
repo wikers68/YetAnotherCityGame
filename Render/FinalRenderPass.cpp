@@ -11,7 +11,7 @@ CFinalRenderPass::~CFinalRenderPass()
 {
 }
 
-void CFinalRenderPass::Draw(float delta_t)
+void CFinalRenderPass::Draw(PBR_Texture renderPass, float delta_t)
 {
 	if (HasBeenInit)
 	{
@@ -30,30 +30,25 @@ void CFinalRenderPass::Draw(float delta_t)
 
 		glBindVertexArray(_vertexArray);
 		glUseProgram(_shader->getShaderProgram());
+
 		glActiveTexture(GL_TEXTURE0);
 		glUniform1i(glGetUniformLocation(_shader->getShaderProgram(), "_TextureColor"), 0);
-		glBindTexture(GL_TEXTURE_2D, _textureColor);	
-
-		/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);*/
+		glBindTexture(GL_TEXTURE_2D, renderPass._ObjectColor);	
 
 		glActiveTexture(GL_TEXTURE1);
-		glUniform1i(glGetUniformLocation(_shader->getShaderProgram(), "_TextureMaterialID"), 1);
-		glBindTexture(GL_TEXTURE_2D, _textureMaterialID);
+		glUniform1i(glGetUniformLocation(_shader->getShaderProgram(), "_GuiColor"), 1);
+		glBindTexture(GL_TEXTURE_2D, renderPass._GuiColor);
+
+		glActiveTexture(GL_TEXTURE2);
+		glUniform1i(glGetUniformLocation(_shader->getShaderProgram(), "_TextureMaterialID"), 2);
+		glBindTexture(GL_TEXTURE_2D, renderPass._textureMaterialID);
 		
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 }
 
-void CFinalRenderPass::Init(GLuint TextureColor, GLuint TextureMaterialID)
+void CFinalRenderPass::Init(void)
 {
-	if (TextureColor > 0 && TextureMaterialID > 0)
-	{
-		_textureMaterialID = TextureMaterialID;
-		_textureColor = TextureColor;
-
 		glGenVertexArrays(1, &_vertexArray);
 		glBindVertexArray(_vertexArray);
 
@@ -97,17 +92,26 @@ void CFinalRenderPass::Init(GLuint TextureColor, GLuint TextureMaterialID)
 			"in vec2 UV;"
 			//"layout(binding=0) uniform isampler2D _TextureMaterialID;"
 			"uniform sampler2D _TextureColor;"
+			"uniform sampler2D _GuiColor;"
 			"uniform isampler2D _TextureMaterialID;"
 			"layout( location = 0) out vec4 color;"
 			"void main()"
 			"{"
+			"vec4 result;"
 			"int ID = texture(_TextureMaterialID,UV).x;"
-			//"float IDf = float(ID) / 255.0f;"
-			//"if(ID > 0) { IDf = 0.20f;}"
-			//"color = vec4(UV.x,UV.y,0.0f,1.0f);"
+			
+			/*
+			*	Render the gui on top, we draw it always on front screen
+			*/
+			"float alpha_GUI =texture(_GuiColor,UV).w; "
 
-			"color = texture(_TextureColor,UV);"
-			//"color = vec4(0.1f,IDf,0.0f,1.0f);"
+			"if(alpha_GUI == 1.0f)"
+			"{"
+				"color = vec4(texture(_GuiColor,UV).xyz,1.0f); "
+			"}else{"
+
+			"color = texture(_TextureColor,UV);}"
+
 			"};"
 		};
 
@@ -119,5 +123,4 @@ void CFinalRenderPass::Init(GLuint TextureColor, GLuint TextureMaterialID)
 		HasBeenInit = true;
 
 		glBindVertexArray(0);
-	}
 }

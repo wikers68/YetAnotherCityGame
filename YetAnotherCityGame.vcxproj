@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3DGameObject\C3DObject.h" />
+    <ClInclude Include="3DGameObject\GameEntityCategory.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Context\3DContext.h" />
     <ClInclude Include="Context\Context.h" />
@@ -149,6 +150,9 @@
     <ClInclude Include="Context\Game\GameContext.h" />
     <ClInclude Include="Context\ObjectEditor\3DAssetEditor.h" />
     <ClInclude Include="Context\ObjectEditor\EditorLandScreen.h" />
+    <ClInclude Include="3DGameObject\GameEntity.h" />
+    <ClInclude Include="GUI\GuiWindow.h" />
+    <ClInclude Include="GUI\CommonGUIheader.h" />
     <ClInclude Include="Render\FinalRenderPass.h" />
     <ClInclude Include="GUI\Font\DisplayText.h" />
     <ClInclude Include="GUI\Font\FontManager.h" />
@@ -180,6 +184,8 @@
     <ClCompile Include="Context\Game\GameContext.cpp" />
     <ClCompile Include="Context\ObjectEditor\3DAssetEditor.cpp" />
     <ClCompile Include="Context\ObjectEditor\EditorLandScreen.cpp" />
+    <ClCompile Include="3DGameObject\GameEntity.cpp" />
+    <ClCompile Include="GUI\GuiWindow.cpp" />
     <ClCompile Include="Render\FinalRenderPass.cpp" />
     <ClCompile Include="GUI\Font\DisplayText.cpp" />
     <ClCompile Include="GUI\Font\FontManager.cpp" />

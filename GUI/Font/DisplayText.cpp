@@ -32,8 +32,8 @@ CDisplayText::CDisplayText(std::string argWidth, std::string argHeight, int argH
 		"in vec2 p_uv;"
 		"uniform sampler2D glyph_packed;"
 		"uniform vec3 TextColor;"
-		"layout (location = 0) out vec4 color;"
-		"layout (location = 1) out int MaterialID;"
+		"layout (location = 1) out vec4 color;"
+		"layout (location = 2) out int MaterialID;"
 		"void main()"
 		"{"
 

@@ -18,11 +18,11 @@ CGuiBaseRect::CGuiBaseRect()
 CGuiBaseRect::CGuiBaseRect(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition)
 {
 	commandWidthString = argWidth;
-	_Width = -1;  
+	_Width = -1;
 
 	commandHeightString = argHeight;
 	_Height = -1;
-	
+
 	_HorizontalPosition = argHorizontalPosition;
 	_VerticalPosition = argVerticalPosition;
 	_Parent = nullptr;
@@ -78,63 +78,16 @@ void CGuiBaseRect::Update(void)
 		CalculateSize();
 	}
 
+	int Horizontal_Offset = 0;
+	int Vertical_Offset = 0;
+
 	if (_Parent != nullptr)
 	{
-		if (_HorizontalPosition >= 0)
-		{
-			_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + _HorizontalPosition;
-			_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
-		}
-		else
-		{
-			switch (_HorizontalPosition)
-			{
-			default:
-				_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition;
-				_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;;
-				break;
-			case HORIZONTAL_CENTER:
-				_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + int( (float)((_Parent->_Width - this->_Width)) / 2.0f);
-				_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
-				break;
-			case HORIZONTAL_LEFT:
-				_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition;
-				_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;;
-				break;
-			case HORIZONTAL_RIGHT:
-				_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + (_Parent->_Width - this->_Width);
-				_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
-				break;
-			}
-		}
+		Calc_PositionWithParent();
 	}
 	else
 	{
-		int ScreenWidth = COption::getInstance().Get_Horizontal_Resolution();
-
-		switch (_HorizontalPosition)
-		{
-		default:
-			_AbsoluteHorizontalPosition = _HorizontalPosition;
-			_AbsoluteVerticalPosition = _VerticalPosition;;
-			break;
-		case HORIZONTAL_CENTER:
-			_AbsoluteHorizontalPosition =  (ScreenWidth - this->_Width) / 2.0;
-			_AbsoluteVerticalPosition =  _VerticalPosition;
-			break;
-		case HORIZONTAL_LEFT:
-			_AbsoluteHorizontalPosition = 0;
-			_AbsoluteVerticalPosition =  _VerticalPosition;;
-			break;
-		case HORIZONTAL_RIGHT:
-			_AbsoluteHorizontalPosition = ScreenWidth - this->_Width;
-			_AbsoluteVerticalPosition = _VerticalPosition;
-			break;
-		}
-		//if no parent is linked to the widget, the position on screen = the relative position
-
-		/*_AbsoluteHorizontalPosition = _HorizontalPosition;
-		_AbsoluteVerticalPosition = _VerticalPosition;*/
+		Calc_PositionNoParent();
 	}
 
 
@@ -233,7 +186,7 @@ int CGuiBaseRect::getHeight(void)
 	else
 	{
 		CalculateSize();
-		
+
 		getHeight();
 	}
 }
@@ -271,13 +224,13 @@ void CGuiBaseRect::SetCommandString(std::string command, Translate_Size ts)
 {
 	switch (ts)
 	{
-		default:break;
-		case Translate_Size::WIDTH:
-			commandWidthString = command;
-			break;
-		case Translate_Size::HEIGHT:
-			commandHeightString = command;
-			break;
+	default:break;
+	case Translate_Size::WIDTH:
+		commandWidthString = command;
+		break;
+	case Translate_Size::HEIGHT:
+		commandHeightString = command;
+		break;
 	}
 
 	Reset_HasBeenCalculated();
@@ -312,14 +265,14 @@ int CGuiBaseRect::TranslateStringToSize(std::string arg, Translate_Size ts)
 					float fWidth = (float)_Parent->_Width * pourcentSizeF;
 					return (int)fWidth;
 				}
-				else if(ts == HEIGHT)
+				else if (ts == HEIGHT)
 				{
 					float fHeight = (float)_Parent->_Height* pourcentSizeF;
 					return (int)fHeight;
 				}
 				return 0;
 			}
-			
+
 			return 0;
 		}
 
@@ -330,8 +283,87 @@ int CGuiBaseRect::TranslateStringToSize(std::string arg, Translate_Size ts)
 
 void CGuiBaseRect::CalculateSize(void)
 {
-	_Width = TranslateStringToSize(commandWidthString,WIDTH);
+	_Width = TranslateStringToSize(commandWidthString, WIDTH);
 	_Height = TranslateStringToSize(commandHeightString, HEIGHT);
 
 	SizeHasBeenCalculated = true;
+}
+
+void CGuiBaseRect::Calc_PositionNoParent(void)
+{
+	int ScreenWidth = COption::getInstance().Get_Horizontal_Resolution();
+	int screenHeight = COption::getInstance().Get_Vertical_Resolution();
+
+	/*
+		*	Horizontal position calculation
+		*/
+	switch (_HorizontalPosition)
+	{
+	default:
+		_AbsoluteHorizontalPosition = _HorizontalPosition;
+		break;
+	case HORIZONTAL_CENTER:
+		_AbsoluteHorizontalPosition = (ScreenWidth - this->_Width) / 2.0;
+		break;
+	case HORIZONTAL_LEFT:
+		_AbsoluteHorizontalPosition = 0;
+		break;
+	case HORIZONTAL_RIGHT:
+		_AbsoluteHorizontalPosition = ScreenWidth - this->_Width;
+		break;
+	}
+
+	/*
+	*	Vertical position calculation
+	*/
+	switch (_VerticalPosition)
+	{
+	default:
+		_AbsoluteVerticalPosition = _VerticalPosition;
+		break;
+	case VERTICAL_TOP:
+		_AbsoluteVerticalPosition = _VerticalPosition;
+		break;
+	case VERTICAL_CENTER:
+		_AbsoluteVerticalPosition = (screenHeight - this->_Height) / 2;
+		break;
+	case VERTICAL_BOTTOM:
+		_AbsoluteVerticalPosition = screenHeight - this->_Height;
+		break;
+	}
+}
+
+void CGuiBaseRect::Calc_PositionWithParent(void)
+{
+	switch (_HorizontalPosition)
+	{
+	default:
+		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + _HorizontalPosition;
+		break;
+	case HORIZONTAL_CENTER:
+		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + int((float)((_Parent->_Width - this->_Width)) / 2.0f);
+		break;
+	case HORIZONTAL_LEFT:
+		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition;
+		break;
+	case HORIZONTAL_RIGHT:
+		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + (_Parent->_Width - this->_Width);
+		break;
+	}
+
+	switch (_VerticalPosition)
+	{
+	default:
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
+		break;
+	case VERTICAL_TOP:
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
+		break;
+	case VERTICAL_CENTER:
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + (_Parent->_Height - this->_Height) /2 ;
+		break;
+	case VERTICAL_BOTTOM:
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _Parent->_Height - this->_Height;
+		break;
+	}
 }

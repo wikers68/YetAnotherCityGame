@@ -22,7 +22,7 @@ static const char *FragmentShader_StaticObject =
 	"in vec2 uv;"
 	"uniform sampler2D baseColor;"
 	"layout (location = 0) out vec4 color;"
-	"layout (location = 1) out int MaterialID;"
+	"layout (location = 2) out int MaterialID;"
 	"void main()"
 	"{"
 	"MaterialID = 60;"

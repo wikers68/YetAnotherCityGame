@@ -5,10 +5,8 @@
 #include "../3DContext.h"
 #include "../../3DGameObject/StaticObject.h"
 #include "../../Camera/Camera.h"
-#include "../../GUI/Layout/Vertical_layout.h"
-#include "../../GUI/Layout/Horizontal_layout.h"
-#include "../../GUI/GUI_Style.h"
-#include "../../GUI/GuiTextureRect.h"
+#include "../../GUI/CommonGUIheader.h"
+#include "../../3DGameObject/GameEntity.h"
 
 /*
 *	Include for importer
@@ -31,6 +29,9 @@ public:
 	CGui2DRect *materialBaseColorButton;
 	CGuiTextureRect *materialBaseColorTexture;
 
+	CGui2DRect *OpenAssetButton;
+	void OpenwindowAssetProperties(CGui2DRect *caller);
+
 	CStaticObject *importedStaticObject;
 
 	/*
@@ -43,6 +44,11 @@ public:
 	void IsLeavingButton(CGui2DRect * caller);
 
 	void ImportBaseColorTexture(CGui2DRect *caller);
+
+	/*
+	*	Hold and display properties linked to the current asset being edited
+	*/
+	CGuiWindow *windowAssetProperties;
 
 };
 

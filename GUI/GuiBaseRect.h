@@ -14,6 +14,9 @@
 #define HORIZONTAL_CENTER -1
 #define HORIZONTAL_LEFT -2
 #define HORIZONTAL_RIGHT -3
+#define VERTICAL_CENTER -1
+#define VERTICAL_TOP -2
+#define VERTICAL_BOTTOM -3
 
 enum Translate_Size
 {
@@ -117,6 +120,9 @@ private:
 	bool SizeHasBeenCalculated;
 
 	void CalculateSize(void);
+
+	void Calc_PositionNoParent(void);
+	void Calc_PositionWithParent(void);
 
 };
 
