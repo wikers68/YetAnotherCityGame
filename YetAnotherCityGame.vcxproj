@@ -153,6 +153,7 @@
     <ClInclude Include="3DGameObject\GameEntity.h" />
     <ClInclude Include="GUI\GuiWindow.h" />
     <ClInclude Include="GUI\CommonGUIheader.h" />
+    <ClInclude Include="GUI\Layout\EmptySlot.h" />
     <ClInclude Include="Render\FinalRenderPass.h" />
     <ClInclude Include="GUI\Font\DisplayText.h" />
     <ClInclude Include="GUI\Font\FontManager.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Context\ObjectEditor\EditorLandScreen.cpp" />
     <ClCompile Include="3DGameObject\GameEntity.cpp" />
     <ClCompile Include="GUI\GuiWindow.cpp" />
+    <ClCompile Include="GUI\Layout\EmptySlot.cpp" />
     <ClCompile Include="Render\FinalRenderPass.cpp" />
     <ClCompile Include="GUI\Font\DisplayText.cpp" />
     <ClCompile Include="GUI\Font\FontManager.cpp" />

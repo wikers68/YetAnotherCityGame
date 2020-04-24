@@ -17,10 +17,34 @@ CMainMenu::~CMainMenu()
 bool CMainMenu::CreateContext()
 {
 	/*
+	*	Common style on button
+	*/
+
+	Widget_Style wsBackground;
+	wsBackground.hPosition = HORIZONTAL_CENTER;
+	wsBackground.vPosition = VERTICAL_CENTER;
+	wsBackground.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsBackground.hSize.size = COption::getInstance().Get_Horizontal_Resolution();
+	wsBackground.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsBackground.vSize.size = COption::getInstance().Get_Vertical_Resolution();
+
+	Widget_Style wsButton;
+	wsButton.hPosition = HORIZONTAL_CENTER;
+	wsButton.vPosition = VERTICAL_CENTER;
+	wsButton.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsButton.hSize.size = 400;
+	wsButton.vSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsButton.vSize.relTo = SIZE_RELATIVE_TO::PARENT;
+	wsButton.vSize.size = 100;
+
+	Widget_Style wsText;
+	wsText.hPosition = HORIZONTAL_CENTER;
+	wsText.vPosition = VERTICAL_CENTER;
+
+	/*
 	*	Set Background Texture
 	*/
-	_MenuBackGround = new CGuiTextureRect(std::to_string(COption::getInstance().Get_Horizontal_Resolution()).append("p")
-		, std::to_string(COption::getInstance().Get_Vertical_Resolution()).append("p"), 0, 0);
+	_MenuBackGround = new CGuiTextureRect(wsBackground);
 	_MenuBackGround->Update();
 	CTexture *_textureButton = new CTexture();
 	_textureButton->LoadFromFile("../GameRessources/media/GUI/textures/background_menu_1920x1080.png");
@@ -29,14 +53,24 @@ bool CMainMenu::CreateContext()
 	/*
 	*	vertical layout
 	*/
-	verticalLayout = new CVertical_layout("100%","100%", 0, 0,50);
+	Widget_Style wsVerticalLayout;
+	wsVerticalLayout.hPosition = 0;
+	wsVerticalLayout.vPosition = VERTICAL_CENTER;
+	wsVerticalLayout.hSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsVerticalLayout.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+	wsVerticalLayout.hSize.size = 100; // % 
+	wsVerticalLayout.vSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsVerticalLayout.vSize.relTo = SIZE_RELATIVE_TO::PARENT;
+	wsVerticalLayout.vSize.size = 100; // 
+
+	verticalLayout = new CVertical_layout(wsVerticalLayout,50);
 
 	_MenuBackGround->AddChild(verticalLayout);
 
 	/*
 	*	Initialisation for play
 	*/
-	_ButtonStartNewGame = new CGui2DRect(BUTTON_WIDTH, BUTTON_HEIGHT, HORIZONTAL_CENTER, 0);
+	_ButtonStartNewGame = new CGui2DRect(wsButton);
 	_ButtonStartNewGame->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_ButtonStartNewGame);
 	_ButtonStartNewGame->Evenment->Set_OnClick_Callback(std::bind(&CMainMenu::ButtonStartNewGameOnClick, this, std::placeholders::_1));
@@ -44,28 +78,28 @@ bool CMainMenu::CreateContext()
 	_ButtonStartNewGame->Evenment->Set_IsLeaving_Callback(std::bind(&CMainMenu::IsLeavingButton, this, std::placeholders::_1));
 	RegisterGui_ForEvent_Handling(_ButtonStartNewGame);
 	
-	PlayText = new CDisplayText("0p", "0p", 0, 0);
+	PlayText = new CDisplayText(wsText);
 	PlayText->SetText(L"Start New Game!");
 	_ButtonStartNewGame->AddChild(PlayText);
 
 	/*
 	*	Initialisation for OpenGame
 	*/
-	_ButtonOpenGame = new CGui2DRect("50%", BUTTON_HEIGHT, HORIZONTAL_CENTER, 0);
+	_ButtonOpenGame = new CGui2DRect(wsButton);
 	_ButtonOpenGame->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_ButtonOpenGame);
 	_ButtonOpenGame->Evenment->Set_IsOver_Callback(std::bind(&CMainMenu::IsOverButton, this, std::placeholders::_1));
 	_ButtonOpenGame->Evenment->Set_IsLeaving_Callback(std::bind(&CMainMenu::IsLeavingButton, this, std::placeholders::_1));
 	RegisterGui_ForEvent_Handling(_ButtonOpenGame);
 
-	OpenGameText = new CDisplayText("0p", "0p", 0, 0);
+	OpenGameText = new CDisplayText(wsText);
 	OpenGameText->SetText(L"Continue existing game!");
 	_ButtonOpenGame->AddChild(OpenGameText);
 
 	/*
 	*	Initialisation for Editor
 	*/
-	_Editor = new CGui2DRect(BUTTON_WIDTH, BUTTON_HEIGHT, HORIZONTAL_CENTER, 0);
+	_Editor = new CGui2DRect(wsButton);
 	_Editor->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_Editor);
 	_Editor->Evenment->Set_OnClick_Callback(std::bind(&CMainMenu::ButtonEditorOnClick, this, std::placeholders::_1));
@@ -73,28 +107,28 @@ bool CMainMenu::CreateContext()
 	_Editor->Evenment->Set_IsLeaving_Callback(std::bind(&CMainMenu::IsLeavingButton, this, std::placeholders::_1));
 	RegisterGui_ForEvent_Handling(_Editor);
 
-	EditorText = new CDisplayText("0p", "0p", 0, 0);
+	EditorText = new CDisplayText(wsText);
 	EditorText->SetText(L"Editor");
 	_Editor->AddChild(EditorText);
 
 	/*
 	*	Initialisation for Option
 	*/
-	_Option = new CGui2DRect(BUTTON_WIDTH, BUTTON_HEIGHT, HORIZONTAL_CENTER, 0);
+	_Option = new CGui2DRect(wsButton);
 	_Option->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	verticalLayout->AddChild(_Option);
 	_Option->Evenment->Set_IsOver_Callback(std::bind(&CMainMenu::IsOverButton, this, std::placeholders::_1));
 	_Option->Evenment->Set_IsLeaving_Callback(std::bind(&CMainMenu::IsLeavingButton, this, std::placeholders::_1));
 	RegisterGui_ForEvent_Handling(_Option);
 
-	OptionText = new CDisplayText("0p", "0p", 0, 0);
+	OptionText = new CDisplayText(wsText);
 	OptionText->SetText(L"Option");
 	_Option->AddChild(OptionText);
 
 	/*
 	*	Initialization for exit button
 	*/
-	_buttonExitGame = new CGui2DRect(BUTTON_WIDTH, BUTTON_HEIGHT, HORIZONTAL_CENTER, 500);
+	_buttonExitGame = new CGui2DRect(wsButton);
 	_buttonExitGame->Evenment->Set_OnClick_Callback(std::bind(&CMainMenu::ExitGame, this, std::placeholders::_1));
 	_buttonExitGame->Evenment->Set_IsOver_Callback(std::bind(&CMainMenu::IsOverButton, this, std::placeholders::_1));
 	_buttonExitGame->Evenment->Set_IsLeaving_Callback(std::bind(&CMainMenu::IsLeavingButton, this, std::placeholders::_1));
@@ -102,11 +136,18 @@ bool CMainMenu::CreateContext()
 	verticalLayout->AddChild(_buttonExitGame);
 	RegisterGui_ForEvent_Handling(_buttonExitGame);
 
-	quit = new CDisplayText("0p", "0p",0,0);
+	quit = new CDisplayText(wsText);
 	quit->SetText(L"Quit");
 	_buttonExitGame->AddChild(quit);
 
-	Version = new CDisplayText("0p", "0p", 0, 600);
+	Widget_Style wsText_Version;
+	wsText_Version.hPosition = HORIZONTAL_LEFT;
+	wsText_Version.vPosition = VERTICAL_BOTTOM;
+	wsText_Version.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsText_Version.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsText_Version.vSize.size = 50;
+
+	Version = new CDisplayText(wsText_Version);
 	Version->SetHeight(20);
 	Version->SetText(L"YetAnotherCityGame V.?");
 	_MenuBackGround->AddChild(Version);

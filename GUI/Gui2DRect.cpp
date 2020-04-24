@@ -2,7 +2,7 @@
 #include "Gui2DRect.h"
 
 
-CGui2DRect::CGui2DRect(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition) :CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
+CGui2DRect::CGui2DRect(Widget_Style style) :CGuiBaseRect(style)
 {
 	glGenVertexArrays(1, &_vertexArray);
 	glBindVertexArray(_vertexArray);
@@ -95,10 +95,10 @@ void CGui2DRect::DrawLocal(float delta_t)
 		glBindVertexArray(_vertexArray);
 
 		glUniform4i(glGetUniformLocation(_Shader->getShaderProgram(), "PositionSize"),
-			(GLint)CGuiBaseRect::_AbsoluteHorizontalPosition,
-			(GLint)CGuiBaseRect::_AbsoluteVerticalPosition,
-			(GLint)CGuiBaseRect::_Width,
-			(GLint)CGui2DRect::_Height);
+			(GLint)_AbsoluteHorizontalPosition,
+			(GLint)_AbsoluteVerticalPosition,
+			(GLint)getWidth()/*_Width*/,
+			(GLint)getHeight()/*_Height*/);
 
 		glUniform4i(glGetUniformLocation(_Shader->getShaderProgram(), "ScreenSize"),
 			COption::getInstance().Get_Horizontal_Resolution(),

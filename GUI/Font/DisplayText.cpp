@@ -2,7 +2,7 @@
 #include "DisplayText.h"
 
 
-CDisplayText::CDisplayText(std::string argWidth, std::string argHeight, int argHorizontalPosition, int argVerticalPosition) : CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
+CDisplayText::CDisplayText( Widget_Style style) : CGuiBaseRect(style)
 {
 	const char *VertexShaderString =
 	{
@@ -175,6 +175,13 @@ void CDisplayText::SetText(std::wstring text)
 
 		StringSize = offset_Horizontal;
 		free(vt);
+
+		/*
+		*	Update the definitive width of string in pixel
+		*/
+		this->commandWidthString = this->ConvertIntToCommandeSring(StringSize, "p");
+		this->commandHeightString = this->ConvertIntToCommandeSring(this->HeightPixel, "p");
+		this->Update();
 	}
 }
 

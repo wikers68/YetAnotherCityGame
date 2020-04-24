@@ -2,7 +2,7 @@
 #include "Vertical_layout.h"
 
 
-CVertical_layout::CVertical_layout(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition,int spaceBetweenChild) : CGuiBaseRect(argWidth, argHeight, argHorizontalPosition, argVerticalPosition)
+CVertical_layout::CVertical_layout(Widget_Style style, int spaceBetweenChild) : CGuiBaseRect(style)
 {
 	Space = spaceBetweenChild;
 }
@@ -14,7 +14,17 @@ CVertical_layout::~CVertical_layout()
 
 void CVertical_layout::AddChild(CGuiBaseRect * argChild)
 {
-	CGuiBaseRect::AddChild(argChild);
+	/*
+	*	We create an empty slot. Then we add the child
+	*/
+	Widget_Style slotStyle;
+	slotStyle.hPosition = style.hPosition;
+	slotStyle.vPosition = 0;
+
+	CEmptySlot *slot = new CEmptySlot(slotStyle);
+	slot->AddChild(argChild);
+
+	CGuiBaseRect::AddChild(slot);
 	Update();
 }
 
@@ -39,8 +49,13 @@ void CVertical_layout::Update(void)
 
 			for (it = _Child->begin(); it != _Child->end(); it++)
 			{
-				(*it)->SetCommandString(std::to_string(Child_Height).append("p"),Translate_Size::HEIGHT);
-				(*it)->_VerticalPosition = (c + 1)*Space + c*Child_Height;
+				(*it)->style.hSize.AbsOrRel = ABS_REL::_RELATIVE;  //ABS_REL::_RELATIVE;
+				(*it)->style.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+				(*it)->style.hSize.size = 100.0;
+
+				(*it)->style.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+				(*it)->style.vSize.size = Child_Height;//SetCommandString(std::to_string(Child_Height).append("p"),Translate_Size::HEIGHT);
+				(*it)->style.vPosition = (c + 1)*Space + c*Child_Height;
 
 				/*
 				*	Update children position

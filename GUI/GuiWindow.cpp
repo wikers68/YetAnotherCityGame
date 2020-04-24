@@ -2,9 +2,9 @@
 #include "GuiWindow.h"
 
 
-CGuiWindow::CGuiWindow(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition):CGui2DRect(argWidth ,argHeight ,argHorizontalPosition, argVerticalPosition)
+CGuiWindow::CGuiWindow(Widget_Style style):CGui2DRect(style)
 {
-	int borderThickness = 5;
+/*	int borderThickness = 5;
 	std::string borderThickness_Command = ConvertIntToCommandeSring(borderThickness, "p");
 
 	int titleBackgroundHeight = 50;
@@ -32,12 +32,12 @@ CGuiWindow::CGuiWindow(std::string argWidth, std::string  argHeight, int argHori
 	this->AddChild(leftBorder);
 	this->AddChild(rightBorder);
 	this->AddChild(bottomBorder);
-	this->AddChild(topBorder);
+	this->AddChild(topBorder);*/
 
 	/*
 	*	Set up the area in which we will add child later
 	*/
-	int freeArea_Vertical_Position = titleBackgroundHeight;
+	/*int freeArea_Vertical_Position = titleBackgroundHeight;
 	std::string fvp = ConvertIntToCommandeSring(freeArea_Vertical_Position, "p");
 
 	int freeAreaWidth = this->_Width  - 2 * borderThickness;
@@ -49,7 +49,7 @@ CGuiWindow::CGuiWindow(std::string argWidth, std::string  argHeight, int argHori
 	freeArea = new CGui2DRect(fw, fh, HORIZONTAL_CENTER, titleBackgroundHeight);
 	freeArea->SetBackGroundColor(0.4f, 0.0f, 0.5f);
 
-	this->AddChild(freeArea);
+	this->AddChild(freeArea);*/
 
 }
 

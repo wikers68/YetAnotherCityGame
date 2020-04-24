@@ -24,14 +24,65 @@ enum Translate_Size
 	HEIGHT,
 };
 
+enum SIZE_RELATIVE_TO
+{
+	NONE,
+	PARENT,
+	CHILDREN,
+};
+
+enum ABS_REL
+{
+	_ABSOLUTE,
+	_RELATIVE,
+};
+
+struct WidgetSize
+{
+	//smallest size of widget, in pixel
+	int min = 0;
+
+	// wider size of the widget. -1 = no size limit
+	int max = -1;
+
+	// define if size is in pixel (absolute) or in percentage (relative)
+	ABS_REL AbsOrRel = ABS_REL::_ABSOLUTE;
+
+	//if size is relative, to parent or children ? 
+	SIZE_RELATIVE_TO relTo;
+
+	/*
+	*	
+	*/
+	float size = 0;
+};
+
+struct Widget_Style
+{
+
+	/*
+	*	Where do we place the widget in screen space
+	*	Always relative to parent position
+	*/
+	int hPosition = 0; 
+	int vPosition = 0;
+
+	//widget width
+	WidgetSize hSize;
+
+	//widget height
+	WidgetSize vSize;
+};
 
 class CGuiBaseRect
 {
 public:
 	CGuiBaseRect();
-	CGuiBaseRect(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition );
+	CGuiBaseRect(Widget_Style style );
 
 	~CGuiBaseRect();
+
+	Widget_Style style;
 
 	std::string commandWidthString;
 	std::string commandHeightString;

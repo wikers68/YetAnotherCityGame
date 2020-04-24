@@ -1,11 +1,11 @@
 #pragma once
 #include "../GuiBaseRect.h"
+#include "EmptySlot.h"
 
 class CVertical_layout : 	public CGuiBaseRect
 {
 public:
-	CVertical_layout(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition,
-		int spaceBetweenChild = 0);
+	CVertical_layout(Widget_Style style, int spaceBetweenChild = 0);
 	~CVertical_layout();
 
 	//void SetSpaceBetweenChild(int space);

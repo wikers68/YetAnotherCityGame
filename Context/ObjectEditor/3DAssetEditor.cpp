@@ -6,12 +6,40 @@ C3DAssetEditor::C3DAssetEditor()
 {
 	importedStaticObject = nullptr;
 
-	TopMenuBackGround = new CGui2DRect(CGuiBaseRect::ConvertIntToCommandeSring(COption::getInstance().Get_Horizontal_Resolution(),"p"),"50p", 0, 0);
+	Widget_Style wsTopMenuBackGround;
+	wsTopMenuBackGround.hPosition = HORIZONTAL_LEFT;
+	wsTopMenuBackGround.vPosition = VERTICAL_TOP;
+	wsTopMenuBackGround.hSize.size = COption::getInstance().Get_Horizontal_Resolution();
+	wsTopMenuBackGround.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsTopMenuBackGround.vSize.size = 50;
+	wsTopMenuBackGround.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	TopMenuBackGround = new CGui2DRect(wsTopMenuBackGround);
 	
-	CHorizontal_layout *hl = new CHorizontal_layout("100%", "80%", 0, 5, 10);
+	Widget_Style wsTopMenu_Layout;
+	wsTopMenu_Layout.hPosition = 0;
+	wsTopMenu_Layout.vPosition = 0;
+	wsTopMenu_Layout.hSize.size = 100;
+	wsTopMenu_Layout.hSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsTopMenu_Layout.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+	wsTopMenu_Layout.vSize.size = 100;
+	wsTopMenu_Layout.vSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsTopMenu_Layout.vSize.relTo = SIZE_RELATIVE_TO::PARENT;
+
+	CHorizontal_layout *hl = new CHorizontal_layout(wsTopMenu_Layout, 10);
 	TopMenuBackGround->AddChild(hl);
 
-	Button_backGround_ImportGeom = new CGui2DRect("50p", "100%", 0, 0);
+
+	Widget_Style wsButton;
+	wsButton.hPosition = HORIZONTAL_CENTER;
+	wsButton.vPosition = VERTICAL_CENTER; //TODO: bug, n'aligne pas le widget au milieu du parent
+	wsButton.hSize.size = 100;
+	wsButton.hSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsButton.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+	wsButton.vSize.size = 80;
+	wsButton.vSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsButton.vSize.relTo = SIZE_RELATIVE_TO::PARENT;
+
+	Button_backGround_ImportGeom = new CGui2DRect(wsButton);
 	Button_backGround_ImportGeom->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	hl->AddChild(Button_backGround_ImportGeom);
 
@@ -20,7 +48,7 @@ C3DAssetEditor::C3DAssetEditor()
 	Button_backGround_ImportGeom->Evenment->Set_IsOver_Callback(std::bind(&C3DAssetEditor::IsOverButton, this, std::placeholders::_1));
 	Button_backGround_ImportGeom->Evenment->Set_IsLeaving_Callback(std::bind(&C3DAssetEditor::IsLeavingButton, this, std::placeholders::_1));
 
-	OpenAssetButton = new CGui2DRect("50p", "100%", 0, 0);
+	OpenAssetButton = new CGui2DRect(wsButton);
 	OpenAssetButton->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	hl->AddChild(OpenAssetButton);
 	RegisterGui_ForEvent_Handling(OpenAssetButton);
@@ -31,43 +59,53 @@ C3DAssetEditor::C3DAssetEditor()
 	/*
 	*	Set up of the material 
 	*/
-	materialBackground = new CGui2DRect("200p", CGuiBaseRect::ConvertIntToCommandeSring(COption::getInstance().Get_Vertical_Resolution() - 50, "p"), HORIZONTAL_RIGHT, 50);
-	CVertical_layout *vlMaterial = new CVertical_layout("80%", "100%", HORIZONTAL_CENTER, 0, 10);
+
+	Widget_Style wsMaterialBackground;
+	wsMaterialBackground.hPosition = HORIZONTAL_RIGHT;
+	wsMaterialBackground.vPosition = wsTopMenuBackGround.vSize.size;
+	wsMaterialBackground.hSize.size = 200;
+	wsMaterialBackground.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsMaterialBackground.vSize.size = COption::getInstance().Get_Vertical_Resolution() - wsTopMenuBackGround.vSize.size;
+	wsMaterialBackground.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+
+	materialBackground = new CGui2DRect(wsMaterialBackground);
+	CVertical_layout *vlMaterial = new CVertical_layout(wsTopMenu_Layout, 10);
 	materialBackground->AddChild(vlMaterial);
 
-	materialBaseColorButton = new CGui2DRect("80%", "80%", 0, 0);
+	materialBaseColorButton = new CGui2DRect(wsButton);
+	materialBaseColorButton->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
 	materialBaseColorButton->Evenment->Set_OnClick_Callback(std::bind(&C3DAssetEditor::ImportBaseColorTexture, this, std::placeholders::_1));
 	materialBaseColorButton->Evenment->Set_IsOver_Callback(std::bind(&C3DAssetEditor::IsOverButton, this, std::placeholders::_1));
 	materialBaseColorButton->Evenment->Set_IsLeaving_Callback(std::bind(&C3DAssetEditor::IsLeavingButton, this, std::placeholders::_1));
 	RegisterGui_ForEvent_Handling(materialBaseColorButton);
 
-	materialBaseColorTexture = new CGuiTextureRect("80%", "80%", HORIZONTAL_CENTER, 0);
+	materialBaseColorTexture = new CGuiTextureRect(wsButton);
 	materialBaseColorTexture->SetTexture(nullptr); // display nothing at start up
 	materialBaseColorButton->AddChild(materialBaseColorTexture);
 
 	vlMaterial->AddChild(materialBaseColorButton);
 
-	windowAssetProperties = new CGuiWindow("500p", "300p", HORIZONTAL_CENTER,VERTICAL_CENTER);
+	/*windowAssetProperties = new CGuiWindow("500p", "300p", HORIZONTAL_CENTER,VERTICAL_CENTER);
 	windowAssetProperties->SetTitle(L"Asset Properties");
 	windowAssetProperties->Hide();
 
 	CVertical_layout *vl_windowsAssetProperties = new CVertical_layout("100%", "100%", HORIZONTAL_LEFT, VERTICAL_TOP);
-	windowAssetProperties->wAddChild(vl_windowsAssetProperties);
+	windowAssetProperties->wAddChild(vl_windowsAssetProperties);*/
 
 	/*
 	*	Create a line to display and edit asset type
 	*/
-	CHorizontal_layout *hl_AssetType = new CHorizontal_layout("100%", "100%", HORIZONTAL_CENTER, VERTICAL_CENTER);
+	/*CHorizontal_layout *hl_AssetType = new CHorizontal_layout("100%", "100%", HORIZONTAL_CENTER, VERTICAL_CENTER);
 	vl_windowsAssetProperties->AddChild(hl_AssetType);
 	CDisplayText *AssetType = new CDisplayText("100%", "50p", HORIZONTAL_CENTER, VERTICAL_TOP);
 	AssetType->SetText(L"Type of Asset");
-	hl_AssetType->AddChild(AssetType);
+	hl_AssetType->AddChild(AssetType);*/
 		/*
 		*	Display the type of the current asset
 		*/
-		CDisplayText *CurrentAssetType = new CDisplayText("100%", "50p", HORIZONTAL_CENTER, VERTICAL_TOP);
+		/*CDisplayText *CurrentAssetType = new CDisplayText("100%", "50p", HORIZONTAL_CENTER, VERTICAL_TOP);
 		CurrentAssetType->SetText(Convert_GameEntity_CategoryToWstring(GameEntity_Category::UNDEFINED));
-		hl_AssetType->AddChild(CurrentAssetType);
+		hl_AssetType->AddChild(CurrentAssetType);*/
 }
 
 
@@ -79,7 +117,7 @@ void C3DAssetEditor::RunContextLogic(float delta_t)
 {
 	TopMenuBackGround->Draw();
 	materialBackground->Draw();
-	windowAssetProperties->Draw();
+	//windowAssetProperties->Draw();
 
 	C3DContext::RunContextLogic(delta_t);
 

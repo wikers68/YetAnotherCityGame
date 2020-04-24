@@ -15,16 +15,16 @@ CGuiBaseRect::CGuiBaseRect()
 	//OnClick_CallBackFunction = IsOver_CallBackFunction = IsLeaving_CallBackFunction = nullptr;
 }
 
-CGuiBaseRect::CGuiBaseRect(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition)
+CGuiBaseRect::CGuiBaseRect(Widget_Style style)
 {
-	commandWidthString = argWidth;
+	this->style = style;
+	
 	_Width = -1;
 
-	commandHeightString = argHeight;
 	_Height = -1;
 
-	_HorizontalPosition = argHorizontalPosition;
-	_VerticalPosition = argVerticalPosition;
+	_HorizontalPosition = 0;
+	_VerticalPosition = 0;
 	_Parent = nullptr;
 	_Child = nullptr;
 	_isVisible = true;
@@ -179,7 +179,14 @@ void CGuiBaseRect::Generate_Mousse_Action(SDL_Event evt)
 
 int CGuiBaseRect::getHeight(void)
 {
-	if (SizeHasBeenCalculated)
+	/*
+	*	2020/04/24 : change to run update calculation each frame. 
+	*/
+	SizeHasBeenCalculated = false;
+	CalculateSize();
+	return _Height;
+
+	/*if (SizeHasBeenCalculated)
 	{
 		return _Height;
 	}
@@ -188,12 +195,16 @@ int CGuiBaseRect::getHeight(void)
 		CalculateSize();
 
 		getHeight();
-	}
+	}*/
 }
 
 int CGuiBaseRect::getWidth(void)
 {
-	if (SizeHasBeenCalculated)
+	SizeHasBeenCalculated = false;
+	CalculateSize();
+	return _Width;
+
+	/*if (SizeHasBeenCalculated)
 	{
 		return _Width;
 	}
@@ -202,7 +213,7 @@ int CGuiBaseRect::getWidth(void)
 		CalculateSize();
 
 		getWidth();
-	}
+	}*/
 }
 
 void CGuiBaseRect::Reset_HasBeenCalculated(void)
@@ -220,71 +231,46 @@ void CGuiBaseRect::Reset_HasBeenCalculated(void)
 	}
 }
 
-void CGuiBaseRect::SetCommandString(std::string command, Translate_Size ts)
-{
-	switch (ts)
-	{
-	default:break;
-	case Translate_Size::WIDTH:
-		commandWidthString = command;
-		break;
-	case Translate_Size::HEIGHT:
-		commandHeightString = command;
-		break;
-	}
-
-	Reset_HasBeenCalculated();
-}
-
-int CGuiBaseRect::TranslateStringToSize(std::string arg, Translate_Size ts)
-{
-	int argLength = arg.length();
-
-	if (argLength > 0)
-	{
-		char lastCharacter = arg[argLength - 1];
-
-		if (lastCharacter == 'p' || lastCharacter == 'P')
-		{
-			std::string pixelSize = arg;
-			pixelSize.resize(argLength - 1);
-
-			return std::atoi(pixelSize.c_str());
-		}
-
-		if (lastCharacter == '%' || lastCharacter == '%')
-		{
-			std::string pourcentSize = arg;
-			pourcentSize.resize(argLength - 1);
-			float pourcentSizeF = 0.01 *  std::atof(pourcentSize.c_str());
-
-			if (_Parent)
-			{
-				if (ts == WIDTH)
-				{
-					float fWidth = (float)_Parent->_Width * pourcentSizeF;
-					return (int)fWidth;
-				}
-				else if (ts == HEIGHT)
-				{
-					float fHeight = (float)_Parent->_Height* pourcentSizeF;
-					return (int)fHeight;
-				}
-				return 0;
-			}
-
-			return 0;
-		}
-
-	}
-
-	return 0;
-}
 
 void CGuiBaseRect::CalculateSize(void)
 {
-	_Width = TranslateStringToSize(commandWidthString, WIDTH);
-	_Height = TranslateStringToSize(commandHeightString, HEIGHT);
+
+	switch (style.hSize.AbsOrRel)
+	{
+	case ABS_REL::_ABSOLUTE:
+		_Width = style.hSize.size;
+		break;
+	case ABS_REL::_RELATIVE:
+		if (style.hSize.relTo == SIZE_RELATIVE_TO::PARENT)
+		{
+			if (_Parent)
+			{
+				_Width = (int)( style.hSize.size / 100.0f * (float)this->_Parent->getWidth());
+			}
+		}
+		if (style.hSize.relTo == SIZE_RELATIVE_TO::CHILDREN)
+		{
+
+		}
+		break;
+	}
+
+	switch (style.vSize.AbsOrRel)
+	{
+	case ABS_REL::_ABSOLUTE:
+		_Height = style.vSize.size;
+		break;
+	case ABS_REL::_RELATIVE:
+		if (style.vSize.relTo == SIZE_RELATIVE_TO::PARENT)
+		{
+			if (_Parent) _Height = style.vSize.size  / 100.0f * (float)this->_Parent->getHeight();
+		}
+		if (style.vSize.relTo == SIZE_RELATIVE_TO::CHILDREN)
+		{
+
+		}
+		break;
+	}
 
 	SizeHasBeenCalculated = true;
 }
@@ -297,73 +283,73 @@ void CGuiBaseRect::Calc_PositionNoParent(void)
 	/*
 		*	Horizontal position calculation
 		*/
-	switch (_HorizontalPosition)
+	switch (style.hPosition)
 	{
 	default:
-		_AbsoluteHorizontalPosition = _HorizontalPosition;
+		_AbsoluteHorizontalPosition = style.hPosition;
 		break;
 	case HORIZONTAL_CENTER:
-		_AbsoluteHorizontalPosition = (ScreenWidth - this->_Width) / 2.0;
+		_AbsoluteHorizontalPosition = (ScreenWidth - this->getWidth()) / 2.0;
 		break;
 	case HORIZONTAL_LEFT:
 		_AbsoluteHorizontalPosition = 0;
 		break;
 	case HORIZONTAL_RIGHT:
-		_AbsoluteHorizontalPosition = ScreenWidth - this->_Width;
+		_AbsoluteHorizontalPosition = ScreenWidth - this->getWidth();
 		break;
 	}
 
 	/*
 	*	Vertical position calculation
 	*/
-	switch (_VerticalPosition)
+	switch (style.vPosition)
 	{
 	default:
-		_AbsoluteVerticalPosition = _VerticalPosition;
+		_AbsoluteVerticalPosition = style.vPosition;
 		break;
 	case VERTICAL_TOP:
-		_AbsoluteVerticalPosition = _VerticalPosition;
+		_AbsoluteVerticalPosition = style.vPosition;
 		break;
 	case VERTICAL_CENTER:
-		_AbsoluteVerticalPosition = (screenHeight - this->_Height) / 2;
+		_AbsoluteVerticalPosition = (screenHeight - this->getHeight()) / 2;
 		break;
 	case VERTICAL_BOTTOM:
-		_AbsoluteVerticalPosition = screenHeight - this->_Height;
+		_AbsoluteVerticalPosition = screenHeight - this->getHeight();
 		break;
 	}
 }
 
 void CGuiBaseRect::Calc_PositionWithParent(void)
 {
-	switch (_HorizontalPosition)
+	switch (style.hPosition)
 	{
 	default:
-		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + _HorizontalPosition;
+		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + style.hPosition;
 		break;
 	case HORIZONTAL_CENTER:
-		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + int((float)((_Parent->_Width - this->_Width)) / 2.0f);
+		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + int((float)((_Parent->getWidth() - this->getWidth())) / 2.0f);
 		break;
 	case HORIZONTAL_LEFT:
 		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition;
 		break;
 	case HORIZONTAL_RIGHT:
-		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + (_Parent->_Width - this->_Width);
+		_AbsoluteHorizontalPosition = _Parent->_AbsoluteHorizontalPosition + (_Parent->getWidth() - this->getWidth());
 		break;
 	}
 
-	switch (_VerticalPosition)
+	switch (style.vPosition)
 	{
 	default:
-		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + style.vPosition;
 		break;
 	case VERTICAL_TOP:
-		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _VerticalPosition;
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + style.vPosition;
 		break;
 	case VERTICAL_CENTER:
-		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + (_Parent->_Height - this->_Height) /2 ;
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + (_Parent->getHeight() - this->getHeight()) /2 ;
 		break;
 	case VERTICAL_BOTTOM:
-		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _Parent->_Height - this->_Height;
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _Parent->getHeight() - this->getHeight();
 		break;
 	}
 }

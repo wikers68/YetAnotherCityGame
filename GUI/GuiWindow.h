@@ -5,7 +5,7 @@
 class CGuiWindow : public CGui2DRect
 {
 public:
-	CGuiWindow(std::string argWidth, std::string  argHeight, int argHorizontalPosition, int argVerticalPosition);
+	CGuiWindow(Widget_Style style);
 	~CGuiWindow();
 
 	void SetTitle(std::wstring title);

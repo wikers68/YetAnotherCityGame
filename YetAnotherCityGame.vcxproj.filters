@@ -120,6 +120,9 @@
     <ClInclude Include="3DGameObject\GameEntityCategory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUI\Layout\EmptySlot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -204,6 +207,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI\GuiWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Layout\EmptySlot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
