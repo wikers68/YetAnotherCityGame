@@ -45,6 +45,17 @@ public:
 
 	void ImportBaseColorTexture(CGui2DRect *caller);
 
+	CVertical_layout *layoutChooseAssetType;
+	CDisplayText *CurrentAssetType;
+	void ShowAssetCategoryWindow(CGui2DRect *caller);
+	void Select_Undefined_Asset_Category(CGui2DRect *caller);
+	void Select_Housse_Asset_Category(CGui2DRect *caller);
+	
+	CGui2DRect *close_AssetProperties;
+	void CloseAssertPropertiesWindow(CGui2DRect *caller);
+
+	void ChangeAssetCategory(GameEntity_Category gec);
+
 	/*
 	*	Hold and display properties linked to the current asset being edited
 	*/

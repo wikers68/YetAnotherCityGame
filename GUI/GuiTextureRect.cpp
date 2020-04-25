@@ -126,12 +126,15 @@ void CGuiTextureRect::ModulateColor(float R, float V, float B, float A)
 	Modulation_A = A;
 }
 
-void CGuiTextureRect::CheckMouseClick(SDL_Event evt)
+bool CGuiTextureRect::CheckMouseClick(SDL_Event evt)
 {
 	if (PointerIsInside_Rect(evt.button.x, evt.button.y) && Evenment->OnClick_CallBackFunction)
 	{
 		Evenment->OnClick_CallBackFunction(this);
+		return true;
 	}
+
+	return false;
 }
 
 void CGuiTextureRect::CheckMouseIsOver(SDL_Event evt)

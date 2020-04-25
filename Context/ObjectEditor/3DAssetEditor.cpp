@@ -85,27 +85,97 @@ C3DAssetEditor::C3DAssetEditor()
 
 	vlMaterial->AddChild(materialBaseColorButton);
 
-	/*windowAssetProperties = new CGuiWindow("500p", "300p", HORIZONTAL_CENTER,VERTICAL_CENTER);
+
+	Widget_Style ws_windowAssetProperties;
+	ws_windowAssetProperties.hPosition = HORIZONTAL_CENTER;
+	ws_windowAssetProperties.vPosition = VERTICAL_CENTER;
+	ws_windowAssetProperties.hSize.size = 500;
+	ws_windowAssetProperties.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	ws_windowAssetProperties.vSize.size = 300;
+	ws_windowAssetProperties.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+
+	windowAssetProperties = new CGuiWindow(ws_windowAssetProperties);
 	windowAssetProperties->SetTitle(L"Asset Properties");
 	windowAssetProperties->Hide();
 
-	CVertical_layout *vl_windowsAssetProperties = new CVertical_layout("100%", "100%", HORIZONTAL_LEFT, VERTICAL_TOP);
-	windowAssetProperties->wAddChild(vl_windowsAssetProperties);*/
+	CVertical_layout *vl_windowsAssetProperties = new CVertical_layout(wsTopMenu_Layout,0);
+	windowAssetProperties->wAddChild(vl_windowsAssetProperties);
 
 	/*
 	*	Create a line to display and edit asset type
 	*/
-	/*CHorizontal_layout *hl_AssetType = new CHorizontal_layout("100%", "100%", HORIZONTAL_CENTER, VERTICAL_CENTER);
+	CHorizontal_layout *hl_AssetType = new CHorizontal_layout(wsTopMenu_Layout);
 	vl_windowsAssetProperties->AddChild(hl_AssetType);
-	CDisplayText *AssetType = new CDisplayText("100%", "50p", HORIZONTAL_CENTER, VERTICAL_TOP);
+
+	Widget_Style wsTitre;
+	wsTitre.hPosition = HORIZONTAL_CENTER;
+	wsTitre.vPosition = VERTICAL_CENTER;
+	wsTitre.vSize.size = 20;
+	wsTitre.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsTitre.hSize.size = 100;
+	wsTitre.hSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsTitre.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+
+	CDisplayText *AssetType = new CDisplayText(wsTitre);
 	AssetType->SetText(L"Type of Asset");
-	hl_AssetType->AddChild(AssetType);*/
+	hl_AssetType->AddChild(AssetType);
 		/*
 		*	Display the type of the current asset
 		*/
-		/*CDisplayText *CurrentAssetType = new CDisplayText("100%", "50p", HORIZONTAL_CENTER, VERTICAL_TOP);
+		CurrentAssetType = new CDisplayText(wsTitre);
 		CurrentAssetType->SetText(Convert_GameEntity_CategoryToWstring(GameEntity_Category::UNDEFINED));
-		hl_AssetType->AddChild(CurrentAssetType);*/
+		hl_AssetType->AddChild(CurrentAssetType);
+
+		CGui2DRect *EditAssetTypeButton = new CGui2DRect(wsButton);
+		EditAssetTypeButton->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
+		EditAssetTypeButton->Evenment->Set_OnClick_Callback(std::bind(&C3DAssetEditor::ShowAssetCategoryWindow, this, std::placeholders::_1));
+		EditAssetTypeButton->Evenment->Set_IsOver_Callback(std::bind(&C3DAssetEditor::IsOverButton, this, std::placeholders::_1));
+		EditAssetTypeButton->Evenment->Set_IsLeaving_Callback(std::bind(&C3DAssetEditor::IsLeavingButton, this, std::placeholders::_1));
+		RegisterGui_ForEvent_Handling(EditAssetTypeButton);
+		hl_AssetType->AddChild(EditAssetTypeButton);
+
+			/*
+			*	Define a layout in which we will add button to select the current asset type.
+			*/
+			layoutChooseAssetType = new CVertical_layout(wsTopMenu_Layout);
+			windowAssetProperties->wAddChild(layoutChooseAssetType);
+			layoutChooseAssetType->Hide();
+
+			CGui2DRect *SelectAsset_UNDEFINED_Button = new CGui2DRect(wsButton);
+			SelectAsset_UNDEFINED_Button->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
+			layoutChooseAssetType->AddChild(SelectAsset_UNDEFINED_Button);
+			RegisterGui_ForEvent_Handling(SelectAsset_UNDEFINED_Button);
+			SelectAsset_UNDEFINED_Button->Evenment->Set_OnClick_Callback(std::bind(&C3DAssetEditor::Select_Undefined_Asset_Category, this, std::placeholders::_1));
+			SelectAsset_UNDEFINED_Button->Evenment->Set_IsOver_Callback(std::bind(&C3DAssetEditor::IsOverButton, this, std::placeholders::_1));
+			SelectAsset_UNDEFINED_Button->Evenment->Set_IsLeaving_Callback(std::bind(&C3DAssetEditor::IsLeavingButton, this, std::placeholders::_1));
+
+				CDisplayText *SelectAsset_UNDEFINED_Button_Text = new CDisplayText(wsTitre);
+				SelectAsset_UNDEFINED_Button_Text->SetText(L"Undefined");
+				SelectAsset_UNDEFINED_Button->AddChild(SelectAsset_UNDEFINED_Button_Text);
+
+			CGui2DRect *SelectAsset_Housse_Button = new CGui2DRect(wsButton);
+			SelectAsset_Housse_Button->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
+			layoutChooseAssetType->AddChild(SelectAsset_Housse_Button);
+			RegisterGui_ForEvent_Handling(SelectAsset_Housse_Button);
+			SelectAsset_Housse_Button->Evenment->Set_OnClick_Callback(std::bind(&C3DAssetEditor::Select_Housse_Asset_Category, this, std::placeholders::_1));
+			SelectAsset_Housse_Button->Evenment->Set_IsOver_Callback(std::bind(&C3DAssetEditor::IsOverButton, this, std::placeholders::_1));
+			SelectAsset_Housse_Button->Evenment->Set_IsLeaving_Callback(std::bind(&C3DAssetEditor::IsLeavingButton, this, std::placeholders::_1));
+
+				CDisplayText *SelectAsset_HousseButton_Text = new CDisplayText(wsTitre);
+				SelectAsset_HousseButton_Text->SetText(L"Housse");
+				SelectAsset_Housse_Button->AddChild(SelectAsset_HousseButton_Text);
+
+	close_AssetProperties = new CGui2DRect(wsButton);
+	close_AssetProperties->SetBackGroundColor(BUTTON_BACKGROUND_OVER_COLOR);
+	close_AssetProperties->Evenment->Set_OnClick_Callback(std::bind(&C3DAssetEditor::CloseAssertPropertiesWindow, this, std::placeholders::_1));
+	close_AssetProperties->Evenment->Set_IsOver_Callback(std::bind(&C3DAssetEditor::IsOverButton, this, std::placeholders::_1));
+	close_AssetProperties->Evenment->Set_IsLeaving_Callback(std::bind(&C3DAssetEditor::IsLeavingButton, this, std::placeholders::_1));
+	RegisterGui_ForEvent_Handling(close_AssetProperties);
+	vl_windowsAssetProperties->AddChild(close_AssetProperties);
+
+	CDisplayText *close_AssetPropertiesText = new CDisplayText(wsTitre);
+	close_AssetPropertiesText->SetText(L"CLose window");
+	close_AssetProperties->AddChild(close_AssetPropertiesText);
 }
 
 
@@ -117,7 +187,7 @@ void C3DAssetEditor::RunContextLogic(float delta_t)
 {
 	TopMenuBackGround->Draw();
 	materialBackground->Draw();
-	//windowAssetProperties->Draw();
+	windowAssetProperties->Draw();
 
 	C3DContext::RunContextLogic(delta_t);
 
@@ -184,4 +254,35 @@ void C3DAssetEditor::ImportBaseColorTexture(CGui2DRect * caller)
 		importedStaticObject->ObjectMaterial->OpenDialogBoxToImportTexture(TextureType::BASE_COLOR);
 		materialBaseColorTexture->SetTexture(importedStaticObject->ObjectMaterial->baseColorTexture);
 	}
+}
+
+void C3DAssetEditor::ShowAssetCategoryWindow(CGui2DRect * caller)
+{
+	layoutChooseAssetType->Show();
+}
+
+void C3DAssetEditor::Select_Undefined_Asset_Category(CGui2DRect * caller)
+{
+	ChangeAssetCategory(GameEntity_Category::UNDEFINED);
+}
+
+void C3DAssetEditor::Select_Housse_Asset_Category(CGui2DRect * caller)
+{
+	ChangeAssetCategory(GameEntity_Category::HOUSE);
+}
+
+void C3DAssetEditor::CloseAssertPropertiesWindow(CGui2DRect * caller)
+{
+	windowAssetProperties->Hide();
+}
+
+void C3DAssetEditor::ChangeAssetCategory(GameEntity_Category gec)
+{
+	if (importedStaticObject)
+	{
+		importedStaticObject->Category = gec; 
+		CurrentAssetType->SetText(Convert_GameEntity_CategoryToWstring(importedStaticObject->Category));
+	}
+
+	layoutChooseAssetType->Hide();
 }

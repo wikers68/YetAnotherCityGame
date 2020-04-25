@@ -2,7 +2,7 @@
 #include "Gui2DRect.h"
 
 
-CGui2DRect::CGui2DRect(Widget_Style style) :CGuiBaseRect(style)
+CGui2DRect::CGui2DRect(Widget_Style style) :CGuiBaseRect(style), CEventTarget()
 {
 	glGenVertexArrays(1, &_vertexArray);
 	glBindVertexArray(_vertexArray);
@@ -37,16 +37,17 @@ CGui2DRect::CGui2DRect(Widget_Style style) :CGuiBaseRect(style)
 		"out vec4 ColorRG;"
 		"void main()"
 		"{"
-		//dimension in viewport space of the rectangle
-	"float widthRelToScreen = float(PositionSize.z) / float(ScreenSize.x);"
-	"float heightRelToScreen = float(PositionSize.w) / float(ScreenSize.y);"
+			//dimension in viewport space of the rectangle
+		"float widthRelToScreen = float(PositionSize.z) / float(ScreenSize.x);"
+		"float heightRelToScreen = float(PositionSize.w) / float(ScreenSize.y);"
 
-		//upper left corner position in screen space
-	"float Xposition = -1 + 2*(vertexPosition.x * widthRelToScreen + float(PositionSize.x) / float(ScreenSize.x));"
-	"float Yposition =  1 - 2*(vertexPosition.y * heightRelToScreen + float(PositionSize.y) / float(ScreenSize.y));"
+			//upper left corner position in screen space
+		"float Xposition = -1 + 2*(vertexPosition.x * widthRelToScreen + float(PositionSize.x) / float(ScreenSize.x));"
+		"float Yposition =  1 - 2*(vertexPosition.y * heightRelToScreen + float(PositionSize.y) / float(ScreenSize.y));"
 
-			"ColorRG = vec4(BackGroundColor.x,BackGroundColor.y,BackGroundColor.z,1.0f);"
-			"gl_Position = vec4( Xposition,Yposition,1,1);"
+		"ColorRG = vec4(BackGroundColor.x,BackGroundColor.y,BackGroundColor.z,1.0f);"
+		"gl_Position = vec4( Xposition,Yposition,1,1);"
+
 		"};"
 	};
 
@@ -54,10 +55,13 @@ CGui2DRect::CGui2DRect(Widget_Style style) :CGuiBaseRect(style)
 	{
 		"#version 420 core\n"
 		"in vec4 ColorRG;"
+		"uniform int ID;"
 		"layout (location = 1) out vec4 color;"
 		"layout (location = 2) out int MaterialID;"
+		"layout (location = 3) out int Object_ID;"
 		"void main()"
 		"{"
+		"Object_ID = ID;"
 		"MaterialID=255;"
 		"color = vec4(ColorRG.x,ColorRG.y,ColorRG.z,1.0f);"
 		"};"
@@ -106,6 +110,8 @@ void CGui2DRect::DrawLocal(float delta_t)
 			0,
 			0);
 
+		glUniform1i(glGetUniformLocation(_Shader->getShaderProgram(), "ID"), this->getId());
+
 		glUniform4f(glGetUniformLocation(_Shader->getShaderProgram(), "BackGroundColor"),
 			_Red,
 			_Green,
@@ -116,12 +122,11 @@ void CGui2DRect::DrawLocal(float delta_t)
 
 }
 
-void CGui2DRect::CheckMouseClick(SDL_Event evt)
+bool CGui2DRect::CheckMouseClick(SDL_Event evt)
 {
-	if (PointerIsInside_Rect(evt.button.x, evt.button.y) && Evenment->OnClick_CallBackFunction)
-	{
-		Evenment->OnClick_CallBackFunction(this);
-	}
+	Evenment->OnClick_CallBackFunction(this);
+
+	return false;
 }
 
 void CGui2DRect::CheckMouseIsOver(SDL_Event evt)

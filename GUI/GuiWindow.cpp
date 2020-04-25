@@ -4,52 +4,87 @@
 
 CGuiWindow::CGuiWindow(Widget_Style style):CGui2DRect(style)
 {
-/*	int borderThickness = 5;
-	std::string borderThickness_Command = ConvertIntToCommandeSring(borderThickness, "p");
+	int borderThickness = 5;
 
-	int titleBackgroundHeight = 50;
-	std::string titleBackgroundHeightCommand = ConvertIntToCommandeSring(titleBackgroundHeight, "p");
+	Widget_Style wsVerticalBorder;
+	wsVerticalBorder.hPosition = HORIZONTAL_LEFT;
+	wsVerticalBorder.vPosition = VERTICAL_TOP;
+	wsVerticalBorder.hSize.size = borderThickness;
+	wsVerticalBorder.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsVerticalBorder.vSize.size = 100;
+	wsVerticalBorder.vSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsVerticalBorder.vSize.relTo = SIZE_RELATIVE_TO::PARENT;
 
-	leftBorder = new CGui2DRect("5p", "100%", HORIZONTAL_LEFT, 0);
+	Widget_Style wsHorizontalBorder;
+	wsHorizontalBorder.hPosition = HORIZONTAL_LEFT;
+	wsHorizontalBorder.vSize.size = borderThickness;
+	wsHorizontalBorder.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsHorizontalBorder.hSize.size = 100;
+	wsHorizontalBorder.hSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsHorizontalBorder.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+
+
+	leftBorder = new CGui2DRect(wsVerticalBorder);
 	leftBorder->SetBackGroundColor(WHITE);
-
-	rightBorder = new CGui2DRect("5p", "100%", HORIZONTAL_RIGHT, 0);
+	
+	wsVerticalBorder.hPosition = HORIZONTAL_RIGHT;
+	rightBorder = new CGui2DRect(wsVerticalBorder);
 	rightBorder->SetBackGroundColor(WHITE);
 
-	topBorder = new CGui2DRect("100%", "5p", HORIZONTAL_RIGHT, 0);
+	wsHorizontalBorder.vPosition = VERTICAL_TOP;
+	topBorder = new CGui2DRect(wsHorizontalBorder);
 	topBorder->SetBackGroundColor(WHITE);
 
-	bottomBorder = new CGui2DRect("100%", "5p", HORIZONTAL_RIGHT, VERTICAL_BOTTOM);
+	wsHorizontalBorder.vPosition = VERTICAL_BOTTOM;
+	bottomBorder = new CGui2DRect(wsHorizontalBorder);
 	bottomBorder->SetBackGroundColor(WHITE);
 
-	titleBackground = new CGui2DRect("100%", titleBackgroundHeightCommand, HORIZONTAL_LEFT, VERTICAL_TOP);
+	Widget_Style wstitleBackground;
+	wstitleBackground.hPosition = 0;
+	wstitleBackground.vPosition = 0;
+	wstitleBackground.vSize.size = 50;
+	wstitleBackground.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wstitleBackground.hSize.size = 100;
+	wstitleBackground.hSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wstitleBackground.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+
+	titleBackground = new CGui2DRect(wstitleBackground);
 	titleBackground->SetBackGroundColor(0.45f, 0.45f, 0.45f, 1.0f);
 	this->AddChild(titleBackground);
 
-	titre = new CDisplayText("100%", "30p", HORIZONTAL_CENTER, VERTICAL_CENTER);
+	Widget_Style wsTitre;
+	wsTitre.hPosition = HORIZONTAL_CENTER;
+	wsTitre.vPosition = VERTICAL_CENTER;
+	wsTitre.vSize.size = wstitleBackground.vSize.size  - 10;
+	wsTitre.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsTitre.hSize.size = 100;
+	wsTitre.hSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsTitre.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+
+	titre = new CDisplayText(wsTitre);
 	titleBackground->AddChild(titre);
 
 	this->AddChild(leftBorder);
 	this->AddChild(rightBorder);
 	this->AddChild(bottomBorder);
-	this->AddChild(topBorder);*/
+	this->AddChild(topBorder);
 
 	/*
 	*	Set up the area in which we will add child later
 	*/
-	/*int freeArea_Vertical_Position = titleBackgroundHeight;
-	std::string fvp = ConvertIntToCommandeSring(freeArea_Vertical_Position, "p");
 
-	int freeAreaWidth = this->_Width  - 2 * borderThickness;
-	std::string fw = ConvertIntToCommandeSring(freeAreaWidth, "p");
+	Widget_Style wsFreeArea;
+	wsFreeArea.hPosition = borderThickness;
+	wsFreeArea.vPosition = wstitleBackground.vSize.size;
+	wsFreeArea.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsFreeArea.hSize.size = this->_Width - 2 * borderThickness;
+	wsFreeArea.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsFreeArea.vSize.size = this->_Height - wstitleBackground.vSize.size - 1 * borderThickness;
 
-	int freeAreaHeight = this->_Height - titleBackgroundHeight - 1 * borderThickness;
-	std::string fh = ConvertIntToCommandeSring(freeAreaHeight, "p");
-
-	freeArea = new CGui2DRect(fw, fh, HORIZONTAL_CENTER, titleBackgroundHeight);
+	freeArea = new CGui2DRect(wsFreeArea);
 	freeArea->SetBackGroundColor(0.4f, 0.0f, 0.5f);
 
-	this->AddChild(freeArea);*/
+	this->AddChild(freeArea);
 
 }
 

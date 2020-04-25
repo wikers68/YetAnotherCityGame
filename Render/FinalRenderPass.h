@@ -10,6 +10,7 @@ struct PBR_Texture
 	GLuint _textureMaterialID = 0;
 	GLuint _ObjectColor = 0;
 	GLuint _GuiColor = 0 ;
+	GLuint _ID_Object = 0;
 };
 
 class CFinalRenderPass

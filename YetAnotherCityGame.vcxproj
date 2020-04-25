@@ -151,6 +151,7 @@
     <ClInclude Include="Context\ObjectEditor\3DAssetEditor.h" />
     <ClInclude Include="Context\ObjectEditor\EditorLandScreen.h" />
     <ClInclude Include="3DGameObject\GameEntity.h" />
+    <ClInclude Include="Event\EventTarget.h" />
     <ClInclude Include="GUI\GuiWindow.h" />
     <ClInclude Include="GUI\CommonGUIheader.h" />
     <ClInclude Include="GUI\Layout\EmptySlot.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Context\ObjectEditor\3DAssetEditor.cpp" />
     <ClCompile Include="Context\ObjectEditor\EditorLandScreen.cpp" />
     <ClCompile Include="3DGameObject\GameEntity.cpp" />
+    <ClCompile Include="Event\EventTarget.cpp" />
     <ClCompile Include="GUI\GuiWindow.cpp" />
     <ClCompile Include="GUI\Layout\EmptySlot.cpp" />
     <ClCompile Include="Render\FinalRenderPass.cpp" />

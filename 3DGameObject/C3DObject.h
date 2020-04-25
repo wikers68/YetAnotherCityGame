@@ -11,8 +11,9 @@
 #include "../Shaders/Shader.h"
 #include "../Option.h"
 #include "../graphics/Material.h"
+#include "GameEntity.h"
 
-class C3DObject
+class C3DObject : public CGameEntity
 {
 public:
 	C3DObject();

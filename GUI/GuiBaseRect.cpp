@@ -10,15 +10,12 @@ CGuiBaseRect::CGuiBaseRect()
 	_Parent = nullptr;
 	_Child = nullptr;
 	_isVisible = true;
-	commandWidthString = "";
-
-	//OnClick_CallBackFunction = IsOver_CallBackFunction = IsLeaving_CallBackFunction = nullptr;
 }
 
 CGuiBaseRect::CGuiBaseRect(Widget_Style style)
 {
 	this->style = style;
-	
+
 	_Width = -1;
 
 	_Height = -1;
@@ -162,25 +159,10 @@ bool CGuiBaseRect::PointerIsInside_Rect(int x, int y)
 	}
 }
 
-void CGuiBaseRect::Generate_Mousse_Action(SDL_Event evt)
-{
-	switch (evt.type)
-	{
-	default: break;
-	case SDL_MOUSEMOTION:
-		CheckMouseIsOver(evt);
-		CheckMouseIsLeaving(evt);
-		break;
-	case SDL_MOUSEBUTTONDOWN:
-		CheckMouseClick(evt);
-		break;
-	}
-}
-
 int CGuiBaseRect::getHeight(void)
 {
 	/*
-	*	2020/04/24 : change to run update calculation each frame. 
+	*	2020/04/24 : change to run update calculation each frame.
 	*/
 	SizeHasBeenCalculated = false;
 	CalculateSize();
@@ -245,7 +227,7 @@ void CGuiBaseRect::CalculateSize(void)
 		{
 			if (_Parent)
 			{
-				_Width = (int)( style.hSize.size / 100.0f * (float)this->_Parent->getWidth());
+				_Width = (int)(style.hSize.size / 100.0f * (float)this->_Parent->getWidth());
 			}
 		}
 		if (style.hSize.relTo == SIZE_RELATIVE_TO::CHILDREN)
@@ -263,7 +245,7 @@ void CGuiBaseRect::CalculateSize(void)
 	case ABS_REL::_RELATIVE:
 		if (style.vSize.relTo == SIZE_RELATIVE_TO::PARENT)
 		{
-			if (_Parent) _Height = style.vSize.size  / 100.0f * (float)this->_Parent->getHeight();
+			if (_Parent) _Height = style.vSize.size / 100.0f * (float)this->_Parent->getHeight();
 		}
 		if (style.vSize.relTo == SIZE_RELATIVE_TO::CHILDREN)
 		{
@@ -346,7 +328,7 @@ void CGuiBaseRect::Calc_PositionWithParent(void)
 		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + style.vPosition;
 		break;
 	case VERTICAL_CENTER:
-		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + (_Parent->getHeight() - this->getHeight()) /2 ;
+		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + (_Parent->getHeight() - this->getHeight()) / 2;
 		break;
 	case VERTICAL_BOTTOM:
 		_AbsoluteVerticalPosition = _Parent->_AbsoluteVerticalPosition + _Parent->getHeight() - this->getHeight();

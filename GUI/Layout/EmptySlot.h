@@ -10,7 +10,7 @@ public:
 
 	// Inherited via CGuiBaseRect
 	virtual void DrawLocal(float delta_t = 0.0f) override;
-	virtual void CheckMouseClick(SDL_Event evt) override;
+	virtual bool CheckMouseClick(SDL_Event evt) override;
 	virtual void CheckMouseIsOver(SDL_Event evt) override;
 	virtual void CheckMouseIsLeaving(SDL_Event evt) override;
 };

@@ -6,10 +6,12 @@
 
 #include <SDL.h> //for event handling
 #include <list>
+#include <map>
 
 #include "../GUI/GuiBaseRect.h"
 #include "../GUI/Gui2DRect.h"
 #include "ContextManager.h"
+#include "../Event/EventTarget.h"
 
 class CContext
 {
@@ -18,6 +20,11 @@ public:
 	~CContext();
 
 	std::list<CGuiBaseRect*> *_GuiElements;
+	
+	/*
+	*	MAP containing all element of the context which can receive event
+	*/
+	std::map<int, CEventTarget*> *EventTargets;
 
 	virtual bool CreateContext();
 	bool ActivateContext();
@@ -26,11 +33,14 @@ public:
 	bool DestroyContext();
 
 	//dispatch event inside the context
-	void ManageEvent(float delta_t = 0.0f);
+	void ManageEvent(float delta_t = 0.0f, GLuint  _Object_ID_Buffer = -1 );
 
 	virtual void EventProcessing(SDL_Event evt, float delta_t = 0.0f) = 0;
 
-	void RegisterGui_ForEvent_Handling(CGuiBaseRect *arg);
+	//give an unique ID to each object that will received event
+	int Free_Object_ID;
+
+	void RegisterGui_ForEvent_Handling(/*CGuiBaseRect *arg*/ CEventTarget *evt = nullptr);
 
 	template<class C>
 	void ChangeContext(CContext *currentContext)
@@ -46,4 +56,16 @@ public:
 		}
 	}
 
+private:
+
+	/*
+	*	We will store ID_Object from the rendering buffer. We will use value to search
+	*	the EventTarget under the mousse cursor.
+	*/
+	int *ID_Buffer;
+
+	/*
+	*	ID du dernier objet sur lequel il y a eu un évenement
+	*/
+	int ID_LastObject;
 };

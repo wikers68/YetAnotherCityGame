@@ -13,8 +13,9 @@ void CEmptySlot::DrawLocal(float delta_t)
 {
 }
 
-void CEmptySlot::CheckMouseClick(SDL_Event evt)
+bool CEmptySlot::CheckMouseClick(SDL_Event evt)
 {
+	return false;
 }
 
 void CEmptySlot::CheckMouseIsOver(SDL_Event evt)

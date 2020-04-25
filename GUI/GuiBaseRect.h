@@ -84,9 +84,6 @@ public:
 
 	Widget_Style style;
 
-	std::string commandWidthString;
-	std::string commandHeightString;
-
 	int _Width;
 	int _Height;
 
@@ -134,10 +131,8 @@ public:
 
 	bool PointerIsInside_Rect(int x, int y);
 
-	void CGuiBaseRect::Generate_Mousse_Action(SDL_Event evt);
-
 	//list of event function
-	virtual void CheckMouseClick(SDL_Event evt) = 0;
+	virtual bool CheckMouseClick(SDL_Event evt) = 0;
 	virtual void CheckMouseIsOver(SDL_Event evt) = 0;
 	virtual void CheckMouseIsLeaving(SDL_Event evt) = 0;
 
@@ -146,24 +141,7 @@ public:
 
 	void Reset_HasBeenCalculated(void);
 
-	void SetCommandString(std::string command, Translate_Size ts);
-
-	/*
-	*	Some helper function
-	*/
-	static std::string ConvertIntToCommandeSring(int size, std::string symbol)
-	{
-		return std::to_string(size).append(symbol);
-	}
-
 private:
-
-	/*
-	*	use to translate arg in string format to size:
-	*		- string ended by p ==> size is in pixel
-	*		- string ended by % ==> size is in parent size %
-	*/
-	int TranslateStringToSize(std::string arg, Translate_Size ts);
 
 	/*
 	*	True if size argument (in string format) has been translated into int type (pixel size)

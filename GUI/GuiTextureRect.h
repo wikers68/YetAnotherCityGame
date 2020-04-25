@@ -40,7 +40,7 @@ private:
 	
 	CTexture *_texture;
 
-	 void CheckMouseClick(SDL_Event evt) override;
+	 bool CheckMouseClick(SDL_Event evt) override;
 
 	 void CheckMouseIsOver(SDL_Event evt) override;
 

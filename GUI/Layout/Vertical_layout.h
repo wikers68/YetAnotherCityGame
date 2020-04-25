@@ -20,7 +20,7 @@ public:
 	/*
 	*	It's not plan to manage event for layout
 	*/
-	virtual void CheckMouseClick(SDL_Event evt) override {};
+	virtual bool CheckMouseClick(SDL_Event evt) override { return false; }
 	virtual void CheckMouseIsOver(SDL_Event evt) override {};
 	virtual void CheckMouseIsLeaving(SDL_Event evt) override {};
 	

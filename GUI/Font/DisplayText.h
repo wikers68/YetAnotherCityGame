@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include "../GuiBaseRect.h"
 #include "FontManager.h"
 #include "../../Option.h"
@@ -28,13 +29,21 @@ public:
 	// Inherited via CGuiBaseRect
 	virtual void DrawLocal(float delta_t = 0.0f) override;
 
-	virtual void CheckMouseClick(SDL_Event evt) override {};
+	virtual bool CheckMouseClick(SDL_Event evt) override { return false; }
 	virtual void CheckMouseIsOver(SDL_Event evt) override {};
 	virtual void CheckMouseIsLeaving(SDL_Event evt) override {};
 
 	float R;
 	float G;
 	float B;
+
+	/*
+	*	if the calculated width or height of the string is higher than the parent size, we scale the string to max parent size 
+	*/
+	void AutoScaleText();
+
+	void ActivateAutoScaling(); 
+	void ResetAutoScaling();
 
 private:
 
@@ -50,5 +59,9 @@ private:
 	*	Calculated during SetText()
 	*/
 	int StringSize;
+
+	bool AutoScaling;
+
+	float ScaleFactor;
 };
 

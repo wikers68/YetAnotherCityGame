@@ -11,6 +11,7 @@ CDisplayText::CDisplayText( Widget_Style style) : CGuiBaseRect(style)
 		"layout( location = 1) in vec2 vertexUV;"
 		"uniform ivec4 PositionSize;"
 		"uniform ivec4 ScreenSize;"
+		"uniform float ScaleFactor;"
 		"out vec2 p_uv;"
 		"void main()"
 		"{"
@@ -19,8 +20,8 @@ CDisplayText::CDisplayText( Widget_Style style) : CGuiBaseRect(style)
 		"float heightRelToScreen = float(PositionSize.w) / float(ScreenSize.y);"
 
 		//upper left corner position in screen space
-		"float Xposition = -1 + 2*(vertexPosition.x  + float(PositionSize.x)) / float(ScreenSize.x);"
-		"float Yposition =  1 - 2*(vertexPosition.y  + float(PositionSize.y)) / float(ScreenSize.y);"
+		"float Xposition = -1 + 2*(ScaleFactor * vertexPosition.x  + float(PositionSize.x)) / float(ScreenSize.x);"
+		"float Yposition =  1 - 2*(ScaleFactor * vertexPosition.y  + float(PositionSize.y)) / float(ScreenSize.y);"
 		" p_uv = vertexUV;"
 		"gl_Position = vec4( Xposition,Yposition,1,1);"
 		"};"
@@ -50,6 +51,9 @@ CDisplayText::CDisplayText( Widget_Style style) : CGuiBaseRect(style)
 	_Shader->Compile(VertexShaderString, FragmentShaderString);
 
 	HeightPixel = 50;
+
+	AutoScaling = true;
+	ScaleFactor = 1.0;
 
 	//default color is White
 	R = G = B = 1.0f;
@@ -179,8 +183,7 @@ void CDisplayText::SetText(std::wstring text)
 		/*
 		*	Update the definitive width of string in pixel
 		*/
-		this->commandWidthString = this->ConvertIntToCommandeSring(StringSize, "p");
-		this->commandHeightString = this->ConvertIntToCommandeSring(this->HeightPixel, "p");
+
 		this->Update();
 	}
 }
@@ -192,6 +195,9 @@ void CDisplayText::SetHeight(int Height_Pixel)
 
 void CDisplayText::DrawLocal(float delta_t)
 {
+
+	if (AutoScaling) AutoScaleText();
+
 	glUseProgram(_Shader->getShaderProgram());
 	glBindVertexArray(_vertexArray);
 
@@ -212,6 +218,8 @@ void CDisplayText::DrawLocal(float delta_t)
 		G,
 		B);
 
+	glUniform1f(glGetUniformLocation(_Shader->getShaderProgram(), "ScaleFactor"),ScaleFactor);
+
 	/*
 	*	We bind the texture with all glyphs 
 	*/
@@ -222,4 +230,27 @@ void CDisplayText::DrawLocal(float delta_t)
 	*	There are 6 vertices per character
 	*/
 	glDrawArrays(GL_TRIANGLES, 0, numberOfCharacter * 6);
+}
+
+void CDisplayText::AutoScaleText()
+{
+	float widthAspectRatio = (float)this->StringSize / (float)this->_Parent->getWidth();
+	float heightAspectRatio = (float)this->HeightPixel / (float)this->_Parent->getHeight();
+
+	if (widthAspectRatio > 1.0 || heightAspectRatio > 1.0)
+	{
+		float maxAspect = std::max(widthAspectRatio, heightAspectRatio);
+		ScaleFactor = 1.0 / maxAspect;
+	}
+}
+
+void CDisplayText::ActivateAutoScaling()
+{
+	AutoScaling = true;
+}
+
+void CDisplayText::ResetAutoScaling()
+{
+	AutoScaling = false;
+	ScaleFactor = 1.0f;
 }

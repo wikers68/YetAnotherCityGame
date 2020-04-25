@@ -18,6 +18,8 @@ static std::wstring Convert_GameEntity_CategoryToWstring(GameEntity_Category arg
 	switch (arg)
 	{
 	default:
-		return std::wstring(L"No GameEntity_Category");
+		return std::wstring(L"UNDEFINED");
+	case GameEntity_Category::HOUSE:
+		return std::wstring(L"Housse");
 	}
 }

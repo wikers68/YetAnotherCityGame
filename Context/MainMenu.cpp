@@ -40,6 +40,12 @@ bool CMainMenu::CreateContext()
 	Widget_Style wsText;
 	wsText.hPosition = HORIZONTAL_CENTER;
 	wsText.vPosition = VERTICAL_CENTER;
+	wsText.vSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsText.vSize.relTo = SIZE_RELATIVE_TO::PARENT;
+	wsText.vSize.size = 100;
+	wsText.hSize.AbsOrRel = ABS_REL::_RELATIVE;
+	wsText.hSize.relTo = SIZE_RELATIVE_TO::PARENT;
+	wsText.hSize.size = 100;
 
 	/*
 	*	Set Background Texture
@@ -80,6 +86,7 @@ bool CMainMenu::CreateContext()
 	
 	PlayText = new CDisplayText(wsText);
 	PlayText->SetText(L"Start New Game!");
+	PlayText->ActivateAutoScaling();
 	_ButtonStartNewGame->AddChild(PlayText);
 
 	/*
@@ -94,6 +101,7 @@ bool CMainMenu::CreateContext()
 
 	OpenGameText = new CDisplayText(wsText);
 	OpenGameText->SetText(L"Continue existing game!");
+	OpenGameText->ActivateAutoScaling();
 	_ButtonOpenGame->AddChild(OpenGameText);
 
 	/*

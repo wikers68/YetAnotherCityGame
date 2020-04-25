@@ -5,6 +5,17 @@
 CContext::CContext()
 {
 	_GuiElements = new std::list<CGuiBaseRect*>();
+
+	EventTargets = new std::map<int, CEventTarget*>();;
+
+	Free_Object_ID = 0;
+	ID_LastObject = 0;
+
+	/*
+	*	Pre Alloc memories for ID_Buffer.
+	*	Buffer size = screen surface with one 32bit INT (as defined in PBR renderpass)
+	*/
+	ID_Buffer = (int*)calloc(COption::getInstance().Get_Horizontal_Resolution()*COption::getInstance().Get_Horizontal_Resolution(), sizeof(int));
 }
 
 
@@ -47,32 +58,66 @@ bool CContext::DestroyContext()
 	return false;
 }
 
-void CContext::RegisterGui_ForEvent_Handling(CGuiBaseRect * arg)
+void CContext::RegisterGui_ForEvent_Handling(/*CGuiBaseRect * arg,*/ CEventTarget *evt)
 {
-	this->_GuiElements->push_back(arg);
+	if (evt)
+	{
+		Free_Object_ID++;
+
+		evt->setId(Free_Object_ID);
+
+		this->EventTargets->insert(std::pair<int, CEventTarget*>(evt->getId(), evt));
+	}
 }
 
-void CContext::ManageEvent(float delta_t)
+void CContext::ManageEvent(float delta_t, GLuint  _Object_ID_Buffer)
 {
 	SDL_Event evt;
 	while (SDL_PollEvent(&evt))
 	{
-		/*
-		*	First, we search for all GUI elements which can receive event
-		*/
-		std::list<CGuiBaseRect*>::iterator it;
 
-		for (it = _GuiElements->begin(); it != _GuiElements->end(); it++)
+		if (_Object_ID_Buffer > 0)
 		{
-			//only CGUiBase Rect can handle  event
-			if (static_cast<CGuiBaseRect*>(*it))
+			glBindTexture(GL_TEXTURE_2D, _Object_ID_Buffer);
+			glGetTexImage(GL_TEXTURE_2D, 0, GL_RED_INTEGER, GL_INT, ID_Buffer);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			if (evt.motion.x > 0 && evt.motion.y > 0 )
 			{
-				if (static_cast<CGuiBaseRect*>(*it)->IsVisible())
+				int mx = evt.motion.x;
+				int my = COption::getInstance().Get_Vertical_Resolution() - evt.motion.y;
+				int ID = -1;
+				ID = ID_Buffer[mx + my*COption::getInstance().Get_Horizontal_Resolution()];
+
+				std::map<int, CEventTarget*>::iterator it = EventTargets->find(ID);
+
+				if (it != EventTargets->end())
 				{
-					static_cast<CGuiBaseRect*>(*it)->Generate_Mousse_Action(evt);
+					switch (evt.type)
+					{
+					default: break;
+					case SDL_MOUSEMOTION:
+						it->second->CheckMouseIsOver(evt);
+						ID_LastObject = ID;
+						std::cout << ID << std::endl;
+						break;
+					case SDL_MOUSEBUTTONDOWN:
+						it->second->CheckMouseClick(evt);
+						break;
+					}
+				}
+
+				if (ID != ID_LastObject)
+				{
+					std::map<int, CEventTarget*>::iterator LastObject = EventTargets->find(ID_LastObject);
+
+					if (LastObject != EventTargets->end())
+					{
+						LastObject->second->CheckMouseIsLeaving(evt);
+						ID_LastObject = 0;
+					}
 				}
 			}
-
 		}
 
 		//function defined in parent class. Used to manage local event <-> Specific to active context

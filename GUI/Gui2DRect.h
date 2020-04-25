@@ -11,9 +11,10 @@
 #include <SDL.h>
 
 #include "../Option.h"
+#include "../Event/EventTarget.h"
 #include "../Event/Mousse_Event.h"
 
-class CGui2DRect : public CGuiBaseRect
+class CGui2DRect : public CGuiBaseRect, public CEventTarget
 {
 public:
 	CGui2DRect(Widget_Style style);
@@ -42,7 +43,7 @@ private:
 	 GLfloat _Blue;
 	 GLfloat _Alpha;
 
-	 void CheckMouseClick(SDL_Event evt) override;
+	 bool CheckMouseClick(SDL_Event evt) override;
 
 	 void CheckMouseIsOver(SDL_Event evt) override;
 

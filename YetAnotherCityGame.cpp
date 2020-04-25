@@ -131,6 +131,8 @@ int main(int argc, char* args[])
 	GLuint PBR_FrameBuffer, ColorBufferTexture,GUI_Color, MaterialID;
 	glGenFramebuffers(1, &PBR_FrameBuffer);
 
+	PBR_Texture pbr;
+
 	/*
 	*	Color texture
 	*/
@@ -174,6 +176,17 @@ int main(int argc, char* args[])
 	glBindTexture(GL_TEXTURE_2D, 0);
 	status = glGetError();
 
+	glGenTextures(1, &pbr._ID_Object);
+	glBindTexture(GL_TEXTURE_2D, pbr._ID_Object);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32I,
+		COption::getInstance().Get_Horizontal_Resolution(),
+		COption::getInstance().Get_Vertical_Resolution(),
+		0, GL_RED_INTEGER, GL_INT, (void*)0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	status = glGetError();
+
 	
 	/*GLuint DepthBufferTExture;
 	glGenTextures(1, &DepthBufferTExture);
@@ -201,12 +214,13 @@ int main(int argc, char* args[])
 	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D, ColorBufferTexture, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, GUI_Color, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, MaterialID, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D,pbr._ID_Object, 0);
 	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, PBR_RenderDepth);
 	//glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, DepthBufferTExture, 0);
 	glEnable(GL_DEPTH_TEST);
 
-	GLenum b[] = { GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2 };
-	glDrawBuffers(3, b);
+	GLenum b[] = { GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2,GL_COLOR_ATTACHMENT3 };
+	glDrawBuffers(4, b);
 
 	status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
 
@@ -217,7 +231,6 @@ int main(int argc, char* args[])
 
 	status = glGetError();
 
-	PBR_Texture pbr;
 	pbr._ObjectColor = ColorBufferTexture;
 	pbr._GuiColor = GUI_Color;
 	pbr._textureMaterialID = MaterialID;
@@ -259,7 +272,20 @@ int main(int argc, char* args[])
 
 		if (CContextManager::Instance().GetCurrentActiveContext())
 		{
-			CContextManager::Instance().GetCurrentActiveContext()->ManageEvent(delta_t);
+			/*
+			*	Fist, we manage event based on previous rendering texture which contain EventTarget ID
+			*/
+			CContextManager::Instance().GetCurrentActiveContext()->ManageEvent(delta_t,pbr._ID_Object);
+
+			/*
+			*	As event treatment is done, we clear the _ID_Object which is at index 1 of glDrawBuffers
+			*	This allow to draw ID_Element of the current frame
+			*/
+			glClearBufferiv(GL_COLOR, 3, clear);
+
+			/*
+			*	Draw the current frame
+			*/
 			CContextManager::Instance().GetCurrentActiveContext()->RunContext(delta_t);
 		}
 

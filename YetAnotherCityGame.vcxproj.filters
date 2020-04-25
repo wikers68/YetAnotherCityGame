@@ -123,6 +123,9 @@
     <ClInclude Include="GUI\Layout\EmptySlot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Event\EventTarget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -210,6 +213,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Layout\EmptySlot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event\EventTarget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
