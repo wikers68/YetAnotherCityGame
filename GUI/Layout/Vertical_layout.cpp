@@ -30,6 +30,8 @@ void CVertical_layout::AddChild(CGuiBaseRect * argChild)
 
 void CVertical_layout::Update(void)
 {
+	CGuiBaseRect::Update();
+
 	if (_Child)
 	{
 		int NumberOfChild = _Child->size();

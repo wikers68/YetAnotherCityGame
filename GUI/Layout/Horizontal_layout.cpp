@@ -14,24 +14,34 @@ CHorizontal_layout::~CHorizontal_layout()
 
 void CHorizontal_layout::AddChild(CGuiBaseRect * argChild)
 {
-	/*
-	*	Create an empty widget with:
-	*		- height = parent height,
-	*		- width, calculated to take in account the number of child in the layout
-	*/
-	Widget_Style slotStyle;
-	slotStyle.hPosition = 0;
-	slotStyle.vPosition = style.vPosition;
+	Reset_HasBeenCalculated();
 
-	CEmptySlot *slot = new CEmptySlot(slotStyle);
-	slot->AddChild(argChild);
 
-	CGuiBaseRect::AddChild(slot);
+	if (argChild)
+	{
+		/*
+*	Create an empty widget with:
+*		- height = parent height,
+*		- width, calculated to take in account the number of child in the layout
+*/
+		Widget_Style slotStyle;
+		slotStyle.hPosition = 0;
+		slotStyle.vPosition = style.vPosition;
+
+		CEmptySlot *slot = new CEmptySlot(slotStyle);
+		CGuiBaseRect::AddChild(slot);
+
+		slot->AddChild(argChild);
+	}
+
+	
 	Update();
 }
 
 void CHorizontal_layout::Update(void)
 {
+	CGuiBaseRect::Update();
+
 	if (_Child)
 	{
 		int NumberOfChild = _Child->size();

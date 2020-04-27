@@ -33,7 +33,7 @@ public:
 	*	Specific update function to set children size
 	*/
 
-	void Update(void);
+	virtual void Update(void) override;
 
 private:
 	int Space;

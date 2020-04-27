@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="3DGameObject\C3DObject.h" />
     <ClInclude Include="3DGameObject\GameEntityCategory.h" />
+    <ClInclude Include="GUI\Widget\BarButton.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Context\3DContext.h" />
     <ClInclude Include="Context\Context.h" />
@@ -172,13 +173,18 @@
     <ClInclude Include="Shaders\Shader.h" />
     <ClInclude Include="3DGameObject\StaticObject.h" />
     <ClInclude Include="Shaders\ShaderSource\C3DObjectShaders.h" />
+    <ClInclude Include="Shaders\ShaderSource\CTerrainShaders.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="graphics\texture\Texture.h" />
     <ClInclude Include="GUI\Layout\Vertical_layout.h" />
+    <ClInclude Include="Context\TerrainEditor\TerrainEditor.h" />
+    <ClInclude Include="Terrain\TerrainCells.h" />
+    <ClInclude Include="Terrain\Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3DGameObject\C3DObject.cpp" />
+    <ClCompile Include="GUI\Widget\BarButton.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Context\3DContext.cpp" />
     <ClCompile Include="Context\Context.cpp" />
@@ -212,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="graphics\texture\Texture.cpp" />
     <ClCompile Include="GUI\Layout\Vertical_layout.cpp" />
+    <ClCompile Include="Context\TerrainEditor\TerrainEditor.cpp" />
+    <ClCompile Include="Terrain\TerrainCells.cpp" />
+    <ClCompile Include="Terrain\Terrain.cpp" />
     <ClCompile Include="YetAnotherCityGame.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

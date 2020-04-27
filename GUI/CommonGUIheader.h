@@ -22,3 +22,4 @@
 *	Advanced widget
 */
 #include "GuiWindow.h"
+#include "Widget\BarButton.h"

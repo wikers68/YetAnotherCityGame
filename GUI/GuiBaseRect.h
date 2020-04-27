@@ -101,7 +101,7 @@ public:
 	//bool _ToBeUpdated;
 
 	//update current CGuiBAseRect then children
-	void Update(void);
+	virtual void Update(void);
 
 	CGuiBaseRect *_Parent;
 

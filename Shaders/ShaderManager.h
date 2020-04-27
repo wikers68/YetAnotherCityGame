@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include "Shader.h"
 #include "ShaderSource\C3DObjectShaders.h"
+#include "ShaderSource\CTerrainShaders.h"
 
 class CShaderManager
 {

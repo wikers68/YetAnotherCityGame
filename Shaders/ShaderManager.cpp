@@ -13,6 +13,7 @@ bool CShaderManager::InitializeShader(void)
 	EnsembleShader = new std::map<std::string, CShader*>();
 
 	if (!AddShader("CStaticObject_Shader", VertexShader_StaticObject, FragmentShader_StaticObject)) return false;
+	if (!AddShader("CTerrain_Shader", VertexShader_CTerrain, FragmentShader_CTerrain)) return false;
 
 	return true;
 }

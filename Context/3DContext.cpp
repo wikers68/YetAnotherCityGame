@@ -123,6 +123,21 @@ C3DContext::C3DContext()
 	glCullFace(GL_FRONT_AND_BACK);
 
 	camera = new CCamera();
+
+	/*
+	*	Master widget take all screen area
+	*/
+	Widget_Style wsMasterWidget;
+	wsMasterWidget.hPosition = HORIZONTAL_LEFT;
+	wsMasterWidget.vPosition = VERTICAL_TOP;
+	wsMasterWidget.hSize.size = COption::getInstance().Get_Horizontal_Resolution();
+	wsMasterWidget.hSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+	wsMasterWidget.vSize.size = COption::getInstance().Get_Vertical_Resolution();
+	wsMasterWidget.vSize.AbsOrRel = ABS_REL::_ABSOLUTE;
+
+	masterWidget = new CEmptySlot(wsMasterWidget);
+
+	gameTErrain = nullptr;
 }
 
 
@@ -133,7 +148,21 @@ C3DContext::~C3DContext()
 void C3DContext::RunContextLogic(float delta_t)
 {
 	/*
-	*	We first draw static object. 
+	*	First pass, gui element drawing
+	*/
+	masterWidget->Draw();
+
+	/*
+	*	Draw the terrain
+	*/
+
+	if (this->gameTErrain)
+	{
+		gameTErrain->Draw(camera);
+	}
+
+	/*
+	*	Second pass, static object drawing 
 	*	In a first time, we set up common shader data.
 	*/
 
@@ -159,4 +188,9 @@ void C3DContext::RunContextLogic(float delta_t)
 void C3DContext::EventProcessing(SDL_Event evt, float delta_t)
 {
 	if (camera) camera->Proceed_Event(evt, delta_t);
+}
+
+void C3DContext::Attach_Gui_Element(CGuiBaseRect * child)
+{
+	masterWidget->AddChild(child);
 }

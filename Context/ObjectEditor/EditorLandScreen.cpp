@@ -100,11 +100,11 @@ CEditorLandScreen::CEditorLandScreen() : CContext()
 	CHorizontal_layout *TerrainAssetHL = new CHorizontal_layout(wsVerticalLayout, 10);
 	vl_Terrain_Asset->AddChild(TerrainAssetHL);
 
-	CGui2DRect *OpenTerrain = new CGui2DRect(wsButton);
-	TerrainAssetHL->AddChild(OpenTerrain);
+	CGui2DRect *TerrainEditor = new CGui2DRect(wsButton);
+	TerrainAssetHL->AddChild(TerrainEditor);
 
-	CGui2DRect *NewTerrain = new CGui2DRect(wsButton);
-	TerrainAssetHL->AddChild(NewTerrain);
+	RegisterGui_ForEvent_Handling(TerrainEditor);
+	TerrainEditor->Evenment->Set_OnClick_Callback(std::bind(&CEditorLandScreen::TerrainEditor, this, std::placeholders::_1));
 	
 	RegisterGui_ForEvent_Handling(NewObject);
 	NewObject->Evenment->Set_OnClick_Callback(std::bind(&CEditorLandScreen::New3DAsset, this, std::placeholders::_1));
@@ -128,4 +128,9 @@ void CEditorLandScreen::EventProcessing(SDL_Event evt, float delta_t )
 void CEditorLandScreen::New3DAsset(CGui2DRect * caller)
 {
 	ChangeContext<C3DAssetEditor>(this);
+}
+
+void CEditorLandScreen::TerrainEditor(CGui2DRect * caller)
+{
+	ChangeContext<CTerrainEditor>(this);
 }
