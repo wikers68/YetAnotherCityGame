@@ -29,6 +29,17 @@ public:
 	virtual bool CreateContext();
 	bool ActivateContext();
 	virtual void RunContextLogic(float delta_t = 0.0f) = 0;
+	
+	/*
+	*	Function executed by Context manager when mousse click is captured but not treated by a Gui or gameElement
+	*/
+	virtual void OnClickScreen(int Px, int Py, float delta_t = 0.0f) {};
+
+	/*
+	*	Perfom action when mousse is somewhere on screen
+	*/
+	virtual void MousseOnScreen(int Px, int Py, float delta_t = 0.0f) {};
+
 	bool RunContext(float delta_t = 0.0f);
 	bool DestroyContext();
 

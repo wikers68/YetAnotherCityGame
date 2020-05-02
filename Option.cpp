@@ -51,7 +51,7 @@ glm::mat4 COption::getMatriceProjection(void)
 		matriceProjection = glm::perspectiveFovRH(glm::radians(45.0f),
 			(float)Get_Horizontal_Resolution(),
 			(float)Get_Vertical_Resolution(),
-			0.1f,
+			zNearPlan,
 			100.0f);
 
 		ProjectionMatriceIsUpToDate = true;

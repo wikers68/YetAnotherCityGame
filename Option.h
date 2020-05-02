@@ -27,6 +27,8 @@ public:
 	float getCamera_TranslationSpeed(void);
 	float getCamera_RotationSpeed(void);
 
+	const float zNearPlan = 0.1f;
+
 private:
 	static COption _Instance;
 

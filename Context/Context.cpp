@@ -106,6 +106,21 @@ void CContext::ManageEvent(float delta_t, GLuint  _Object_ID_Buffer)
 						break;
 					}
 				}
+				else
+				{
+					switch (evt.type)
+					{
+					default: break;
+					case SDL_MOUSEBUTTONDOWN:
+						if (evt.button.button == SDL_BUTTON_LEFT) //left button
+						{
+							this->OnClickScreen(evt.motion.x, evt.motion.y);
+						}
+						break;
+					}
+				}
+
+				MousseOnScreen(evt.motion.x, evt.motion.y, delta_t);
 
 				if (ID != ID_LastObject)
 				{

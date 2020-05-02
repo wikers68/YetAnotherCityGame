@@ -14,6 +14,6 @@ public:
 	GLuint _glProgram;
 	GLuint getShaderProgram(void);
 
-	bool Compile(const char *argVertexShader, const char *argPixelShader);
+	bool Compile(const char *argVertexShader, const char *argPixelShader, const char *GeometryShader = nullptr);
 };
 

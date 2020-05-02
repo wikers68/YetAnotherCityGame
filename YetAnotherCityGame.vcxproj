@@ -143,6 +143,13 @@
   <ItemGroup>
     <ClInclude Include="3DGameObject\C3DObject.h" />
     <ClInclude Include="3DGameObject\GameEntityCategory.h" />
+    <ClInclude Include="Utilities\MovableObject.h" />
+    <ClInclude Include="Shaders\ShaderSource\CControlPointShader.h" />
+    <ClInclude Include="Shaders\ShaderSource\CCurveShader.h" />
+    <ClInclude Include="Terrain\Modeling\ControlPoint.h" />
+    <ClInclude Include="Terrain\Modeling\TerrainCurve.h" />
+    <ClInclude Include="Terrain\TerrainCurve.h" />
+    <ClInclude Include="Terrain\ControlPoint.h" />
     <ClInclude Include="GUI\Widget\BarButton.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Context\3DContext.h" />
@@ -181,9 +188,13 @@
     <ClInclude Include="Context\TerrainEditor\TerrainEditor.h" />
     <ClInclude Include="Terrain\TerrainCells.h" />
     <ClInclude Include="Terrain\Terrain.h" />
+    <ClInclude Include="Utilities\Axis.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3DGameObject\C3DObject.cpp" />
+    <ClCompile Include="Utilities\MovableObject.cpp" />
+    <ClCompile Include="Terrain\Modeling\ControlPoint.cpp" />
+    <ClCompile Include="Terrain\Modeling\TerrainCurve.cpp" />
     <ClCompile Include="GUI\Widget\BarButton.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Context\3DContext.cpp" />
@@ -221,6 +232,7 @@
     <ClCompile Include="Context\TerrainEditor\TerrainEditor.cpp" />
     <ClCompile Include="Terrain\TerrainCells.cpp" />
     <ClCompile Include="Terrain\Terrain.cpp" />
+    <ClCompile Include="Utilities\Axis.cpp" />
     <ClCompile Include="YetAnotherCityGame.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

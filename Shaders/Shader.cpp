@@ -16,7 +16,7 @@ GLuint CShader::getShaderProgram(void)
 	return _glProgram;
 }
 
-bool CShader::Compile(const char *argVertexShader, const char *argPixelShader)
+bool CShader::Compile(const char *argVertexShader, const char *argPixelShader, const char *GeometryShader)
 {
 	_glProgram = glCreateProgram();
 
@@ -52,6 +52,29 @@ bool CShader::Compile(const char *argVertexShader, const char *argPixelShader)
 	}
 	glAttachShader(_glProgram, _pixelShader);
 
+	/*
+	*	Geomtry shader compilation. Optional 
+	*/
+	if (GeometryShader != nullptr)
+	{
+		GLuint _geomShader = glCreateShader(GL_GEOMETRY_SHADER);
+		glShaderSource(_geomShader, 1, &GeometryShader, 0);
+		glCompileShader(_geomShader);
+
+		glGetShaderiv(_geomShader, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(_geomShader, 512, NULL, infoLog);
+			int size = -1;
+			glGetShaderInfoLog(_geomShader, 512, &size, infoLog);
+			std::cout << "ERROR::SHADER::GEOMETRY::COMPILATION_FAILED\n" << infoLog << std::endl;
+		}
+		glAttachShader(_glProgram, _geomShader);
+	}
+
+	/*
+	*	Link the program to end sahder compilation
+	*/
 	glLinkProgram(_glProgram);
 
 	glGetProgramiv(_glProgram, GL_LINK_STATUS, &success);
@@ -62,6 +85,7 @@ bool CShader::Compile(const char *argVertexShader, const char *argPixelShader)
 		glGetProgramInfoLog(_vertexShader, 512, &size, infoLog);
 		std::cout << "ERROR::SHADER::LINK_Program::FAILED\n" << infoLog << std::endl;
 	}
+
 
 	return true;
 }
