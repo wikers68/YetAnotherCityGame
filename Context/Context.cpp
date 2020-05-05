@@ -93,20 +93,46 @@ void CContext::ManageEvent(float delta_t, GLuint  _Object_ID_Buffer)
 
 				if (it != EventTargets->end())
 				{
-					switch (evt.type)
+
+					CGuiBaseRect * isGui = dynamic_cast<CGuiBaseRect*>(it->second);
+				
+					/*
+					*	Common dispatch event for all context. Only to interact with GUI
+					*/
+
+					if (isGui)
 					{
-					default: break;
-					case SDL_MOUSEMOTION:
-						it->second->CheckMouseIsOver(evt);
-						ID_LastObject = ID;
-						std::cout << ID << std::endl;
-						break;
-					case SDL_MOUSEBUTTONDOWN:
-						it->second->CheckMouseClick(evt);
-						break;
+						switch (evt.type)
+						{
+						default: break;
+						case SDL_MOUSEMOTION:
+							it->second->CheckMouseIsOver(evt);
+							ID_LastObject = ID;
+							std::cout << ID << std::endl;
+							break;
+						case SDL_MOUSEBUTTONDOWN:
+							it->second->CheckMouseClick(evt);
+							break;
+						}
+					}
+					else //send event to non gui element
+					{
+						switch (evt.type)
+						{
+						default: break;
+						case SDL_MOUSEBUTTONDOWN:
+							this->ManageOnClickEvent(evt, it->second);
+							break;
+						case SDL_MOUSEBUTTONUP:
+							it->second->Mouse_Button_Up(evt); //event action not depend of context. Event is sent to object
+							break;
+						case SDL_MOUSEMOTION:
+							it->second->CheckMouseIsOver(evt);
+							break;
+						}
 					}
 				}
-				else
+				else //user click somewhere on the screen
 				{
 					switch (evt.type)
 					{
@@ -120,6 +146,9 @@ void CContext::ManageEvent(float delta_t, GLuint  _Object_ID_Buffer)
 					}
 				}
 
+				/*
+				*	Mousse is moving
+				*/
 				MousseOnScreen(evt.motion.x, evt.motion.y, delta_t);
 
 				if (ID != ID_LastObject)

@@ -35,6 +35,8 @@ public:
 	*/
 	virtual void OnClickScreen(int Px, int Py, float delta_t = 0.0f) {};
 
+	virtual void ManageOnClickEvent(SDL_Event evt, CEventTarget *objectClick) {};
+
 	/*
 	*	Perfom action when mousse is somewhere on screen
 	*/

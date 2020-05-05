@@ -117,9 +117,14 @@ bool CControlPoint::CheckMouseClick(SDL_Event evt)
 			else
 			{
 				/*
-				*	Double click  Stop to mouve the point
+				*	Double click  Stop to move the point
 				*/
 				ContextExecution->ControlPointInserted = nullptr;
+
+				/*
+				*	Say to the ditor that we are not longer in ADD_POINT mode
+				*/
+				ContextExecution->SetDefaultMode();
 
 				return false;
 			}
@@ -127,19 +132,17 @@ bool CControlPoint::CheckMouseClick(SDL_Event evt)
 	}
 	else
 	{
+		/*
+		*	User click on this control point, reset other to unselected state
+		*/
 		if (ContextExecution->SelectedPoint == nullptr)
 		{
 			ContextExecution->SelectedPoint = this;
 		}
 		else
 		{
-			/*
-			*	Stop to move the selected point
-			*/
-			if (evt.button.button == 1)
-			{
-				ContextExecution->SelectedPoint = nullptr;
-			}
+			ContextExecution->SelectedPoint->isSelected = false;
+			ContextExecution->SelectedPoint = this;
 		}
 	}
 

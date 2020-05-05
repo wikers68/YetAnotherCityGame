@@ -9,6 +9,8 @@ CCamera::CCamera()
 
 	latitude = - 45.0;
 	longitude = 225.0;
+
+	isFreeToRotate = false;
 }
 
 
@@ -23,36 +25,54 @@ glm::mat4 CCamera::getMatriceView()
 		glm::vec3(0.0, 0.0, 1.0));
 }
 
+void CCamera::LastMoussePosition(int Px, int Py)
+{
+	lastMousseXposition = Px;
+	lastMousseYposition = Py;
+}
+
 void CCamera::Proceed_Event(SDL_Event evt, float delta_t)
 {	
-	/*
-	*	When keyboard is pressed, it seems that mousse motion values are out or on border of the window. 
-	*	To avoid no smooth motion, we check that mousse is in window and not on borders.
-	*/
-	if (evt.motion.y < COption::getInstance().Get_Vertical_Resolution()
-		&& evt.motion.y > 0 
-		&& evt.motion.x > 0
-		&& evt.motion.x < COption::getInstance().Get_Horizontal_Resolution())
+	if (isFreeToRotate)
 	{
-		int newXposition = evt.motion.x;
-		int newYposition = evt.motion.y;
-
-		if (SDL_GetMouseState(nullptr, nullptr))
+		/*
+		*	When keyboard is pressed, it seems that mousse motion values are out or on border of the window.
+		*	To avoid no smooth motion, we check that mousse is in window and not on borders.
+		*/
+		if (evt.motion.y < COption::getInstance().Get_Vertical_Resolution()
+			&& evt.motion.y > 0
+			&& evt.motion.x > 0
+			&& evt.motion.x < COption::getInstance().Get_Horizontal_Resolution())
 		{
-			int deltaX_deplacement = lastMousseXposition - newXposition;
-			int deltaY_deplacement = lastMousseYposition - newYposition;
+			int newXposition = evt.motion.x;
+			int newYposition = evt.motion.y;
 
-			float scaledX_deplaceement = (float)deltaX_deplacement  * delta_t * COption::getInstance().getCamera_RotationSpeed();
-			float scaledY_deplaceement = (float)deltaY_deplacement  * delta_t * COption::getInstance().getCamera_RotationSpeed();
+			if (SDL_GetMouseState(nullptr, nullptr))
+			{
+				int deltaX_deplacement = lastMousseXposition - newXposition;
+				int deltaY_deplacement = lastMousseYposition - newYposition;
 
-			latitude += scaledY_deplaceement;
-			longitude += scaledX_deplaceement;
+				float scaledX_deplaceement = (float)deltaX_deplacement  * delta_t * COption::getInstance().getCamera_RotationSpeed();
+				float scaledY_deplaceement = (float)deltaY_deplacement  * delta_t * COption::getInstance().getCamera_RotationSpeed();
 
-			std::cout << evt.motion.x << " " << evt.motion.y << std::endl;
+				latitude += scaledY_deplaceement;
+				longitude += scaledX_deplaceement;
+
+				std::cout << evt.motion.x << " " << evt.motion.y << std::endl;
+			}
+
+			lastMousseXposition = newXposition;
+			lastMousseYposition = newYposition;
 		}
+	}
+	else
+	{
+		/*
+		*	Avoid camera position jump between two camera motion by continuously update the last position as the current one
+		*/
 
-		lastMousseXposition = newXposition;
-		lastMousseYposition = newYposition;
+		lastMousseXposition = evt.motion.x;
+		lastMousseYposition = evt.motion.y;
 	}
 	
 	switch (evt.type)
@@ -63,6 +83,15 @@ void CCamera::Proceed_Event(SDL_Event evt, float delta_t)
 			*	Zoom in if y > 0 & zoom out if y < 0
 			*/
 			Position += 5.0f*(float)evt.wheel.y * getViewDirection()*delta_t* COption::getInstance().getCamera_TranslationSpeed();
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			if (evt.button.button == SDL_BUTTON_RIGHT)
+			{
+				isFreeToRotate = true;
+			}
+			break;
+		case SDL_MOUSEBUTTONUP:
+			isFreeToRotate = false;
 			break;
 	}
 

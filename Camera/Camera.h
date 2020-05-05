@@ -17,9 +17,13 @@ public:
 	
 	glm::mat4 getMatriceView();
 
+	void LastMoussePosition(int Px, int Py);
+
 	void Proceed_Event(SDL_Event evt, float delta_t = 0.0);
 
 	glm::vec3 getViewDirection(void);
+
+	bool isFreeToRotate;
 
 private:
 	int lastMousseXposition;

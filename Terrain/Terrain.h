@@ -29,5 +29,10 @@ public:
 	CTerrainCells *masterCells;
 
 	bool HasBeenInitialized;
+
+	/*
+	*	return the max terrain height allowed the game
+	*/
+	static float MaxTerrainHeight(void) { return 1.0; }
 };
 

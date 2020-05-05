@@ -76,6 +76,9 @@ void CTerrainCurve::Draw(CCamera *activeCamera)
 
 	glUniform1i(glGetUniformLocation(shaderProg, "ID"), this->getId());
 
+	float maxheight = CTerrain::MaxTerrainHeight();
+	glUniform1f(glGetUniformLocation(shaderProg, "maxHeight"), maxheight );
+
 	if (isSelected)
 	{
 		glUniform3f(glGetUniformLocation(shaderProg, "Color"), 0.0, 1.0, 0.3);
@@ -122,6 +125,8 @@ void CTerrainCurve::RebuildVertexBuffer(void)
 		cp[Indice] = CurvePoint;
 
 		Indice++;
+
+		std::cout << it->second->Height << std::endl;
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, numberOfControlPoint * sizeof(CCurvePoint), cp, GL_DYNAMIC_DRAW);

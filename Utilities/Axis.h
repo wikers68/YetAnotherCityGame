@@ -58,5 +58,6 @@ public:
 	virtual bool CheckMouseClick(SDL_Event evt) override;
 	virtual void CheckMouseIsOver(SDL_Event evt) override;
 	virtual void CheckMouseIsLeaving(SDL_Event evt) override;
+	virtual void Mouse_Button_Up(SDL_Event evt) override;
 };
 

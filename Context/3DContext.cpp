@@ -187,10 +187,7 @@ void C3DContext::RunContextLogic(float delta_t)
 
 void C3DContext::EventProcessing(SDL_Event evt, float delta_t)
 {
-	if (evt.button.button == SDL_BUTTON_RIGHT) //right click
-	{
-		if (camera) camera->Proceed_Event(evt, delta_t);
-	}
+	if (camera) camera->Proceed_Event(evt, delta_t);
 }
 
 void C3DContext::Attach_Gui_Element(CGuiBaseRect * child)

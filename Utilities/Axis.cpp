@@ -101,36 +101,45 @@ void CAxis::Draw(CCamera *activeCamera)
 bool CAxis::CheckMouseClick(SDL_Event evt)
 {
 	isSelected = true;
-
-	int y = evt.motion.y;
-
-	if(yp ==0)
-	{
-		yp = y;
-	}
-	else
-	{
-		int delta_y = y - yp;
-		yp = y;
-
-		this->ParentObject->Height += (float)delta_y / 10.0f;
-
-		/*
-		*	If the parent is a ControlPoint, we need to update the Curve parent with new point position
-		*/
-		if (static_cast<CControlPoint*>(ParentObject))
-		{
-			static_cast<CControlPoint*>(ParentObject)->ParentCurve->ToBeUpdated = true;
-		}
-	}
-
+	
+	
 	return false;
 }
 
 void CAxis::CheckMouseIsOver(SDL_Event evt)
 {
+	if (isSelected)
+	{
+		int y = evt.motion.y;
+
+		if (yp == 0)
+		{
+			yp = y;
+		}
+		else
+		{
+			int delta_y = y - yp;
+			yp = y;
+
+			this->ParentObject->Height -= (float)delta_y / 100.0f;
+
+			/*
+			*	If the parent is a ControlPoint, we need to update the Curve parent with new point position
+			*/
+			if (static_cast<CControlPoint*>(ParentObject))
+			{
+				static_cast<CControlPoint*>(ParentObject)->ParentCurve->ToBeUpdated = true;
+			}
+		}
+	}
 }
 
 void CAxis::CheckMouseIsLeaving(SDL_Event evt)
 {
+	isSelected = false;
+}
+
+void CAxis::Mouse_Button_Up(SDL_Event evt)
+{
+	isSelected = false;
 }

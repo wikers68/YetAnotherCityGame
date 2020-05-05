@@ -101,7 +101,15 @@ void CTerrainEditor::OnClickScreen(int Px, int Py, float delta_t)
 		editorMode = TERRAIN_MODE::NO_MODE;
 		break;
 	default: 
-		if (SelectedCurve)
+		/*
+		*	First, we unselect the selected point, then a second click is needed to unselect the curve
+		*/
+		if (SelectedPoint)
+		{
+			SelectedPoint->isSelected = false;
+			SelectedPoint = nullptr;
+		}
+		else if (SelectedCurve)
 		{
 			/*
 			*	User doesn't want to edit the curve
@@ -117,20 +125,49 @@ void CTerrainEditor::MousseOnScreen(int Px, int Py, float delta_t)
 {
 	glm::vec3 MousseWorldPosition = ScreenToWorldPosition(Px, Py);
 
-	/*
-	*	Move the point being inserted
-	*/
-	if (ControlPointInserted)
-	{
-		ControlPointInserted->Move(MousseWorldPosition.x, MousseWorldPosition.y);
-	}
-
 	switch (editorMode)
 	{
+	case TERRAIN_MODE::ADD_POINT_TO_CURVE:
+		/*
+		*	Move the point being inserted
+		*/
+		if (ControlPointInserted)
+		{
+			ControlPointInserted->Move(MousseWorldPosition.x, MousseWorldPosition.y);
+		}
+		break;
 	case TERRAIN_MODE::MOVE_POINT:
 		if (SelectedPoint) SelectedPoint->Move(MousseWorldPosition.x, MousseWorldPosition.y);
 		break;
 	default:break;
+	}
+}
+
+void CTerrainEditor::ManageOnClickEvent(SDL_Event evt, CEventTarget *objectClick)
+{
+
+	switch (editorMode)
+	{
+	case TERRAIN_MODE::ADD_POINT_TO_CURVE:
+		if (ControlPointInserted)
+		{
+			ControlPointInserted->CheckMouseClick(evt);
+		}
+		break;
+	case TERRAIN_MODE::MOVE_POINT:
+		if (SelectedPoint)
+		{
+			SelectedPoint->isSelected = false;
+			SelectedPoint = nullptr;
+		}
+		else
+		{
+			objectClick->CheckMouseClick(evt);
+		}
+		break;
+	default:
+		objectClick->CheckMouseClick(evt);
+		break;
 	}
 }
 
@@ -143,8 +180,6 @@ void CTerrainEditor::CreateNewTerrain(CGui2DRect * caller)
 
 void CTerrainEditor::AddCurve(CGui2DRect * caller)
 {
-	editorMode = TERRAIN_MODE::ADD_POINT_TO_CURVE;
-
 	debugCurve = new CTerrainCurve(this);
 	RegisterGui_ForEvent_Handling(debugCurve);
 
@@ -162,6 +197,8 @@ void CTerrainEditor::AddPointToSelectedCurve(CGui2DRect * caller)
 		cp->Move(1.0, 2.0);
 		SelectedCurve->AddControlPoint(cp);
 		ControlPointInserted = cp;
+
+		editorMode = TERRAIN_MODE::ADD_POINT_TO_CURVE;
 	}
 }
 
@@ -205,6 +242,11 @@ glm::vec3 CTerrainEditor::ScreenToWorldPosition(int Px, int Py)
 	//TODO: add terrain height in Z result
 
 	return glm::vec3(x,y,0);
+}
+
+void CTerrainEditor::SetDefaultMode(void)
+{
+	editorMode = TERRAIN_MODE::NO_MODE;
 }
 
 void CTerrainEditor::IsOverButton(CGui2DRect * caller)

@@ -44,6 +44,8 @@ public:
 	virtual void OnClickScreen(int Px, int Py, float delta_t = 0.0f) override;
 	virtual void MousseOnScreen(int Px, int Py, float delta_t = 0.0f) override;
 
+	virtual void ManageOnClickEvent(SDL_Event evt, CEventTarget *objectClick) override;
+
 	void CTerrainEditor::IsOverButton(CGui2DRect * caller);
 	void CTerrainEditor::IsLeavingButton(CGui2DRect * caller);
 	void CTerrainEditor::CreateNewTerrain(CGui2DRect * caller);
@@ -61,5 +63,7 @@ public:
 	glm::vec3 ScreenToWorldPosition(int Px, int Py);
 
 	CTerrainCurve *debugCurve;
+
+	void SetDefaultMode(void);
 };
 
