@@ -8,13 +8,16 @@ static const char *VertexShader_CTerrain =
 	"uniform mat4 View;"
 	"uniform mat4 Projection;"
 	"uniform vec4 SizePosition;"
+	"uniform sampler2D heightMap;"
 	"out vec2 uv;"
 	"void main()"
 	"{"
+	"uv = vertexPosition.xy;"
+	"float altitude = texture(heightMap,uv).r;"
 	"float longitude =  (vertexPosition.x - 0.5f) * SizePosition.x + SizePosition.z;  "
 	"float latitude =  (vertexPosition.y - 0.5f) * SizePosition.y + SizePosition.w;  "
-	"uv = vertexPosition.xy;"
-	"gl_Position =  Projection* View * Model* vec4(longitude, latitude, 0.0 ,1.0) ;"
+
+	"gl_Position =  Projection* View * Model* vec4(longitude, latitude, altitude ,1.0) ;"
 	"};"
 };
 
@@ -28,7 +31,7 @@ static const char *FragmentShader_CTerrain =
 	"void main()"
 	"{"
 	"MaterialID = 230;"
-	"color = vec4(uv.x,uv.y,0.0,1.0f);"
-	//"color = texture(baseColor,uv);"
+	//"color = vec4(uv.x,uv.y,0.0,1.0f);"
+	"color = texture(baseColor,uv);"
 	"};"
 };

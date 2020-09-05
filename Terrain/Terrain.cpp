@@ -1,11 +1,18 @@
 #include "stdafx.h"
 #include "Terrain.h"
 
+/*
+*	Placed here to avoid circular dependency while compiling
+*/
+#include "Modeling\TerrainCurve.h"
+
 
 CTerrain::CTerrain()
 {
 	masterCells = new CTerrainCells(nullptr);
 	HasBeenInitialized = false;
+
+	SetUp_RenderBuffer();
 }
 
 
@@ -13,7 +20,7 @@ CTerrain::~CTerrain()
 {
 }
 
-void CTerrain::InitGrid(int ResolutionPoint)
+void CTerrain::InitGrid()
 {
 	GLuint VertexBuffer;
 	GLuint VertexArrayAtt;
@@ -22,7 +29,7 @@ void CTerrain::InitGrid(int ResolutionPoint)
 	glGenBuffers(1, &VertexBuffer);
 
 
-	int NombreCarre = ResolutionPoint - 1;
+	int NombreCarre = CTerrainCells::getTerrainResolution() - 1;
 
 	ArraySize = 3 * NombreCarre * NombreCarre * 2; //2 triangles à 3 vertices par carré
 	float *EmplacementMemoireVertex = (float*)calloc(3 * ArraySize, sizeof(float));
@@ -133,4 +140,52 @@ void CTerrain::Draw(CCamera *activeCamera)
 		}
 	}
 
+}
+
+void CTerrain::UpdateHeightMap(std::list<CTerrainCurve*>* SetOfTerrainCurve)
+{
+	/*
+	*	Get the current Framebuffer ID (PBR rendering pass)
+	*/
+	GLint currentPBR_FrameBuffer;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentPBR_FrameBuffer);
+	
+	/*
+	*	Bind the framebuffer dedicated to heightmap rendering
+	*/
+	glBindFramebuffer(GL_FRAMEBUFFER, RenderHeightMapFrameBuffer);
+	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RenderDepth);
+
+	if (masterCells)
+	{
+		masterCells->UpdateHeightMap(SetOfTerrainCurve);
+	}
+
+	/*
+	*	Restore the PBR Framebuffer
+	*/
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentPBR_FrameBuffer);
+}
+
+void CTerrain::SetUp_RenderBuffer(void)
+{
+	/*
+	*	Get the current Framebuffer ID (PBR rendering pass)
+	*/
+	GLint currentPBR_FrameBuffer;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentPBR_FrameBuffer);
+
+	glGenFramebuffers(1, &RenderHeightMapFrameBuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, RenderHeightMapFrameBuffer);
+
+	/*
+	*		Set up depth buffer
+	*/
+	glGenRenderbuffers(1, &RenderDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, RenderDepth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
+		CTerrainCells::getTerrainResolution(),
+		CTerrainCells::getTerrainResolution());
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentPBR_FrameBuffer);
 }

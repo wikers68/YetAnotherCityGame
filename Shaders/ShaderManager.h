@@ -4,11 +4,6 @@
 #include <map>
 #include <GL/glew.h>
 #include "Shader.h"
-#include "ShaderSource\C3DObjectShaders.h"
-#include "ShaderSource\CTerrainShaders.h"
-#include "ShaderSource\CControlPointShader.h"
-#include "ShaderSource\CCurveShader.h"
-#include "ShaderSource\CAxis_Shader.h"
 
 class CShaderManager
 {

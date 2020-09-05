@@ -53,7 +53,7 @@ CTerrainEditor::CTerrainEditor() : C3DContext()
 
 	this->Attach_Gui_Element(TopMenuBar);
 
-	debugCurve = nullptr;
+//	debugCurve = nullptr;
 
 	//debugCurve = new CTerrainCurve(this);
 	/*CControlPoint *pt1 = new CControlPoint(this,debugCurve);
@@ -71,6 +71,8 @@ CTerrainEditor::CTerrainEditor() : C3DContext()
 
 	RegisterGui_ForEvent_Handling(debugCurve);*/
 
+	SetOfTerrainCurve = new std::list<CTerrainCurve*>();
+
 	SelectedCurve = nullptr;
 	ControlPointInserted = nullptr;
 	SelectedPoint = nullptr;
@@ -83,11 +85,18 @@ CTerrainEditor::~CTerrainEditor()
 
 void CTerrainEditor::RunContextLogic(float delta_t)
 {
+	//this->Update_Heightmap();
+
 	C3DContext::RunContextLogic(delta_t);
 
-	if (debugCurve)
+	if (SetOfTerrainCurve->size() > 0)
 	{
-		debugCurve->Draw(camera);
+		std::list<CTerrainCurve*>::iterator it;
+
+		for (it = SetOfTerrainCurve->begin(); it != SetOfTerrainCurve->end(); it++)
+		{
+			(*it)->Draw(camera);
+		}
 	}
 
 }
@@ -174,17 +183,19 @@ void CTerrainEditor::ManageOnClickEvent(SDL_Event evt, CEventTarget *objectClick
 void CTerrainEditor::CreateNewTerrain(CGui2DRect * caller)
 {
 	this->gameTErrain = new CTerrain();
-	gameTErrain->InitGrid(10);
+	gameTErrain->InitGrid();
 	gameTErrain->masterCells->SetSquareSize(5);
 }
 
 void CTerrainEditor::AddCurve(CGui2DRect * caller)
 {
-	debugCurve = new CTerrainCurve(this);
-	RegisterGui_ForEvent_Handling(debugCurve);
+	CTerrainCurve *newCurve = new CTerrainCurve(this);
+	RegisterGui_ForEvent_Handling(newCurve);
 
-	debugCurve->isSelected = true;
-	SelectedCurve = debugCurve;
+	newCurve->isSelected = true;
+	SelectedCurve = newCurve;
+
+	SetOfTerrainCurve->push_back(newCurve);
 
 	this->AddPointToSelectedCurve(nullptr);
 }
@@ -247,6 +258,14 @@ glm::vec3 CTerrainEditor::ScreenToWorldPosition(int Px, int Py)
 void CTerrainEditor::SetDefaultMode(void)
 {
 	editorMode = TERRAIN_MODE::NO_MODE;
+}
+
+void CTerrainEditor::Update_Heightmap(void)
+{
+	if (gameTErrain)
+	{
+		gameTErrain->UpdateHeightMap(SetOfTerrainCurve);
+	}
 }
 
 void CTerrainEditor::IsOverButton(CGui2DRect * caller)

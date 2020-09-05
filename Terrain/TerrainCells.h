@@ -4,8 +4,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <list>
 
 #include "../Shaders/ShaderManager.h"
+//#include "Modeling\TerrainCurve.h"
+
+class CTerrainCurve;
 
 class CTerrainCells
 {
@@ -17,16 +21,27 @@ public:
 
 	unsigned int level;
 
-	void SetSquareSize(float size);
-
-	void Draw(unsigned int NumberOfVertex);
-
 	const int maxLevel = 2;
+
+	GLuint heightMapTExture;
 
 	CTerrainCells *childNorthWest;
 	CTerrainCells *childNorthEast;
 	CTerrainCells *childSouthEast;
 	CTerrainCells *childSoutWest;
+
+	void SetSquareSize(float size);
+
+	void Draw(unsigned int NumberOfVertex);
+
+	void UpdateHeightMap(std::list<CTerrainCurve*> *SetOfTerrainCurve);
+
+	/*
+	*	Create the render texture for heightmap
+	*/
+	void InitHeightMap(void);
+
+	static int getTerrainResolution(void) { return 40; }
 
 protected:
 
@@ -43,7 +58,8 @@ protected:
 	/*
 	*	Define the center of the cell
 	*/
-	float HorizonPosition;
+	float LongitudePosition;
 	float LatitudePosition;
+
 };
 

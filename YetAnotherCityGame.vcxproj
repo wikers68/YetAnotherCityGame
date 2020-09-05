@@ -143,6 +143,9 @@
   <ItemGroup>
     <ClInclude Include="3DGameObject\C3DObject.h" />
     <ClInclude Include="3DGameObject\GameEntityCategory.h" />
+    <ClInclude Include="Mesh\VertexFormat.h" />
+    <ClInclude Include="Shaders\ShaderSource\CAxis_Shader.h" />
+    <ClInclude Include="Shaders\ShaderSource\CTerrainCells_Heightmap_Shaders.h" />
     <ClInclude Include="Utilities\MovableObject.h" />
     <ClInclude Include="Shaders\ShaderSource\CControlPointShader.h" />
     <ClInclude Include="Shaders\ShaderSource\CCurveShader.h" />

@@ -84,6 +84,7 @@ void CControlPoint::Draw(CCamera *activeCamera)
 
 void CControlPoint::Move(float newX, float newY)
 {
+	std::cout << "Pt X;Y :" << newX << ";" << newY << std::endl;
 	this->X = newX;
 	this->Y = newY;
 

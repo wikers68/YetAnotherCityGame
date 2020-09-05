@@ -1,8 +1,10 @@
-#pragma once
+#ifndef TERRAIN_EDITOR_H
+#define TERRAIN_EDITOR_H
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <list>
 
 #include "../3DContext.h"
 #include "../../GUI/CommonGUIheader.h"
@@ -18,13 +20,15 @@ enum TERRAIN_MODE
 class CTerrainCurve;
 class CControlPoint;
 
-class CTerrainEditor : 	public C3DContext
+class CTerrainEditor : public C3DContext
 {
 public:
 	CTerrainEditor();
 	~CTerrainEditor();
 
 	CBarButton *TopMenuBar;
+
+	std::list<CTerrainCurve*> *SetOfTerrainCurve;
 
 	/*
 	*	pointer to the selected curve
@@ -62,8 +66,20 @@ public:
 
 	glm::vec3 ScreenToWorldPosition(int Px, int Py);
 
-	CTerrainCurve *debugCurve;
+	//CTerrainCurve *debugCurve;
 
 	void SetDefaultMode(void);
+
+	/*
+	*	Start to render heightmap with curve height triangles
+	*/
+	void Update_Heightmap(void);
+
+	/*
+	*	Draw terrain curve height triangle as a solid in 3D view
+	*/
+	//void Draw_CTerrainCurve(void);
 };
+
+#endif // !1
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "../Camera/Camera.h"
 #include "Axis.h"
 #include "../Context/ContextManager.h"
@@ -34,5 +36,7 @@ public:
 	CAxis *Height_Axis;
 
 	void DrawAxis(CCamera *activeCamera, float delta_t = 0.0f);
+
+	glm::vec3 getVec3(void);
 };
 

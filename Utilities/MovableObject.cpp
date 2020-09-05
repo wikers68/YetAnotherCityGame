@@ -19,3 +19,8 @@ void CMovableObject::DrawAxis(CCamera *activeCamera, float delta_t)
 {
 	Height_Axis->Draw(activeCamera);
 }
+
+glm::vec3 CMovableObject::getVec3(void)
+{
+	return glm::vec3(X,Y,Height);
+}

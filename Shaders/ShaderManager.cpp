@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "ShaderManager.h"
 
+#include "ShaderSource\C3DObjectShaders.h"
+#include "ShaderSource\CTerrainShaders.h"
+#include "ShaderSource\CControlPointShader.h"
+#include "ShaderSource\CCurveShader.h"
+#include "ShaderSource\CAxis_Shader.h"
+#include "ShaderSource\CTerrainCells_Heightmap_Shaders.h"
+
 CShaderManager CShaderManager::instance = CShaderManager();
 
 CShaderManager & CShaderManager::getInstance()
@@ -17,6 +24,8 @@ bool CShaderManager::InitializeShader(void)
 	if (!AddShader("CControlPoint_Shader", VertexShader_CControlPoint, FragmentShader_CControlPoint, GeomShader_CControlPoint)) return false;
 	if (!AddShader("CTerrainCurve_Shader", VertexShader_CTerrainCurve, FragmentShader_CTerrainCurve, GeomShader_CTerrainCurve)) return false;
 	if (!AddShader("CAxis_Shader", VertexShader_CAxis, FragmentShader_CAxis, GeomShader_CAxis)) return false;
+	if (!AddShader("CTerrainCells_Heightmap_Shaders", VertexShader_CTerrainCells_Heightmap, FragmentShader_CTerrainCells_Heightmap)) return false;
+	if (!AddShader("CTerrainCells_Heightmap_3D", VertexShader_CTerrainCells_Heightmap_3D, FragmentShader_CTerrainCells_Heightmap_3D)) return false;
 
 	return true;
 }

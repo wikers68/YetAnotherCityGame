@@ -1,10 +1,13 @@
-#pragma once
+#ifndef C3DCONTEXT_H
+#define C3DCONTEXT_H
 
 #include "Context.h"
 #include "../../3DGameObject/StaticObject.h"
 #include "../../Camera/Camera.h"
 #include "../GUI/CommonGUIheader.h"
 #include "../Terrain/Terrain.h"
+
+class CTerrain;
 
 class C3DContext : public CContext
 {
@@ -36,4 +39,6 @@ private:
 	CEmptySlot *masterWidget;
 
 };
+#endif // !C3DCONTEXT_H
+
 
