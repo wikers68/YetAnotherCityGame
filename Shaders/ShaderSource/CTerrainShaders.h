@@ -31,7 +31,7 @@ static const char *FragmentShader_CTerrain =
 	"void main()"
 	"{"
 	"MaterialID = 230;"
-	//"color = vec4(uv.x,uv.y,0.0,1.0f);"
-	"color = texture(baseColor,uv);"
+	"color = vec4(uv.x,uv.y,0.0,1.0f);"
+	//"color = texture(baseColor,uv);"
 	"};"
 };

@@ -2,8 +2,8 @@
 #define C3DCONTEXT_H
 
 #include "Context.h"
-#include "../../3DGameObject/StaticObject.h"
-#include "../../Camera/Camera.h"
+#include "../3DGameObject/StaticObject.h"
+#include "../Camera/Camera.h"
 #include "../GUI/CommonGUIheader.h"
 #include "../Terrain/Terrain.h"
 

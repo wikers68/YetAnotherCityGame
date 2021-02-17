@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../../Event/EventTarget.h"
+#include "../Event/EventTarget.h"
 #include "../Camera/Camera.h"
 #include "../Shaders/ShaderManager.h"
 #include "MovableObject.h"

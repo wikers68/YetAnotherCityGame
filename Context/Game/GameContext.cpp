@@ -4,7 +4,9 @@
 
 CGameContext::CGameContext()
 {
-
+	gameTErrain = new CTerrain();
+	gameTErrain->InitGrid();
+	gameTErrain->masterCells->SetSquareSize(5);
 }
 
 

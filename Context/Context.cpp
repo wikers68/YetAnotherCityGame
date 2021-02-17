@@ -82,90 +82,106 @@ void CContext::ManageEvent(float delta_t, GLuint  _Object_ID_Buffer)
 			glGetTexImage(GL_TEXTURE_2D, 0, GL_RED_INTEGER, GL_INT, ID_Buffer);
 			glBindTexture(GL_TEXTURE_2D, 0);
 
-			if (evt.motion.x > 0 && evt.motion.y > 0 )
+
+			//only manage mouse event
+			if (evt.type == SDL_EventType::SDL_MOUSEMOTION 
+				|| evt.type == SDL_EventType::SDL_MOUSEBUTTONDOWN
+				|| evt.type == SDL_EventType::SDL_MOUSEBUTTONUP
+				)
 			{
-				int mx = evt.motion.x;
-				int my = COption::getInstance().Get_Vertical_Resolution() - evt.motion.y;
-				int ID = -1;
-				ID = ID_Buffer[mx + my*COption::getInstance().Get_Horizontal_Resolution()];
-
-				std::map<int, CEventTarget*>::iterator it = EventTargets->find(ID);
-
-				if (it != EventTargets->end())
-				{
-
-					CGuiBaseRect * isGui = dynamic_cast<CGuiBaseRect*>(it->second);
-				
-					/*
-					*	Common dispatch event for all context. Only to interact with GUI
-					*/
-
-					if (isGui)
-					{
-						switch (evt.type)
-						{
-						default: break;
-						case SDL_MOUSEMOTION:
-							it->second->CheckMouseIsOver(evt);
-							ID_LastObject = ID;
-							std::cout << ID << std::endl;
-							break;
-						case SDL_MOUSEBUTTONDOWN:
-							it->second->CheckMouseClick(evt);
-							break;
-						}
-					}
-					else //send event to non gui element
-					{
-						switch (evt.type)
-						{
-						default: break;
-						case SDL_MOUSEBUTTONDOWN:
-							this->ManageOnClickEvent(evt, it->second);
-							break;
-						case SDL_MOUSEBUTTONUP:
-							it->second->Mouse_Button_Up(evt); //event action not depend of context. Event is sent to object
-							break;
-						case SDL_MOUSEMOTION:
-							it->second->CheckMouseIsOver(evt);
-							break;
-						}
-					}
-				}
-				else //user click somewhere on the screen
-				{
-					switch (evt.type)
-					{
-					default: break;
-					case SDL_MOUSEBUTTONDOWN:
-						if (evt.button.button == SDL_BUTTON_LEFT) //left button
-						{
-							this->OnClickScreen(evt.motion.x, evt.motion.y);
-						}
-						break;
-					}
-				}
-
-				/*
-				*	Mousse is moving
-				*/
-				MousseOnScreen(evt.motion.x, evt.motion.y, delta_t);
-
-				if (ID != ID_LastObject)
-				{
-					std::map<int, CEventTarget*>::iterator LastObject = EventTargets->find(ID_LastObject);
-
-					if (LastObject != EventTargets->end())
-					{
-						LastObject->second->CheckMouseIsLeaving(evt);
-						ID_LastObject = 0;
-					}
-				}
+				ManageMousseEvent(evt,delta_t);
 			}
 		}
 
+		//keybord event managed by next function
 		//function defined in parent class. Used to manage local event <-> Specific to active context
 		EventProcessing(evt,delta_t);
 	}
 
+}
+
+void CContext::ManageMousseEvent(SDL_Event evt, float delta_t)
+{
+	if (evt.motion.x > 0 && evt.motion.y > 0)
+	{
+		int mx = evt.motion.x;
+		int my = COption::getInstance().Get_Vertical_Resolution() - evt.motion.y;
+
+
+		int ID = -1;
+		ID = ID_Buffer[mx + my * COption::getInstance().Get_Horizontal_Resolution()];
+
+		std::map<int, CEventTarget*>::iterator it = EventTargets->find(ID);
+
+		if (it != EventTargets->end())
+		{
+
+			CGuiBaseRect * isGui = dynamic_cast<CGuiBaseRect*>(it->second);
+
+			/*
+			*	Common dispatch event for all context. Only to interact with GUI
+			*/
+
+			if (isGui)
+			{
+				switch (evt.type)
+				{
+				default: break;
+				case SDL_MOUSEMOTION:
+					it->second->CheckMouseIsOver(evt);
+					ID_LastObject = ID;
+					std::cout << ID << std::endl;
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					it->second->CheckMouseClick(evt);
+					break;
+				}
+			}
+			else //send event to non gui element
+			{
+				switch (evt.type)
+				{
+				default: break;
+				case SDL_MOUSEBUTTONDOWN:
+					this->ManageOnClickEvent(evt, it->second);
+					break;
+				case SDL_MOUSEBUTTONUP:
+					it->second->Mouse_Button_Up(evt); //event action not depend of context. Event is sent to object
+					break;
+				case SDL_MOUSEMOTION:
+					it->second->CheckMouseIsOver(evt);
+					break;
+				}
+			}
+		}
+		else //user click somewhere on the screen
+		{
+			switch (evt.type)
+			{
+			default: break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (evt.button.button == SDL_BUTTON_LEFT) //left button
+				{
+					this->OnClickScreen(evt.motion.x, evt.motion.y);
+				}
+				break;
+			}
+		}
+
+		/*
+		*	Mousse is moving
+		*/
+		MousseOnScreen(evt.motion.x, evt.motion.y, delta_t);
+
+		if (ID != ID_LastObject)
+		{
+			std::map<int, CEventTarget*>::iterator LastObject = EventTargets->find(ID_LastObject);
+
+			if (LastObject != EventTargets->end())
+			{
+				LastObject->second->CheckMouseIsLeaving(evt);
+				ID_LastObject = 0;
+			}
+		}
+	}
 }

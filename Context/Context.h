@@ -48,6 +48,8 @@ public:
 	//dispatch event inside the context
 	void ManageEvent(float delta_t = 0.0f, GLuint  _Object_ID_Buffer = -1 );
 
+	void ManageMousseEvent(SDL_Event evt, float delta_t);
+
 	virtual void EventProcessing(SDL_Event evt, float delta_t = 0.0f) = 0;
 
 	//give an unique ID to each object that will received event
